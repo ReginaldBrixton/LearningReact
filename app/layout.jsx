@@ -33,8 +33,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={isDarkMode ? 'dark' : ''}>
       <body className={`${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-900'} transition-colors duration-300`}>
-        <Header isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
-        {children}
+          <Header isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
+          <main className="flex-grow h-[10vh]">
+            {children}
+          </main>
+        
       </body>
     </html>
   );

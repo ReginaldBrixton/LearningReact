@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/header";
+
 /**
  * The main page component.
  *
@@ -16,11 +17,14 @@ import Header from "@/components/header";
  * The footer contains links to the Next.js documentation, examples, and
  * the website.
  */
-export default function Home() {
+export default async function Home() {
+  // Delay the page rendering to display the loading component
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center">
-      
-      
+    <main className="h-[100%] flex flex-col items-center justify-center">
+      <h1>Welcome to Cinemate!</h1>
+      {/* Add your main content here */}
     </main>
   );
 }
