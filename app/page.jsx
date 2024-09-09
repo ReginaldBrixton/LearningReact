@@ -1,5 +1,5 @@
 import Image from "next/image";
-
+import Link from "next/link";
 /**
  * The main page component.
  *
@@ -28,6 +28,7 @@ export default function Home() {
           height={37}
           priority
         />
+        <Link href="/about">About</Link>
       </div>
     </main>
   );
