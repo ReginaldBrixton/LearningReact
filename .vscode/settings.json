@@ -1,14 +1,4 @@
 {
-    "hide-files.files": [
-        ".eslintrc.json",
-        ".gitignore",
-        "jsconfig.json",
-        "postcss.config.mjs",
-        "node_modules",
-        ".next",
-        "package-lock.json",
-        "src/app/fonts"
-    ],
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,
@@ -16,13 +6,7 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
-        ".eslintrc.json": true,
-        ".gitignore": true,
-        "jsconfig.json": true,
-        "postcss.config.mjs": true,
-        "node_modules": true,
-        ".next": true,
-        "package-lock.json": true,
-        "src/app/fonts": true
-    }
+        "**/node_modules": true
+    },
+    "hide-files.files": []
 }
