@@ -6,7 +6,16 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
-        "**/node_modules": true
+        "**/node_modules": true,
+        ".eslintrc.json": true,
+        "jsconfig.json": true,
+        "pnpm-lock.yaml": true,
+        "postcss.config.mjs": true
     },
-    "hide-files.files": []
+    "hide-files.files": [
+        ".eslintrc.json",
+        "jsconfig.json",
+        "pnpm-lock.yaml",
+        "postcss.config.mjs"
+    ]
 }
