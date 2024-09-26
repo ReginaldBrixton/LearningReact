@@ -10,12 +10,14 @@
         ".eslintrc.json": true,
         "jsconfig.json": true,
         "pnpm-lock.yaml": true,
-        "postcss.config.mjs": true
+        "postcss.config.mjs": true,
+        "app/fonts": true
     },
     "hide-files.files": [
         ".eslintrc.json",
         "jsconfig.json",
         "pnpm-lock.yaml",
-        "postcss.config.mjs"
+        "postcss.config.mjs",
+        "app/fonts"
     ]
 }
