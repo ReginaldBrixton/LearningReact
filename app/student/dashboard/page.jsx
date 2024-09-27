@@ -1,9 +1,13 @@
 "use client"
 
+// Importing necessary icons from lucide-react library
 import { Bell, Calendar as CalendarIcon, ChevronRight, Home, Layout, List, Menu, PieChart, Plus, Search, Settings, Users, FileText, Archive, HelpCircle } from "lucide-react"
+// Importing Link component from next/link for navigation
 import Link from "next/link"
+// Importing useState hook from react for state management
 import { useState } from "react"
 
+// Importing custom UI components
 import { Button } from "@/app/student/dashboard/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/app/student/dashboard/components/ui/card"
 import { Input } from "@/app/student/dashboard/components/ui/input"
@@ -13,6 +17,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/app/
 import Calendar from "@/app/student/dashboard/components/ui/calendar"; // Import the Calendar component
 // import DashboardLayout from "@/app/student/layout" // Import the DashboardLayout
 
+// Component to display a statistical card with title, value, change, and an icon
 function StatCard({ title, value, change, icon: Icon }) {
   return (
     <Card>
