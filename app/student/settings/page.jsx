@@ -66,7 +66,9 @@ function NotificationsTab({ emailNotifications, setEmailNotifications, pushNotif
   );
 }
 
-function AppearanceTab({ theme, setTheme, handleSaveChanges }) {
+function AppearanceTab({ handleSaveChanges }) {
+  const { theme, setTheme } = useTheme();
+
   return (
     <TabsContent value="appearance">
       <Card>
@@ -273,7 +275,7 @@ export default function EnhancedSettingsPage() {
           setPushNotifications={setPushNotifications}
           handleSaveChanges={handleSaveChanges}
         />
-        <AppearanceTab theme={theme} setTheme={setTheme} handleSaveChanges={handleSaveChanges} />
+        <AppearanceTab handleSaveChanges={handleSaveChanges} />
         <ProjectsTab handleSaveChanges={handleSaveChanges} />
       </Tabs>
     </div>
