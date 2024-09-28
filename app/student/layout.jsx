@@ -4,10 +4,10 @@ import { Bell, Calendar as CalendarIcon, ChevronRight, Home, Layout, List, Menu,
 import Link from "next/link"
 import { useState } from "react"
 
-import { Button } from "@/app/student/dashboard/components/ui/button"
-import { Input } from "@/app/student/dashboard/components/ui/input"
-import { Sheet, SheetContent, SheetTrigger } from "@/app/student/dashboard/components/ui/sheet"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/app/student/dashboard/components/ui/tooltip"
+import { Button } from "./dashboard/components/ui/button"
+import { Input } from "./dashboard/components/ui/input"
+import { Sheet, SheetContent, SheetTrigger } from "./dashboard/components/ui/sheet"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./dashboard/components/ui/tooltip"
 
 const sidebarItems = [
   { icon: Home, label: "Dashboard", route: "/student/dashboard" },

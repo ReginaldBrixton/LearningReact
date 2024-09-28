@@ -7,14 +7,15 @@ import Link from "next/link"
 // Importing useState hook from react for state management
 import { useState } from "react"
 
-import { Button } from "@/app/student/dashboard/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/app/student/dashboard/components/ui/card"
-import { Input } from "@/app/student/dashboard/components/ui/input"
-import { Progress } from "@/app/student/dashboard/components/ui/progress"
-import { Sheet, SheetContent, SheetTrigger } from "@/app/student/dashboard/components/ui/sheet"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/app/student/dashboard/components/ui/tooltip"
-import Calendar from "@/app/student/dashboard/components/ui/calendar"; 
-import DashboardLayout from "@/app/student/layout" 
+// import { Button } from "@/app/student/dashboard/components/ui/button"
+import { Button } from "./components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card"
+import { Input } from "./components/ui/input"
+import { Progress } from "./components/ui/progress"
+import { Sheet, SheetContent, SheetTrigger } from "./components/ui/sheet"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./components/ui/tooltip"
+import Calendar from "./components/ui/calendar"; 
+import DashboardLayout from "../layout"
 
 // Component to display a statistical card with title, value, change, and an icon
 function StatCard({ title, value, change, icon: Icon }) {
