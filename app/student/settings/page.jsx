@@ -258,7 +258,7 @@ export default function EnhancedSettingsPage() {
   };
 
   return (
-    <div className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
+    <div className="container mx-auto py-[1px] px-[2rem] sm:px-6 lg:px-[1px]">
       <h1 className="text-3xl font-bold mb-6">Settings</h1>
       <Tabs defaultValue="profile" className="space-y-4">
         <TabsList className="flex flex-wrap w-full">
