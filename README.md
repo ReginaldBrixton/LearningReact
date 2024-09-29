@@ -1,4 +1,14 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Student Project Management System
+
+This is a [Next.js](https://nextjs.org/) based project management system designed specifically for students. It includes theme support and custom components to enhance the user experience.
+
+## Features
+
+- Project creation and management
+- Task tracking
+- Deadline reminders
+- Collaboration tools
+- Customizable themes
 
 ## Getting Started
 
