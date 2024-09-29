@@ -39,6 +39,11 @@ body {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+
+    /* Default color scheme */
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --accent-color: #e74c3c;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -75,4 +80,91 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Colorful scheme */
+[data-color-scheme="colorful"] {
+  --primary-color: #ff6b6b;
+  --secondary-color: #4ecdc4;
+  --accent-color: #feca57;
+}
+
+/* Monochrome scheme */
+[data-color-scheme="monochrome"] {
+  --primary-color: #333333;
+  --secondary-color: #666666;
+  --accent-color: #999999;
+}
+
+/* Pastel scheme */
+[data-color-scheme="pastel"] {
+  --primary-color: #a8d8ea;
+  --secondary-color: #aa96da;
+  --accent-color: #fcbad3;
+}
+
+/* Neon scheme */
+[data-color-scheme="neon"] {
+  --primary-color: #39ff14;
+  --secondary-color: #ff00ff;
+  --accent-color: #00ffff;
+}
+
+/* Custom scheme */
+[data-color-scheme="custom"] {
+  --primary-color: var(--custom-primary-color, #3498db);
+  --secondary-color: var(--custom-secondary-color, #2ecc71);
+  --accent-color: var(--custom-accent-color, #e74c3c);
+}
+
+/* Utility classes */
+.text-primary {
+  color: var(--primary-color);
+}
+.text-secondary {
+  color: var(--secondary-color);
+}
+.text-accent {
+  color: var(--accent-color);
+}
+
+.bg-primary {
+  background-color: var(--primary-color);
+}
+.bg-secondary {
+  background-color: var(--secondary-color);
+}
+.bg-accent {
+  background-color: var(--accent-color);
+}
+
+/* Add more utility classes for flexibility */
+.border-primary {
+  border-color: var(--primary-color);
+}
+.border-secondary {
+  border-color: var(--secondary-color);
+}
+.border-accent {
+  border-color: var(--accent-color);
+}
+
+.hover\:bg-primary:hover {
+  background-color: var(--primary-color);
+}
+.hover\:bg-secondary:hover {
+  background-color: var(--secondary-color);
+}
+.hover\:bg-accent:hover {
+  background-color: var(--accent-color);
+}
+
+.focus\:ring-primary:focus {
+  --tw-ring-color: var(--primary-color);
+}
+.focus\:ring-secondary:focus {
+  --tw-ring-color: var(--secondary-color);
+}
+.focus\:ring-accent:focus {
+  --tw-ring-color: var(--accent-color);
 }

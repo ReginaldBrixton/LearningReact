@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { useColorScheme } from '../../../theme/mainTheme';
+import { HexColorPicker } from 'react-colorful'; // Add this import
 
 import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
 import { Button } from "./components/ui/button";
@@ -68,6 +70,8 @@ function NotificationsTab({ emailNotifications, setEmailNotifications, pushNotif
 
 function AppearanceTab({ handleSaveChanges }) {
   const { theme, setTheme } = useTheme();
+  const { colorScheme, changeColorScheme, customColors, updateCustomColors } = useColorScheme();
+  const [showCustomPicker, setShowCustomPicker] = useState(false);
 
   return (
     <TabsContent value="appearance">
@@ -78,7 +82,17 @@ function AppearanceTab({ handleSaveChanges }) {
         </CardHeader>
         <CardContent className="space-y-6">
           <ThemeSelector theme={theme} setTheme={setTheme} />
-          <ColorSchemeSelector />
+          <ColorSchemeSelector
+            colorScheme={colorScheme}
+            changeColorScheme={changeColorScheme}
+            setShowCustomPicker={setShowCustomPicker}
+          />
+          {showCustomPicker && (
+            <CustomColorPicker
+              customColors={customColors}
+              updateCustomColors={updateCustomColors}
+            />
+          )}
           <Button onClick={handleSaveChanges} className="w-full">Save Appearance Settings</Button>
         </CardContent>
       </Card>
@@ -198,22 +212,54 @@ function ThemeSelector({ theme, setTheme }) {
   );
 }
 
-function ColorSchemeSelector() {
+function ColorSchemeSelector({ colorScheme, changeColorScheme, setShowCustomPicker }) {
+  const handleChange = (value) => {
+    changeColorScheme(value);
+    setShowCustomPicker(value === 'custom');
+  };
+
   return (
     <div className="space-y-2">
-      <Label htmlFor="color-scheme">Color Scheme</Label>
-      <Select>
-        <SelectTrigger id="color-scheme">
-          <SelectValue placeholder="Select Color Scheme" />
+      <Label>Color Scheme</Label>
+      <Select onValueChange={handleChange} defaultValue={colorScheme}>
+        <SelectTrigger>
+          <SelectValue placeholder="Select a color scheme" />
         </SelectTrigger>
         <SelectContent>
-          {["default", "colorful", "monochrome"].map((scheme) => (
-            <SelectItem key={scheme} value={scheme}>
-              {scheme.charAt(0).toUpperCase() + scheme.slice(1)}
-            </SelectItem>
-          ))}
+          <SelectItem value="default">Default</SelectItem>
+          <SelectItem value="colorful">Colorful</SelectItem>
+          <SelectItem value="monochrome">Monochrome</SelectItem>
+          <SelectItem value="pastel">Pastel</SelectItem>
+          <SelectItem value="neon">Neon</SelectItem>
+          <SelectItem value="custom">Custom</SelectItem>
         </SelectContent>
       </Select>
+    </div>
+  );
+}
+
+function CustomColorPicker({ customColors, updateCustomColors }) {
+  const [currentColor, setCurrentColor] = useState('primary');
+
+  const handleColorChange = (color) => {
+    updateCustomColors({ ...customColors, [currentColor]: color });
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex space-x-2">
+        {Object.entries(customColors).map(([key, value]) => (
+          <Button
+            key={key}
+            onClick={() => setCurrentColor(key)}
+            className={`w-1/3 ${currentColor === key ? 'ring-2 ring-offset-2' : ''}`}
+            style={{ backgroundColor: value }}
+          >
+            {key}
+          </Button>
+        ))}
+      </div>
+      <HexColorPicker color={customColors[currentColor]} onChange={handleColorChange} />
     </div>
   );
 }
@@ -240,6 +286,7 @@ function SelectField({ label, id, options }) {
 
 export default function EnhancedSettingsPage() {
   const { setTheme, theme } = useTheme();
+  const { colorScheme, changeColorScheme } = useColorScheme();
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [pushNotifications, setPushNotifications] = useState(true);
   const [avatarUrl, setAvatarUrl] = useState("/placeholder.svg");
