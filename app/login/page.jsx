@@ -11,8 +11,7 @@ import { Label } from "./components/ui/label"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event) => {
     event.preventDefault()
     // Handle login logic here
     console.log('Login submitted')
