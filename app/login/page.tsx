@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, FormEvent } from 'react'
 import { Eye, EyeOff, LogIn } from 'lucide-react'
 import Link from 'next/link'
 
@@ -12,7 +12,7 @@ import { Label } from "./components/ui/label"
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     // Handle login logic here
     console.log('Login submitted')
