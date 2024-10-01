@@ -16,7 +16,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./comp
 import Calendar from "./components/ui/calendar"
 import DashboardLayout from "../layout"
 
-// Component to display a statistical card with title, value, change, and an icon
 function StatCard({ title, value, change, icon: Icon }) {
   return (
     <Card>
@@ -30,6 +29,26 @@ function StatCard({ title, value, change, icon: Icon }) {
       </CardContent>
     </Card>
   )
+}
+
+// Function for Total Projects StatCard
+function TotalProjectsCard() {
+  return <StatCard title="Total Projects" value="15" change="+2 from last month" icon={ChevronRight} />;
+}
+
+// Function for Active Tasks StatCard
+function ActiveTasksCard() {
+  return <StatCard title="Active Tasks" value="42" change="+5 from last week" icon={List} />;
+}
+
+// Function for Score Board StatCard
+function ScoreBoardCard() {
+  return <StatCard title="Score Board" value="8" change="+1 new this month" icon={Trophy} />;
+}
+
+// Function for Completion Rate StatCard
+function CompletionRateCard() {
+  return <StatCard title="Completion Rate" value="78%" change="+2% from last month" icon={PieChart} />;
 }
 
 // Component to display recent activities in a card
@@ -94,8 +113,8 @@ function UpcomingDeadlines() {
 function ProjectProgress() {
   const projects = [
     { name: "Research Proposal", progress: 75 },
-    { name: "Capstone One", progress: 50 },
-    { name: "Capstone Two", progress: 25 },
+    { name: "Capstone One", progress: 3 },
+    { name: "Capstone Two", progress: 2 },
   ]
 
   return (
@@ -139,6 +158,8 @@ function QuickActions() {
   )
 }
 
+
+
 // Main component to display the project dashboard
 export default function ProjectDashboard() {
   return (
@@ -146,10 +167,10 @@ export default function ProjectDashboard() {
       <h1 className="text-3xl font-bold">Project Dashboard</h1>
       {/* Grid layout for statistical cards */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard title="Total Projects" value="15" change="+2 from last month" icon={ChevronRight} />
-        <StatCard title="Active Tasks" value="42" change="+5 from last week" icon={List} />
-        <StatCard title="Score Board" value="8" change="+1 new this month" icon={Trophy} />
-        <StatCard title="Completion Rate" value="78%" change="+2% from last month" icon={PieChart} />
+        <TotalProjectsCard />
+        <ActiveTasksCard />
+        <ScoreBoardCard />
+        <CompletionRateCard />
       </div>
       {/* Grid layout for recent activities and upcoming deadlines */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
