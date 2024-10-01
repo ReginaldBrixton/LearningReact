@@ -70,7 +70,7 @@ export default function Register() {
               <Label htmlFor="major">Major</Label>
               <Select>
                 <SelectTrigger id="major">
-                  <SelectValue placeholder="Select your major" />
+                  <SelectValue placeholder="Select your business major" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="hr">Human Resource Management</SelectItem>
