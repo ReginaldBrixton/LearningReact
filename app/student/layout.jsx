@@ -13,10 +13,11 @@ const sidebarItems = [
   { icon: Home, label: "Dashboard", route: "/student/dashboard" },
   { icon: List, label: "Projects", route: "/student/projects" },
   { icon: Users, label: "Team", route: "/student/team" },
+  { icon: PieChart, label: "Score Board", route: "/student/scoreboard" }, // New score board item
   { icon: Settings, label: "Settings", route: "/student/settings" },
-  { icon: FileText, label: "Reports", route: "/student/reports" }, // New item
-  { icon: Archive, label: "Archived", route: "/student/archived" }, // New item
-  { icon: HelpCircle, label: "Help", route: "/student/help" }, // New item
+  { icon: FileText, label: "Reports", route: "/student/reports" },
+  { icon: Archive, label: "Archived", route: "/student/archived" },
+  { icon: HelpCircle, label: "Help", route: "/student/help" },
 ]
 
 function Sidebar() {
