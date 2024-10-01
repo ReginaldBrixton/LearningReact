@@ -217,7 +217,7 @@ export default function ProjectsPage() {
   const { project, handleSubmission, handleApproval, handleVideoUpload } = useProjectState();
 
   return (
-    <div className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
+    <div className="container mx-auto sm:px-6 lg:px-8">
       <h1 className="text-3xl font-bold mb-6">{project.title}</h1>
       <OverallProgressCard project={project} />
       <SectionAccordion 

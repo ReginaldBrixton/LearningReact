@@ -1,20 +1,19 @@
 "use client"
 
 // Importing necessary icons from lucide-react library
-import { Bell, Calendar as CalendarIcon, ChevronRight, Home, Layout, List, Menu, PieChart, Plus, Search, Settings, Users, FileText, Archive, HelpCircle } from "lucide-react"
+import { Bell, Calendar as CalendarIcon, ChevronRight, Home, Layout, List, Menu, PieChart, Plus, Search, Settings, Users, FileText, Archive, HelpCircle, Trophy } from "lucide-react"
 // Importing Link component from next/link for navigation
 import Link from "next/link"
 // Importing useState hook from react for state management
 import { useState } from "react"
 
-// import { Button } from "@/app/student/dashboard/components/ui/button"
 import { Button } from "./components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card"
 import { Input } from "./components/ui/input"
 import { Progress } from "./components/ui/progress"
 import { Sheet, SheetContent, SheetTrigger } from "./components/ui/sheet"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./components/ui/tooltip"
-import Calendar from "./components/ui/calendar"; 
+import Calendar from "./components/ui/calendar"
 import DashboardLayout from "../layout"
 
 // Component to display a statistical card with title, value, change, and an icon
@@ -35,6 +34,12 @@ function StatCard({ title, value, change, icon: Icon }) {
 
 // Component to display recent activities in a card
 function RecentActivities() {
+  const activities = [
+    { title: "Your project has been reviewed.", time: "2 hours ago" },
+    { title: "Mr. Ofei made an announcement.", time: "5 hours ago" },
+    { title: "New team member added", time: "1 day ago" },
+  ]
+
   return (
     <Card className="col-span-4">
       <CardHeader>
@@ -42,11 +47,7 @@ function RecentActivities() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {[
-            { title: "New task added to Project X", time: "2 hours ago" },
-            { title: "Project Y completed", time: "5 hours ago" },
-            { title: "New team member added", time: "1 day ago" },
-          ].map((activity, index) => (
+          {activities.map((activity, index) => (
             <div key={index} className="flex items-center">
               <div className="ml-4 space-y-1">
                 <p className="text-sm font-medium leading-none">{activity.title}</p>
@@ -62,6 +63,12 @@ function RecentActivities() {
 
 // Component to display upcoming deadlines in a card
 function UpcomingDeadlines() {
+  const deadlines = [
+    { title: "Capstone Proposal", dueIn: "Due in 2 days" },
+    { title: "Capstone One", dueIn: "Due in 5 days" },
+    { title: "Capstone Two", dueIn: "Due in 7 weeks" },
+  ]
+
   return (
     <Card className="col-span-3">
       <CardHeader>
@@ -69,10 +76,7 @@ function UpcomingDeadlines() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {[
-            { title: "Project A Milestone", dueIn: "Due in 2 days" },
-            { title: "Project B Presentation", dueIn: "Due in 5 days" },
-          ].map((deadline, index) => (
+          {deadlines.map((deadline, index) => (
             <div key={index} className="flex items-center">
               <div className="ml-4 space-y-1">
                 <p className="text-sm font-medium leading-none">{deadline.title}</p>
@@ -88,17 +92,19 @@ function UpcomingDeadlines() {
 
 // Component to display project progress in a card
 function ProjectProgress() {
+  const projects = [
+    { name: "Research Proposal", progress: 75 },
+    { name: "Capstone One", progress: 50 },
+    { name: "Capstone Two", progress: 25 },
+  ]
+
   return (
     <Card className="col-span-4">
       <CardHeader>
         <CardTitle>Project Progress</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {[
-          { name: "Project X", progress: 75 },
-          { name: "Project Y", progress: 50 },
-          { name: "Project Z", progress: 25 },
-        ].map((project, index) => (
+        {projects.map((project, index) => (
           <div key={index} className="space-y-2">
             <div className="flex items-center justify-between">
               <div className="font-medium">{project.name}</div>
@@ -122,7 +128,7 @@ function QuickActions() {
       <CardContent className="space-y-4">
         <Button className="w-full">
           <Plus className="mr-2 h-4 w-4" />
-          New Project
+          Project Submission
         </Button>
         <Button className="w-full" variant="outline">
           <Plus className="mr-2 h-4 w-4" />
@@ -136,26 +142,27 @@ function QuickActions() {
 // Main component to display the project dashboard
 export default function ProjectDashboard() {
   return (
-    <div>
+    <div className="space-y-6 ">
+      <h1 className="text-3xl font-bold">Project Dashboard</h1>
       {/* Grid layout for statistical cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <StatCard title="Total Projects" value="15" change="+2 from last month" icon={ChevronRight} />
         <StatCard title="Active Tasks" value="42" change="+5 from last week" icon={List} />
-        <StatCard title="Team Members" value="8" change="+1 new this month" icon={Users} />
+        <StatCard title="Score Board" value="8" change="+1 new this month" icon={Trophy} />
         <StatCard title="Completion Rate" value="78%" change="+2% from last month" icon={PieChart} />
       </div>
       {/* Grid layout for recent activities and upcoming deadlines */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         <RecentActivities />
         <UpcomingDeadlines />
       </div>
       {/* Grid layout for project progress and quick actions */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         <ProjectProgress />
         <QuickActions />
       </div>
       {/* Calendar component */}
-      <div className="mt-4">
+      <div>
         <Calendar />
       </div>
     </div>
