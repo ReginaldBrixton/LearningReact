@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Eye, EyeOff, LogIn } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '../firebaseConfig'
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
+import { auth, googleProvider } from '../firebaseConfig'
 
 import { Button } from "./components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./components/ui/card"
@@ -17,20 +17,63 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [showErrorBanner, setShowErrorBanner] = useState(false)
   const router = useRouter()
 
+  useEffect(() => {
+    let timer
+    if (showErrorBanner) {
+      timer = setTimeout(() => setShowErrorBanner(false), 5000)
+    }
+    return () => clearTimeout(timer)
+  }, [showErrorBanner])
+
+  const handleLogin = async (email, password) => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log("User signed in:", userCredential.user);
+      return userCredential.user;
+    } catch (error) {
+      console.error("Login error:", error.code, error.message, error);
+      if (error.code === 'auth/operation-not-allowed') {
+        throw new Error("Email/Password sign-in is not enabled. Please contact the administrator.");
+      } else if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        throw new Error("Invalid email or password. Please try again.");
+      } else {
+        throw new Error("An error occurred during login. Please try again later.");
+      }
+    }
+  };
+
   const handleSubmit = async (event) => {
-    event.preventDefault()
-    setError(null)
+    event.preventDefault();
+    setError(null);
+    setIsLoading(true);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password)
-      console.log('Login successful')
-      router.push('/dashboard') // Redirect to dashboard or home page
+      await handleLogin(email, password);
+      console.log('Login successful');
+      router.push('/dashboard'); // Redirect to dashboard or home page
     } catch (error) {
-      setError(error.message)
+      setError(error.message);
+      setShowErrorBanner(true);
+    } finally {
+      setIsLoading(false);
     }
   }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log("Google Sign-in successful:", result.user);
+      router.push('/dashboard'); // Changed from '/student/dashboard' to '/dashboard'
+    } catch (error) {
+      console.error("Google Sign-in error:", error);
+      setError(`Google Sign-in failed: ${error.message}`);
+      setShowErrorBanner(true);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
@@ -42,6 +85,12 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {showErrorBanner && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+              <strong className="font-bold">Error!</strong>
+              <span className="block sm:inline"> {error}</span>
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -75,11 +124,24 @@ export default function LoginPage() {
                 </Button>
               </div>
             </div>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <Button type="submit" className="w-full">
-              <LogIn className="mr-2 h-4 w-4" /> Log In
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <span className="animate-spin inline-block mr-2">⌛</span>
+                  Logging in...
+                </>
+              ) : (
+                <>
+                  <LogIn className="mr-2 h-4 w-4" /> Log In
+                </>
+              )}
             </Button>
           </form>
+          <div className="mt-4">
+            <Button onClick={handleGoogleSignIn} variant="outline" className="w-full">
+              <span className="mr-2 font-bold text-blue-500">G</span> Sign in with Google
+            </Button>
+          </div>
         </CardContent>
         <CardFooter className="flex flex-wrap items-center justify-between gap-2">
           <div className="text-sm text-muted-foreground">

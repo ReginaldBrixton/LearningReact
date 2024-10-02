@@ -4,8 +4,8 @@ import { useState } from 'react'
 import { Eye, EyeOff, UserPlus } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { auth } from '../firebaseConfig'
+import { createUserWithEmailAndPassword, updateProfile, signInWithPopup } from 'firebase/auth'
+import { auth, googleProvider } from '../firebaseConfig'
 
 import { Button } from "./components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./components/ui/card"
@@ -29,17 +29,37 @@ export default function Register() {
     setError(null)
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+      console.log("Starting user registration process...");
+      console.log("Attempting to create user with email:", email);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      console.log("User registered successfully:", userCredential.user);
+      
+      console.log("Attempting to update user profile");
       await updateProfile(userCredential.user, {
         displayName: `${firstName} ${lastName}`,
       })
-      // You can store additional user data (like major) in a database here
+      console.log("User profile updated successfully");
+      
       console.log('Registration successful')
-      router.push('/dashboard') // Redirect to dashboard or home page
+      router.push('/dashboard')
     } catch (error) {
-      setError(error.message)
+      console.error("Registration error:", error.code, error.message);
+      console.error("Full error object:", JSON.stringify(error, null, 2));
+      console.error("Error stack:", error.stack);
+      setError(`Registration failed: ${error.message}`);
     }
   }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log("Google Sign-in successful:", result.user);
+      router.push('/student/dashboard');
+    } catch (error) {
+      console.error("Google Sign-in error:", error);
+      setError(`Google Sign-in failed: ${error.message}`);
+    }
+  };
 
   return (
     (<div className="flex items-center justify-center min-h-screen bg-background">
@@ -106,6 +126,11 @@ export default function Register() {
               <UserPlus className="mr-2 h-4 w-4" /> Sign Up
             </Button>
           </form>
+          <div className="mt-4">
+            <Button onClick={handleGoogleSignIn} variant="outline" className="w-full">
+              <span className="mr-2 font-bold text-blue-500">G</span> Sign up with Google
+            </Button>
+          </div>
         </CardContent>
         <CardFooter>
           <div className="text-sm text-muted-foreground">
