@@ -1,8 +1,11 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { useState } from 'react'
 import { Eye, EyeOff, LogIn } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../firebaseConfig'
 
 import { Button } from "./components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./components/ui/card"
@@ -11,10 +14,22 @@ import { Label } from "./components/ui/label"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
-  const handleSubmit = (event) => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState(null)
+  const router = useRouter()
+
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    // Handle login logic here
-    console.log('Login submitted')
+    setError(null)
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password)
+      console.log('Login successful')
+      router.push('/dashboard') // Redirect to dashboard or home page
+    } catch (error) {
+      setError(error.message)
+    }
   }
 
   return (
@@ -30,7 +45,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="m@example.com" required />
+              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="m@example.com" required />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
@@ -38,6 +53,8 @@ export default function LoginPage() {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
                 <Button
@@ -58,6 +75,7 @@ export default function LoginPage() {
                 </Button>
               </div>
             </div>
+            {error && <p className="text-red-500 text-sm">{error}</p>}
             <Button type="submit" className="w-full">
               <LogIn className="mr-2 h-4 w-4" /> Log In
             </Button>
