@@ -48,11 +48,13 @@ const breakpoints = {
   '2xl': '1536px',
 };
 
+import { MessageSquare } from "lucide-react"
+
 const footbarItems = [
   { icon: Home, label: "Dashboard", route: "/student/dashboard" },
   { icon: List, label: "Projects", route: "/student/projects" },
   { icon: PieChart, label: "Score Board", route: "/student/scoreboard" },
-  { icon: FileText, label: "Reports", route: "/student/reports" },
+  { icon: MessageSquare, label: "Chat", route: "/student/chat" },
   { icon: Settings, label: "Settings", route: "/student/settings" },
 ]
 
@@ -62,6 +64,7 @@ const sidebarItems = [
   { icon: List, label: "Projects", route: "/student/projects" },
   { icon: Users, label: "Team", route: "/student/team" },
   { icon: PieChart, label: "Score Board", route: "/student/scoreboard" },
+  { icon: MessageSquare, label: "Chat", route: "/student/chat" },
   { icon: Settings, label: "Settings", route: "/student/settings" },
   { icon: FileText, label: "Reports", route: "/student/reports" },
   { icon: Archive, label: "Archived", route: "/student/archived" },
