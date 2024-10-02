@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, User, Bell, Palette, Folder } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useColorScheme } from '../../../theme/mainTheme';
 import { HexColorPicker } from 'react-colorful';
@@ -17,6 +17,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Switch } from "./components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
 import { Textarea } from "./components/ui/textarea";
+
+// Custom breakpoints
+const breakpoints = {
+  sm: '600px',
+  md: '668px',
+  lg: '1024px',
+  xl: '1280px',
+  '2xl': '1536px',
+};
 
 function ProfileTab({ handleSaveChanges, avatarUrl, handleFileUpload, userData, setUserData }) {
   const handleInputChange = (e) => {
@@ -419,10 +428,22 @@ export default function EnhancedSettingsPage() {
       <h1 className="text-3xl font-bold mb-6">Settings</h1>
       <Tabs defaultValue="profile" className="space-y-4">
         <TabsList className="flex flex-wrap w-full">
-          <TabsTrigger value="profile" className="flex-grow text-center py-1 px-4">Profile</TabsTrigger>
-          <TabsTrigger value="notifications" className="flex-grow text-center py-1 px-4">Notifications</TabsTrigger>
-          <TabsTrigger value="appearance" className="flex-grow text-center py-1 px-4">Appearance</TabsTrigger>
-          <TabsTrigger value="projects" className="flex-grow text-center py-1 px-4">Projects</TabsTrigger>
+          <TabsTrigger value="profile" className="flex-grow text-center py-1 px-4">
+            <User className="h-4 w-4 sm:hidden" />
+            <span className="hidden sm:inline">Profile</span>
+          </TabsTrigger>
+          <TabsTrigger value="notifications" className="flex-grow text-center py-1 px-4">
+            <Bell className="h-4 w-4 sm:hidden" />
+            <span className="hidden sm:inline">Notifications</span>
+          </TabsTrigger>
+          <TabsTrigger value="appearance" className="flex-grow text-center py-1 px-4">
+            <Palette className="h-4 w-4 sm:hidden" />
+            <span className="hidden sm:inline">Appearance</span>
+          </TabsTrigger>
+          <TabsTrigger value="projects" className="flex-grow text-center py-1 px-4">
+            <Folder className="h-4 w-4 sm:hidden" />
+            <span className="hidden sm:inline">Projects</span>
+          </TabsTrigger>
         </TabsList>
         <ProfileTab 
           handleSaveChanges={handleSaveChanges} 
