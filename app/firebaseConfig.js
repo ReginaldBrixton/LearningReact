@@ -24,9 +24,7 @@ try {
   console.log("Auth instance obtained successfully");
   
   googleProvider = new GoogleAuthProvider();
-  
-  // Uncomment the following line if you're using Firebase Emulators
-  // connectAuthEmulator(auth, "http://localhost:9099");
+
 } catch (error) {
   console.error("Error initializing Firebase:", error);
 }
