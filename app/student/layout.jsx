@@ -39,6 +39,24 @@ import {
   TooltipTrigger
 } from "./dashboard/components/ui/tooltip"
 
+// Custom breakpoints
+const breakpoints = {
+  sm: '600px',
+  md: '668px',
+  lg: '1024px',
+  xl: '1280px',
+  '2xl': '1536px',
+};
+
+const footbarItems = [
+  { icon: Home, label: "Dashboard", route: "/student/dashboard" },
+  { icon: List, label: "Projects", route: "/student/projects" },
+  { icon: PieChart, label: "Score Board", route: "/student/scoreboard" },
+  { icon: FileText, label: "Reports", route: "/student/reports" },
+  { icon: Settings, label: "Settings", route: "/student/settings" },
+]
+
+
 const sidebarItems = [
   { icon: Home, label: "Dashboard", route: "/student/dashboard" },
   { icon: List, label: "Projects", route: "/student/projects" },
@@ -52,7 +70,7 @@ const sidebarItems = [
 
 function Sidebar() {
   return (
-    <aside className="hidden md:flex flex-col w-14 lg:w-[12rem] h-screen bg-gray-100 dark:bg-gray-800">
+    <aside className={`hidden sm:flex flex-col w-14 lg:w-[12rem] h-screen bg-gray-100 dark:bg-gray-800`}>
       <div className="flex items-center justify-center h-[3rem] bg-gray-200 dark:bg-gray-700">
         <Layout className="h-6 w-6 lg:hidden" />
         <span className="hidden lg:inline text-lg font-semibold">Capstone Project</span>
@@ -98,38 +116,20 @@ function Header({ sidebarOpen, setSidebarOpen }) {
     const auth = getAuth(app)
     try {
       await signOut(auth)
-      router.push('/login') // Redirect to login page after logout
+      router.push('/login') 
     } catch (error) {
       console.error("Error signing out: ", error)
     }
   }
 
   return (
-    <header className="flex items-center h-[3rem] px-4 border-b shrink-0 md:px-6">
-      <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Menu className="h-5 w-5" />
-            <span className="sr-only">Toggle sidebar</span>
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-[240px] sm:w-[300px]">
-          <nav className="flex flex-col gap-4">
-            {sidebarItems.map((item, index) => (
-              <Link key={index} href={item.route} className="flex items-center gap-2 text-lg">
-                <item.icon className="h-5 w-5" />
-                <span>{item.label}</span>
-              </Link>
-            ))}
-          </nav>
-        </SheetContent>
-      </Sheet>
-      <div className="flex items-center w-full gap-4 md:ml-auto md:gap-2 lg:gap-4">
+    <header className={`flex items-center h-[3rem] px-4 border-b shrink-0 md:px-6`}>
+      <div className={`flex items-center w-full gap-4 md:ml-auto md:gap-2 lg:gap-4`}>
         <form className="flex-1 ml-auto sm:flex-initial">
           <div className="relative">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
             <Input
-              className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
+              className={`pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]`}
               placeholder="Search projects..."
               type="search"
             />
@@ -168,17 +168,31 @@ function Header({ sidebarOpen, setSidebarOpen }) {
   )
 }
 
-export default function DashboardLayout({ children }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+function BottomNav() {
+  return (
+    <nav className="sm:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+      <div className="flex justify-around">
+        {footbarItems.map((item, index) => (
+          <Link key={index} href={item.route} className="flex flex-col items-center py-2">
+            <item.icon className="h-5 w-5" />
+            <span className="text-xs mt-1">{item.label}</span>
+          </Link>
+        ))}
+      </div>
+    </nav>
+  )
+}
 
+export default function DashboardLayout({ children }) {
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+        <Header />
+        <main className={`flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 pb-16 sm:pb-4`}>
           {children}
         </main>
+        <BottomNav />
       </div>
     </div>
   )
