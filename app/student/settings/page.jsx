@@ -329,7 +329,6 @@ function SelectField({ label, id, options }) {
 export default function EnhancedSettingsPage() {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState({});
-  const [loading, setLoading] = useState(true);
   const { setTheme, theme } = useTheme();
   const { colorScheme, changeColorScheme } = useColorScheme();
   const [emailNotifications, setEmailNotifications] = useState(true);
@@ -342,8 +341,6 @@ export default function EnhancedSettingsPage() {
       setUser(user);
       if (user) {
         fetchUserData(user);
-      } else {
-        setLoading(false);
       }
     });
 
@@ -372,8 +369,6 @@ export default function EnhancedSettingsPage() {
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -415,16 +410,12 @@ export default function EnhancedSettingsPage() {
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   if (!user) {
     return <div>Please sign in to access settings.</div>;
   }
 
   return (
-    <div className="container mx-auto py-[1px] px-[2rem] sm:px-6 lg:px-[1px]">
+    <div className="container mx-auto lg:px-[1px]">
       <h1 className="text-3xl font-bold mb-6">Settings</h1>
       <Tabs defaultValue="profile" className="space-y-4">
         <TabsList className="flex flex-wrap w-full">
