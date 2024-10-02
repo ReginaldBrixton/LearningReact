@@ -16,7 +16,7 @@ const chatData = [
   {
     id: 1,
     name: "Sarah Johnson",
-    avatar: "/api/placeholder/32/32",
+    avatar: "https://i.pravatar.cc/150?img=1",
     lastMessage: "See you tomorrow!",
     time: "2m ago",
     online: true,
@@ -31,38 +31,88 @@ const chatData = [
   {
     id: 2,
     name: "John Smith",
-    avatar: "/api/placeholder/32/32",
+    avatar: "https://i.pravatar.cc/150?img=2",
     lastMessage: "Thanks for the help!",
     time: "1h ago",
     online: false,
-    messages: []
+    messages: [
+      { id: 1, text: "Hey, I'm stuck on this coding problem.", sent: false, time: "2:30 PM" },
+      { id: 2, text: "What seems to be the issue?", sent: true, time: "2:35 PM" },
+      { id: 3, text: "I can't figure out how to implement the sorting algorithm.", sent: false, time: "2:37 PM" },
+      { id: 4, text: "Let me show you an example. It's easier than you think!", sent: true, time: "2:40 PM" },
+      { id: 5, text: "Thanks for the help!", sent: false, time: "3:15 PM" },
+    ]
   },
   {
     id: 3,
     name: "Emily Davis",
-    avatar: "/api/placeholder/32/32",
+    avatar: "https://i.pravatar.cc/150?img=3",
     lastMessage: "The meeting is at 3 PM",
     time: "3h ago",
     online: true,
-    messages: []
+    messages: [
+      { id: 1, text: "Don't forget about our team meeting today.", sent: false, time: "9:00 AM" },
+      { id: 2, text: "Thanks for the reminder. What time was it again?", sent: true, time: "11:30 AM" },
+      { id: 3, text: "The meeting is at 3 PM", sent: false, time: "11:32 AM" },
+      { id: 4, text: "Got it, I'll be there!", sent: true, time: "11:33 AM" },
+    ]
   },
   {
     id: 4,
     name: "Michael Brown",
-    avatar: "/api/placeholder/32/32",
+    avatar: "https://i.pravatar.cc/150?img=4",
     lastMessage: "Did you see the news?",
     time: "5h ago",
     online: false,
-    messages: []
+    messages: [
+      { id: 1, text: "Did you see the news?", sent: false, time: "7:00 AM" },
+      { id: 2, text: "No, what happened?", sent: true, time: "8:30 AM" },
+      { id: 3, text: "There's a new breakthrough in quantum computing!", sent: false, time: "8:32 AM" },
+      { id: 4, text: "Wow, that's exciting! Send me the link?", sent: true, time: "8:35 AM" },
+    ]
   },
   {
     id: 5,
     name: "Lisa Wilson",
-    avatar: "/api/placeholder/32/32",
+    avatar: "https://i.pravatar.cc/150?img=5",
     lastMessage: "Great work today!",
     time: "1d ago",
     online: true,
-    messages: []
+    messages: [
+      { id: 1, text: "Your presentation was amazing!", sent: false, time: "4:00 PM" },
+      { id: 2, text: "Thank you! I was so nervous.", sent: true, time: "4:05 PM" },
+      { id: 3, text: "You didn't show it at all. Great work today!", sent: false, time: "4:07 PM" },
+      { id: 4, text: "I appreciate that, thanks!", sent: true, time: "4:10 PM" },
+    ]
+  },
+  {
+    id: 6,
+    name: "David Lee",
+    avatar: "https://i.pravatar.cc/150?img=8",
+    lastMessage: "The project is due next week",
+    time: "2d ago",
+    online: false,
+    messages: [
+      { id: 1, text: "How's the project coming along?", sent: false, time: "11:00 AM" },
+      { id: 2, text: "I'm about 70% done. You?", sent: true, time: "11:30 AM" },
+      { id: 3, text: "Almost finished. Remember, it's due next week.", sent: false, time: "11:35 AM" },
+      { id: 4, text: "I'll have it done in time, don't worry!", sent: true, time: "11:40 AM" },
+    ]
+  },
+  {
+    id: 7,
+    name: "Emma Thompson",
+    avatar: "https://i.pravatar.cc/150?img=9",
+    lastMessage: "Movie night on Friday?",
+    time: "3d ago",
+    online: true,
+    messages: [
+      { id: 1, text: "Hey, are you free this Friday?", sent: false, time: "6:00 PM" },
+      { id: 2, text: "I think so, why?", sent: true, time: "6:10 PM" },
+      { id: 3, text: "Movie night at my place! You in?", sent: false, time: "6:12 PM" },
+      { id: 4, text: "Sounds fun! What time?", sent: true, time: "6:15 PM" },
+      { id: 5, text: "Let's say 8 PM. See you then!", sent: false, time: "6:20 PM" }
+    ]
   }
 ];
 
@@ -72,9 +122,24 @@ export default function ChatInterfaceComponent() {
   const [searchQuery, setSearchQuery] = useState("");
   const messagesEndRef = useRef(null);
 
+  const [isMobileScreen, setIsMobileScreen] = useState(false);
+
   useEffect(() => {
-    scrollToBottom();
-  }, [selectedChat.messages]);
+    const checkScreenSize = () => {
+      setIsMobileScreen(window.innerWidth < 768); // Assuming 768px as the breakpoint for mobile
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  useEffect(() => {
+    if (isMobileScreen) {
+      scrollToBottom();
+    }
+  }, [selectedChat.messages, isMobileScreen]);
 
   // Utility Functions
   function scrollToBottom() {
@@ -114,31 +179,29 @@ export default function ChatInterfaceComponent() {
   // UI Components
   function renderHorizontalChatList() {
     return (
-      <div className="md:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4">
-        <ScrollArea className="w-full" orientation="horizontal">
-          <div className="flex space-x-4">
-            {getFilteredChats().map((chat) => (
-              <div
-                key={chat.id}
-                onClick={() => handleChatSelect(chat)}
-                className="flex flex-col items-center cursor-pointer">
-                <Avatar className="w-12 h-12">
-                  <AvatarImage src={chat.avatar} alt={chat.name} />
-                  <AvatarFallback>{chat.name[0]}</AvatarFallback>
-                </Avatar>
-                <span className="text-xs mt-1 text-center">{chat.name.split(' ')[0]}</span>
-              </div>
-            ))}
-          </div>
-        </ScrollArea>
+      <div className="md:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
+        <div className="flex space-x-4 pb-5 min-w-max">
+          {getFilteredChats().map((chat) => (
+            <div
+              key={chat.id}
+              onClick={() => handleChatSelect(chat)}
+              className="flex flex-col items-center cursor-pointer">
+              <Avatar className="w-12 h-12">
+                <AvatarImage src={chat.avatar} alt={chat.name} />
+                <AvatarFallback>{chat.name[0]}</AvatarFallback>
+              </Avatar>
+              <span className="text-xs mt-1 text-center whitespace-nowrap">{chat.name.split(' ')[0]}</span>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
 
   function renderSidebar() {
     return (
-      <div className="hidden md:block w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
-        <div className="p-4">
+      <div className="hidden md:block w-50 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
+        <div className="pr-2">
           <Input
             type="text"
             placeholder="Search chats"
@@ -177,7 +240,7 @@ export default function ChatInterfaceComponent() {
 
   function renderChatHeader() {
     return (
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 pt-2 sm:pt-2 pb-2 flex items-center justify-between">
         <div className="flex items-center">
           <Avatar className="w-10 h-10">
             <AvatarImage src={selectedChat.avatar} alt={selectedChat.name} />
@@ -234,7 +297,7 @@ export default function ChatInterfaceComponent() {
 
   function renderChatMessages() {
     return (
-      <ScrollArea className="flex-1 p-4">
+      <ScrollArea className="flex-1 p-2">
         <AnimatePresence>
           {selectedChat.messages.map((message) => (
             <motion.div
@@ -244,12 +307,39 @@ export default function ChatInterfaceComponent() {
               exit={{ opacity: 0, y: -20 }}
               className={`flex ${message.sent ? 'justify-end' : 'justify-start'} mb-4`}>
               <div
-                className={`max-w-[70%] ${message.sent ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700'} rounded-lg p-3`}>
+                className={`max-w-[70%] ${
+                  message.sent
+                    ? 'bg-blue-500 text-white rounded-br-none'
+                    : 'bg-gray-200 dark:bg-gray-700 rounded-bl-none'
+                } rounded-xl p-3 relative`}>
                 <p>{message.text}</p>
                 <p
-                  className={`text-xs mt-1 ${message.sent ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'}`}>
+                  className={`text-xs mt-1 ${
+                    message.sent ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
+                  }`}>
                   {message.time}
                 </p>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className={`absolute top-1 ${message.sent ? 'left-1' : 'right-1'}`}>
+                        <MoreHorizontal className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <DropdownMenu>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem>Copy</DropdownMenuItem>
+                          <DropdownMenuItem>Edit</DropdownMenuItem>
+                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </motion.div>
           ))}
@@ -317,7 +407,7 @@ export default function ChatInterfaceComponent() {
 
   // Main Render
   return (
-    <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex flex-col bg-gray-100 dark:bg-gray-900 h-screen">
       {renderHorizontalChatList()}
       <div className="flex flex-1 overflow-hidden">
         {renderSidebar()}
