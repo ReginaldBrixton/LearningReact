@@ -1,9 +1,11 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useColorScheme } from '../../../theme/mainTheme';
-import { HexColorPicker } from 'react-colorful'; // Add this import
+import { HexColorPicker } from 'react-colorful';
+import { getAuth, updateProfile } from 'firebase/auth';
+import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
 
 import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
 import { Button } from "./components/ui/button";
@@ -16,7 +18,12 @@ import { Switch } from "./components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
 import { Textarea } from "./components/ui/textarea";
 
-function ProfileTab({ handleSaveChanges, avatarUrl, handleFileUpload }) {
+function ProfileTab({ handleSaveChanges, avatarUrl, handleFileUpload, userData, setUserData }) {
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setUserData(prevData => ({ ...prevData, [id]: value }));
+  };
+
   return (
     <TabsContent value="profile">
       <Card>
@@ -26,10 +33,36 @@ function ProfileTab({ handleSaveChanges, avatarUrl, handleFileUpload }) {
         </CardHeader>
         <CardContent className="space-y-6">
           <AvatarSection avatarUrl={avatarUrl} handleFileUpload={handleFileUpload} />
-          <InputField label="Full Name" id="name" placeholder="John Doe" />
-          <InputField label="Email" id="email" type="email" placeholder="john@university.edu" />
-          <InputField label="Major" id="major" placeholder="Computer Science" />
-          <TextareaField label="Bio" id="bio" placeholder="Tell us about yourself and your projects" />
+          <InputField 
+            label="Full Name" 
+            id="displayName" 
+            placeholder="John Doe" 
+            value={userData.displayName || ''} 
+            onChange={handleInputChange}
+          />
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input 
+              id="email" 
+              type="email" 
+              value={userData.email || ''} 
+              disabled
+            />
+          </div>
+          <InputField 
+            label="Major" 
+            id="major" 
+            placeholder="Business Administration"
+            value={userData.major || ''} 
+            onChange={handleInputChange}
+          />
+          <TextareaField 
+            label="Bio" 
+            id="bio" 
+            placeholder="Tell us about yourself and your projects" 
+            value={userData.bio || ''} 
+            onChange={handleInputChange}
+          />
           <Button onClick={handleSaveChanges} className="w-full">Save Changes</Button>
         </CardContent>
       </Card>
@@ -146,20 +179,20 @@ function AvatarSection({ avatarUrl, handleFileUpload }) {
   );
 }
 
-function InputField({ label, id, type = "text", placeholder }) {
+function InputField({ label, id, type = "text", placeholder, value, onChange }) {
   return (
     <div className="space-y-2">
       <Label htmlFor={id}>{label}</Label>
-      <Input id={id} type={type} placeholder={placeholder} />
+      <Input id={id} type={type} placeholder={placeholder} value={value} onChange={onChange} />
     </div>
   );
 }
 
-function TextareaField({ label, id, placeholder }) {
+function TextareaField({ label, id, placeholder, value, onChange }) {
   return (
     <div className="space-y-2">
       <Label htmlFor={id}>{label}</Label>
-      <Textarea id={id} placeholder={placeholder} />
+      <Textarea id={id} placeholder={placeholder} value={value} onChange={onChange} />
     </div>
   );
 }
@@ -285,14 +318,83 @@ function SelectField({ label, id, options }) {
 }
 
 export default function EnhancedSettingsPage() {
+  const [user, setUser] = useState(null);
+  const [userData, setUserData] = useState({});
+  const [loading, setLoading] = useState(true);
   const { setTheme, theme } = useTheme();
   const { colorScheme, changeColorScheme } = useColorScheme();
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [pushNotifications, setPushNotifications] = useState(true);
   const [avatarUrl, setAvatarUrl] = useState("/placeholder.svg");
 
-  const handleSaveChanges = () => {
-    console.log("Settings saved");
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+      if (user) {
+        fetchUserData(user);
+      } else {
+        setLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const fetchUserData = async (user) => {
+    try {
+      const db = getFirestore();
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        setUserData({
+          displayName: user.displayName || '',
+          email: user.email || '',
+          major: data.major || '',
+          bio: data.bio || '',
+        });
+      } else {
+        setUserData({
+          displayName: user.displayName || '',
+          email: user.email || '',
+          major: '',
+          bio: '',
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSaveChanges = async () => {
+    if (user) {
+      const auth = getAuth();
+      const db = getFirestore();
+      
+      try {
+        // Update Firebase Auth profile
+        await updateProfile(auth.currentUser, {
+          displayName: userData.displayName,
+        });
+
+        // Prepare the update object for Firestore
+        const updateData = {};
+        if (userData.displayName !== undefined) updateData.displayName = userData.displayName;
+        if (userData.major !== undefined) updateData.major = userData.major;
+        if (userData.bio !== undefined) updateData.bio = userData.bio;
+
+        // Only update Firestore if there are fields to update
+        if (Object.keys(updateData).length > 0) {
+          await updateDoc(doc(db, 'users', user.uid), updateData);
+        }
+
+        console.log("Profile updated successfully");
+      } catch (error) {
+        console.error("Error updating profile:", error);
+      }
+    }
   };
 
   const handleFileUpload = (event) => {
@@ -304,6 +406,14 @@ export default function EnhancedSettingsPage() {
     }
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <div>Please sign in to access settings.</div>;
+  }
+
   return (
     <div className="container mx-auto py-[1px] px-[2rem] sm:px-6 lg:px-[1px]">
       <h1 className="text-3xl font-bold mb-6">Settings</h1>
@@ -314,7 +424,13 @@ export default function EnhancedSettingsPage() {
           <TabsTrigger value="appearance" className="flex-grow text-center py-1 px-4">Appearance</TabsTrigger>
           <TabsTrigger value="projects" className="flex-grow text-center py-1 px-4">Projects</TabsTrigger>
         </TabsList>
-        <ProfileTab handleSaveChanges={handleSaveChanges} avatarUrl={avatarUrl} handleFileUpload={handleFileUpload} />
+        <ProfileTab 
+          handleSaveChanges={handleSaveChanges} 
+          avatarUrl={avatarUrl} 
+          handleFileUpload={handleFileUpload}
+          userData={userData}
+          setUserData={setUserData}
+        />
         <NotificationsTab
           emailNotifications={emailNotifications}
           setEmailNotifications={setEmailNotifications}
