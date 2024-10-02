@@ -3,7 +3,7 @@ import { Clock, Activity, RefreshCw } from 'lucide-react';
 
 export default function NoRecentActivities() {
   return (
-    <div className="flex flex-col items-center justify-center p-1 space-y-2">
+    <div className="flex flex-col items-center justify-center  ">
       <div className="relative">
         <Clock className="w-16 h-16 text-gray-300" />
         <div className="absolute -top-1 -right-1">

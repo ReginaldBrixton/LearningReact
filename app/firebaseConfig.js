@@ -10,12 +10,13 @@ const firebaseConfig = {
   appId: "1:528387285026:web:58648592940288f7e6ea7b"
 };
 
+let app;
 let auth;
 let googleProvider;
 
 try {
   console.log("Initializing Firebase app...");
-  const app = initializeApp(firebaseConfig);
+  app = initializeApp(firebaseConfig);
   console.log("Firebase app initialized successfully");
   
   console.log("Getting auth instance...");
@@ -30,4 +31,4 @@ try {
   console.error("Error initializing Firebase:", error);
 }
 
-export { auth, googleProvider };
+export { app, auth, googleProvider };

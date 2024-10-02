@@ -1,19 +1,49 @@
 "use client"
 
-import { Bell, Calendar as CalendarIcon, ChevronRight, Home, Layout, List, Menu, PieChart, Plus, Search, Settings, Users, FileText, Archive, HelpCircle } from "lucide-react"
+import {
+  Bell,
+  Calendar as CalendarIcon,
+  ChevronRight,
+  Home,
+  Layout,
+  List,
+  Menu,
+  PieChart,
+  Plus,
+  Search,
+  Settings,
+  Users,
+  FileText,
+  Archive,
+  HelpCircle
+} from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
+import { app } from "../firebaseConfig"
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "./dashboard/components/ui/popover"
 
 import { Button } from "./dashboard/components/ui/button"
 import { Input } from "./dashboard/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "./dashboard/components/ui/sheet"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./dashboard/components/ui/tooltip"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from "./dashboard/components/ui/tooltip"
 
 const sidebarItems = [
   { icon: Home, label: "Dashboard", route: "/student/dashboard" },
   { icon: List, label: "Projects", route: "/student/projects" },
   { icon: Users, label: "Team", route: "/student/team" },
-  { icon: PieChart, label: "Score Board", route: "/student/scoreboard" }, // New score board item
+  { icon: PieChart, label: "Score Board", route: "/student/scoreboard" },
   { icon: Settings, label: "Settings", route: "/student/settings" },
   { icon: FileText, label: "Reports", route: "/student/reports" },
   { icon: Archive, label: "Archived", route: "/student/archived" },
@@ -52,6 +82,28 @@ function Sidebar() {
 }
 
 function Header({ sidebarOpen, setSidebarOpen }) {
+  const [user, setUser] = useState(null)
+  const router = useRouter()
+
+  useEffect(() => {
+    const auth = getAuth(app)
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser)
+    })
+
+    return () => unsubscribe()
+  }, [])
+
+  const handleLogout = async () => {
+    const auth = getAuth(app)
+    try {
+      await signOut(auth)
+      router.push('/login') // Redirect to login page after logout
+    } catch (error) {
+      console.error("Error signing out: ", error)
+    }
+  }
+
   return (
     <header className="flex items-center h-[3rem] px-4 border-b shrink-0 md:px-6">
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
@@ -87,20 +139,30 @@ function Header({ sidebarOpen, setSidebarOpen }) {
           <Bell className="w-4 h-4" />
           <span className="sr-only">Notifications</span>
         </Button>
-        <Button className="rounded-full" size="icon" variant="ghost">
-          <img
-            alt="Avatar"
-            className="rounded-full"
-            height="32"
-            src="/placeholder.svg"
-            style={{
-              aspectRatio: "32/32",
-              objectFit: "cover",
-            }}
-            width="32"
-          />
-          <span className="sr-only">Profile</span>
-        </Button>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button className="rounded-full" size="icon" variant="ghost">
+              <Image
+                alt="User Avatar"
+                className="rounded-full"
+                src={user?.photoURL || "/placeholder.svg"}
+                width={32}
+                height={32}
+                priority
+              />
+              <span className="sr-only">Profile</span>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-56">
+            <div className="flex flex-col space-y-2">
+              <p className="text-sm font-medium">{user?.displayName || "User"}</p>
+              <p className="text-xs text-gray-500">{user?.email}</p>
+              <Button variant="outline" onClick={handleLogout}>
+                Log out
+              </Button>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
     </header>
   )
