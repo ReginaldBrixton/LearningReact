@@ -1,16 +1,20 @@
 import { NextResponse } from 'next/server';
-import { auth } from './app/firebaseConfig';
 
 export async function middleware(request) {
-  const session = await auth.currentUser;
+  console.log('Middleware: Triggered for path:', request.nextUrl.pathname);
 
-  if (!session && request.nextUrl.pathname.startsWith('/student/dashboard')) {
-    return NextResponse.redirect(new URL('/login', request.url));
+  // Remove the auth check from middleware as it's not reliable for server-side checks
+  // Instead, we'll handle authentication in the client-side components
+
+  if (request.nextUrl.pathname === '/student/dashboard') {
+    console.log('Middleware: Allowing access to dashboard');
+    return NextResponse.next();
   }
 
+  console.log('Middleware: Proceeding to next middleware or page');
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/student/dashboard/:path*'],
-};
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+}

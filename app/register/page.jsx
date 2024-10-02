@@ -13,7 +13,6 @@ import { Input } from "./components/ui/input"
 import { Label } from "./components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select"
 
-// Change from named export to default export
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false)
   const [firstName, setFirstName] = useState('')
@@ -30,22 +29,19 @@ export default function Register() {
 
     try {
       console.log("Starting user registration process...");
-      console.log("Attempting to create user with email:", email);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       console.log("User registered successfully:", userCredential.user);
       
-      console.log("Attempting to update user profile");
       await updateProfile(userCredential.user, {
         displayName: `${firstName} ${lastName}`,
       })
       console.log("User profile updated successfully");
       
-      console.log('Registration successful')
-      router.push('/dashboard')
+      console.log('Registration successful, attempting to redirect...');
+      router.push('/student/dashboard');
+      console.log('Redirect initiated');
     } catch (error) {
-      console.error("Registration error:", error.code, error.message);
-      console.error("Full error object:", JSON.stringify(error, null, 2));
-      console.error("Error stack:", error.stack);
+      console.error("Registration error:", error);
       setError(`Registration failed: ${error.message}`);
     }
   }

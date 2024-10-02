@@ -22,12 +22,26 @@ export default function LoginPage() {
   const router = useRouter()
 
   useEffect(() => {
-    let timer
-    if (showErrorBanner) {
-      timer = setTimeout(() => setShowErrorBanner(false), 5000)
-    }
-    return () => clearTimeout(timer)
-  }, [showErrorBanner])
+    console.log('LoginPage: useEffect hook triggered');
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      console.log('LoginPage: Auth state changed:', user ? 'User signed in' : 'No user');
+      if (user) {
+        console.log('LoginPage: User is signed in, user details:', JSON.stringify(user, null, 2));
+        console.log('LoginPage: Attempting to redirect to dashboard');
+        // Use a timeout to ensure the router is ready
+        setTimeout(() => {
+          router.push('/student/dashboard');
+        }, 100);
+      } else {
+        console.log('LoginPage: No user signed in');
+      }
+    });
+
+    return () => {
+      console.log('LoginPage: Cleaning up auth state listener');
+      unsubscribe();
+    };
+  }, [router]);
 
   const handleLogin = async (email, password) => {
     try {
@@ -50,12 +64,14 @@ export default function LoginPage() {
     event.preventDefault();
     setError(null);
     setIsLoading(true);
+    console.log('LoginPage: Handle submit triggered');
 
     try {
-      await handleLogin(email, password);
-      console.log('Login successful');
-      router.push('/dashboard'); // Redirect to dashboard or home page
+      const user = await handleLogin(email, password);
+      console.log('LoginPage: Login successful, user:', user.uid);
+      // Redirection is handled in the useEffect hook
     } catch (error) {
+      console.error('LoginPage: Login error:', error);
       setError(error.message);
       setShowErrorBanner(true);
     } finally {
@@ -64,12 +80,13 @@ export default function LoginPage() {
   }
 
   const handleGoogleSignIn = async () => {
+    console.log('LoginPage: Google Sign-in initiated');
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      console.log("Google Sign-in successful:", result.user);
-      router.push('/dashboard'); // Changed from '/student/dashboard' to '/dashboard'
+      console.log("LoginPage: Google Sign-in successful, user:", result.user.uid);
+      // The redirection will be handled by the useEffect hook
     } catch (error) {
-      console.error("Google Sign-in error:", error);
+      console.error("LoginPage: Google Sign-in error:", error);
       setError(`Google Sign-in failed: ${error.message}`);
       setShowErrorBanner(true);
     }
