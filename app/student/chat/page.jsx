@@ -240,7 +240,7 @@ export default function ChatInterfaceComponent() {
 
   function renderChatHeader() {
     return (
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 pt-2 sm:pt-2 pb-2 flex items-center justify-between">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-2 sm:pt-2 pb-2 flex items-center justify-between">
         <div className="flex items-center">
           <Avatar className="w-10 h-10">
             <AvatarImage src={selectedChat.avatar} alt={selectedChat.name} />
@@ -294,10 +294,9 @@ export default function ChatInterfaceComponent() {
       </div>
     );
   }
-
   function renderChatMessages() {
     return (
-      <ScrollArea className="flex-1 p-2">
+      <ScrollArea className="flex-1 p-2 ">
         <AnimatePresence>
           {selectedChat.messages.map((message) => (
             <motion.div
@@ -319,27 +318,6 @@ export default function ChatInterfaceComponent() {
                   }`}>
                   {message.time}
                 </p>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className={`absolute top-1 ${message.sent ? 'left-1' : 'right-1'}`}>
-                        <MoreHorizontal className="w-4 h-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <DropdownMenu>
-                        <DropdownMenuContent>
-                          <DropdownMenuItem>Copy</DropdownMenuItem>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
               </div>
             </motion.div>
           ))}
@@ -348,7 +326,6 @@ export default function ChatInterfaceComponent() {
       </ScrollArea>
     );
   }
-
   function renderChatInput() {
     return (
       <form
@@ -407,14 +384,16 @@ export default function ChatInterfaceComponent() {
 
   // Main Render
   return (
-    <div className="flex flex-col bg-gray-100 dark:bg-gray-900 h-screen">
+    <div className="flex flex-col bg-white sm:h-[45rem] md:h-[48rem] lg:h-[47rem] dark:bg-gray-900">
       {renderHorizontalChatList()}
       <div className="flex flex-1 overflow-hidden">
         {renderSidebar()}
         <div className="flex-1 flex flex-col">
           {renderChatHeader()}
           {renderChatMessages()}
-          {renderChatInput()}
+          <div className="">
+            {renderChatInput()}
+          </div>
         </div>
       </div>
     </div>
