@@ -15,7 +15,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 const chatData = [
   {
     id: 1,
-    name: "Sarah Johnson",
+    name: "Abraham Ocran",
     avatar: "https://i.pravatar.cc/150?img=1",
     lastMessage: "See you tomorrow!",
     time: "2m ago",
@@ -30,7 +30,7 @@ const chatData = [
   },
   {
     id: 2,
-    name: "John Smith",
+    name: "Mord Astu",
     avatar: "https://i.pravatar.cc/150?img=2",
     lastMessage: "Thanks for the help!",
     time: "1h ago",
@@ -45,7 +45,7 @@ const chatData = [
   },
   {
     id: 3,
-    name: "Emily Davis",
+    name: "Joshua Addy",
     avatar: "https://i.pravatar.cc/150?img=3",
     lastMessage: "The meeting is at 3 PM",
     time: "3h ago",
@@ -59,7 +59,7 @@ const chatData = [
   },
   {
     id: 4,
-    name: "Michael Brown",
+    name: "Skylous Peter",
     avatar: "https://i.pravatar.cc/150?img=4",
     lastMessage: "Did you see the news?",
     time: "5h ago",
@@ -73,7 +73,7 @@ const chatData = [
   },
   {
     id: 5,
-    name: "Lisa Wilson",
+    name: "Frederick Arthur",
     avatar: "https://i.pravatar.cc/150?img=5",
     lastMessage: "Great work today!",
     time: "1d ago",
@@ -87,7 +87,7 @@ const chatData = [
   },
   {
     id: 6,
-    name: "David Lee",
+    name: "Mirabel Mante",
     avatar: "https://i.pravatar.cc/150?img=8",
     lastMessage: "The project is due next week",
     time: "2d ago",
@@ -101,7 +101,7 @@ const chatData = [
   },
   {
     id: 7,
-    name: "Emma Thompson",
+    name: "Chelsea Mettle",
     avatar: "https://i.pravatar.cc/150?img=9",
     lastMessage: "Movie night on Friday?",
     time: "3d ago",
@@ -201,14 +201,15 @@ export default function ChatInterfaceComponent() {
   function renderSidebar() {
     return (
       <div className="hidden md:block w-50 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
-        <div className="pr-2">
+        <div className="pr-2 relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
             type="text"
             placeholder="Search chats"
             value={searchQuery}
             onChange={handleSearchChange}
-            className="w-full"
-            startIcon={<Search className="w-4 h-4 text-gray-400" />} />
+            className="w-full pl-10"
+          />
         </div>
         <ScrollArea className="h-[calc(100vh-5rem)]">
           {getFilteredChats().map((chat) => (
@@ -384,7 +385,7 @@ export default function ChatInterfaceComponent() {
 
   // Main Render
   return (
-    <div className="flex flex-col bg-white sm:h-[45rem] md:h-[48rem] lg:h-[47rem] dark:bg-gray-900">
+    <div className="flex flex-col bg-white h-[45rem] md:h-[48rem] lg:h-[47rem] dark:bg-gray-900">
       {renderHorizontalChatList()}
       <div className="flex flex-1 overflow-hidden">
         {renderSidebar()}
