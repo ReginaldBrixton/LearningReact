@@ -1,55 +1,305 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import Link from "next/link"
+import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "../components/ui/navigation-menu"
+import { useState, useEffect } from "react";
+import Image from 'next/image';
+
+// Header Component
+function Header() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <header className="sticky top-0 z-50 w-full bg-background shadow-sm">
+      <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
+        <Link href="/" className="flex items-center gap-2" prefetch={false}>
+          <BookIcon className="h-6 w-6 text-primary" />
+          <span className="text-xl font-bold">Research Portal</span>
+        </Link>
+        <NavigationMenu>
+          <NavigationMenuList>
+            {[
+              { href: "/student", icon: SchoolIcon, text: "Student" },
+              { href: "/lecturer", icon: LecternIcon, text: "Lecturer" },
+              { href: "/supervisor", icon: MonitorIcon, text: "Supervisor" },
+              { href: "/admin", icon: ServerIcon, text: "Admin" },
+            ].map(({ href, icon: Icon, text }) => (
+              <NavigationMenuItem key={href}>
+                <NavigationMenuLink
+                  href={href}
+                  className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-primary/50 data-[state=open]:bg-primary/50"
+                >
+                  <Icon className="h-5 w-5 mr-2" />
+                  <span>{text}</span>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            ))}
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
+    </header>
+  )
+}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+// Hero Section Component
+function HeroSection() {
+  return (
+    <section className="bg-gradient-to-r from-primary to-primary/80 py-20 md:py-32">
+      <div className="container mx-auto max-w-7xl px-4 md:px-6">
+        <div className="grid items-center gap-8 md:grid-cols-2">
+          <div className="space-y-4">
+            <h1 className="text-4xl font-bold tracking-tight text-primary-foreground sm:text-5xl lg:text-6xl">
+              Welcome to the Research Portal
+            </h1>
+            <p className="text-lg text-primary-foreground/90 sm:text-xl">
+              Streamline your research submission process with our user-friendly platform.
+            </p>
+            <Link
+              href="/student"
+              className="inline-flex h-10 items-center justify-center rounded-md bg-primary-foreground px-6 py-2 text-sm font-medium text-primary shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              prefetch={false}
+            >
+              Get Started
+            </Link>
+          </div>
+          <div className="justify-self-center md:justify-self-end">
             <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src="/images/research-illustration.jpg"
+              width={400}
+              height={300}
+              alt="Research illustration"
+              className="rounded-lg shadow-md"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </div>
         </div>
-      </main>
-     
+      </div>
+    </section>
+  )
+}
+
+// Feature Card Component
+function FeatureCard({ icon: Icon, title, description, learnMoreHref }) {
+  return (
+    <div className="group rounded-lg bg-background p-6 shadow-sm transition-all hover:bg-muted">
+      <div className="flex items-center gap-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
+          <Icon className="h-6 w-6" />
+        </div>
+        <h3 className="text-xl font-semibold">{title}</h3>
+      </div>
+      <p className="mt-4 text-muted-foreground">{description}</p>
+      <Link
+        href={learnMoreHref}
+        className="mt-4 inline-flex items-center gap-2 text-primary hover:underline"
+        prefetch={false}
+      >
+        Learn More
+        <ArrowRightIcon className="h-4 w-4" />
+      </Link>
     </div>
-  );
+  )
+}
+
+// Features Section Component
+function FeaturesSection() {
+  const features = [
+    {
+      icon: SchoolIcon,
+      title: "Student",
+      description: "Submit your research papers, view feedback, and track your progress.",
+      learnMoreHref: "/student",
+    },
+    {
+      icon: LecternIcon,
+      title: "Lecturer",
+      description: "Review student submissions, provide feedback, and manage your courses.",
+      learnMoreHref: "/lecturer",
+    },
+    {
+      icon: MonitorIcon,
+      title: "Supervisor",
+      description: "Oversee student research, provide guidance, and manage submissions.",
+      learnMoreHref: "/supervisor",
+    },
+    {
+      icon: ServerIcon,
+      title: "Admin",
+      description: "Manage the research portal, users, and overall system administration.",
+      learnMoreHref: "/admin",
+    },
+  ]
+
+  return (
+    <section className="py-12 md:py-24">
+      <div className="container mx-auto max-w-7xl px-4 md:px-6">
+        <h2 className="text-3xl font-bold text-center mb-8">Our Features</h2>
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {features.map((feature, index) => (
+            <FeatureCard key={index} {...feature} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Footer Component
+function Footer() {
+  return (
+    <footer className="bg-muted py-6 text-center text-muted-foreground">
+      <div className="container mx-auto max-w-7xl px-4 md:px-6">
+        <p>&copy; {new Date().getFullYear()} Research Portal. All rights reserved.</p>
+      </div>
+    </footer>
+  )
+}
+
+// Main Page Component
+export default function Page() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1">
+        <HeroSection />
+        <FeaturesSection />
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+// Icon Components
+function ArrowRightIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
+    </svg>
+  )
+}
+
+function BookIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+    </svg>
+  )
+}
+
+function LecternIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M16 12h3a2 2 0 0 0 1.902-1.38l1.056-3.333A1 1 0 0 0 21 6H3a1 1 0 0 0-.958 1.287l1.056 3.334A2 2 0 0 0 5 12h3" />
+      <path d="M18 6V3a1 1 0 0 0-1-1h-3" />
+      <rect width="8" height="12" x="8" y="10" rx="1" />
+    </svg>
+  )
+}
+
+function MonitorIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect width="20" height="14" x="2" y="3" rx="2" />
+      <line x1="8" x2="16" y1="21" y2="21" />
+      <line x1="12" x2="12" y1="17" y2="21" />
+    </svg>
+  )
+}
+
+function SchoolIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M14 22v-4a2 2 0 1 0-4 0v4" />
+      <path d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2" />
+      <path d="M18 5v17" />
+      <path d="m4 6 8-4 8 4" />
+      <path d="M6 5v17" />
+      <circle cx="12" cy="9" r="2" />
+    </svg>
+  )
+}
+
+function ServerIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect width="20" height="8" x="2" y="2" rx="2" ry="2" />
+      <rect width="20" height="8" x="2" y="14" rx="2" ry="2" />
+      <line x1="6" x2="6.01" y1="6" y2="6" />
+      <line x1="6" x2="6.01" y1="18" y2="18" />
+    </svg>
+  )
 }
