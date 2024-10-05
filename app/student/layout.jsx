@@ -6,6 +6,7 @@ import {
   ChevronRight,
   Home,
   Layout,
+  ClipboardCheck,
   List,
   Menu,
   PieChart,
@@ -49,6 +50,7 @@ const breakpoints = {
 };
 
 import { MessageSquare } from "lucide-react"
+import { MolecularStructureLoaderComponent } from "../../components/LoadingScreens/molecular-structure-loader"
 
 const footbarItems = [
   { icon: Home, label: "Dashboard", route: "/student/dashboard" },
@@ -62,7 +64,7 @@ const footbarItems = [
 const sidebarItems = [
   { icon: Home, label: "Dashboard", route: "/student/dashboard" },
   { icon: List, label: "Projects", route: "/student/projects" },
-  { icon: Users, label: "Team", route: "/student/team" },
+  { icon: ClipboardCheck, label: "Review", route: "/student/review" },
   { icon: PieChart, label: "Score Board", route: "/student/scoreboard" },
   { icon: MessageSquare, label: "Chat", route: "/student/chat" },
   { icon: Settings, label: "Settings", route: "/student/settings" },
@@ -187,6 +189,34 @@ function BottomNav() {
 }
 
 export default function DashboardLayout({ children }) {
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const auth = getAuth(app)
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser)
+      setLoading(false)
+    })
+
+    return () => unsubscribe()
+  }, [])
+  const [showLoader, setShowLoader] = useState(true);
+
+  useEffect(() => {
+    if (!loading && user) {
+      const timer = setTimeout(() => {
+        setShowLoader(false);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [loading, user]);
+
+  if (showLoader || loading || !user) {
+    return <MolecularStructureLoaderComponent />;
+  }
+
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar />

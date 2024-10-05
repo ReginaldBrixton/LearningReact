@@ -1,4 +1,3 @@
-
 'use client';
 import React, { useState, useEffect } from 'react'
 import { 
@@ -24,10 +23,10 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { Switch } from "@/components/ui/switch"
-import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "./components/ui/tooltip"
+import { Switch } from "./components/ui/switch"
+import { Progress } from "./components/ui/progress"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs"
 
 const students = [
   { id: 1, name: "Alice Johnson", avatar: "/avatars/alice.jpg", projectTitle: "AI-Powered Smart Home", scores: { proposal: 95, capstone1: 92, capstone2: 98 }, totalScore: 285, rank: 1, previousRank: 2, progress: 100 },
@@ -42,7 +41,7 @@ const students = [
   { id: 10, name: "Julia Green", avatar: "/avatars/julia.jpg", projectTitle: "Renewable Energy Optimizer", scores: { proposal: 82, capstone1: 85, capstone2: 84 }, totalScore: 251, rank: 10, previousRank: 9, progress: 100 },
 ]
 
-export function SemesterProjectScoreboardComponent() {
+const useScoreboardState = () => {
   const [sortColumn, setSortColumn] = useState('rank')
   const [sortDirection, setSortDirection] = useState('asc')
   const [searchTerm, setSearchTerm] = useState('')
@@ -50,6 +49,50 @@ export function SemesterProjectScoreboardComponent() {
   const [studentsPerPage] = useState(5)
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [activeTab, setActiveTab] = useState('overall')
+
+  return {
+    sortColumn, setSortColumn,
+    sortDirection, setSortDirection,
+    searchTerm, setSearchTerm,
+    currentPage, setCurrentPage,
+    studentsPerPage,
+    isDarkMode, setIsDarkMode,
+    activeTab, setActiveTab
+  }
+}
+
+const useFilterAndSort = (students, searchTerm, sortColumn, sortDirection) => {
+  return students
+    .filter(student => 
+      student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      student.projectTitle.toLowerCase().includes(searchTerm.toLowerCase()))
+    .sort((a, b) => {
+      if (sortColumn === 'rank' || sortColumn === 'totalScore' || sortColumn === 'progress') {
+        return sortDirection === 'asc' ? a[sortColumn] - b[sortColumn] : b[sortColumn] - a[sortColumn]
+      } else {
+        return sortDirection === 'asc' 
+          ? a[sortColumn].localeCompare(b[sortColumn]) 
+          : b[sortColumn].localeCompare(a[sortColumn]);
+      }
+    })
+}
+
+const getRankChangeIcon = (current, previous) => {
+  if (current < previous) return <TrendingUp className="text-green-500" />;
+  if (current > previous) return <TrendingDown className="text-red-500" />;
+  return <Minus className="text-gray-500" />;
+}
+
+const SemesterProjectScoreboardComponent = () => {
+  const {
+    sortColumn, setSortColumn,
+    sortDirection, setSortDirection,
+    searchTerm, setSearchTerm,
+    currentPage, setCurrentPage,
+    studentsPerPage,
+    isDarkMode, setIsDarkMode,
+    activeTab, setActiveTab
+  } = useScoreboardState()
 
   useEffect(() => {
     if (isDarkMode) {
@@ -68,25 +111,7 @@ export function SemesterProjectScoreboardComponent() {
     }
   }
 
-  const filteredAndSortedStudents = students
-    .filter(student => 
-      student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.projectTitle.toLowerCase().includes(searchTerm.toLowerCase()))
-    .sort((a, b) => {
-      if (sortColumn === 'rank' || sortColumn === 'totalScore' || sortColumn === 'progress') {
-        return sortDirection === 'asc' ? a[sortColumn] - b[sortColumn] : b[sortColumn] - a[sortColumn]
-      } else {
-        return sortDirection === 'asc' 
-          ? a[sortColumn].localeCompare(b[sortColumn]) 
-          : b[sortColumn].localeCompare(a[sortColumn]);
-      }
-    })
-
-  const getRankChangeIcon = (current, previous) => {
-    if (current < previous) return <TrendingUp className="text-green-500" />;
-    if (current > previous) return <TrendingDown className="text-red-500" />;
-    return <Minus className="text-gray-500" />;
-  }
+  const filteredAndSortedStudents = useFilterAndSort(students, searchTerm, sortColumn, sortDirection)
 
   // Pagination
   const indexOfLastStudent = currentPage * studentsPerPage
@@ -97,7 +122,7 @@ export function SemesterProjectScoreboardComponent() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
   return (
-    (<div className={`container mx-auto p-4 space-y-4 ${isDarkMode ? 'dark' : ''}`}>
+    <div className={`container mx-auto p-4 space-y-4 ${isDarkMode ? 'dark' : ''}`}>
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-primary">Semester Project Scoreboard</h1>
         <div className="flex items-center space-x-2">
@@ -349,6 +374,10 @@ export function SemesterProjectScoreboardComponent() {
           </Button>
         </div>
       </div>
-    </div>)
+    </div>
   );
+}
+
+export default function Page() {
+  return <SemesterProjectScoreboardComponent />;
 }
