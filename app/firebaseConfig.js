@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, connectAuthEmulator, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA5MjFuz1gZgTgmDQfz2xegR8tK7-qJcOM",
@@ -27,7 +27,9 @@ try {
   console.log("Google Auth Provider created successfully");
 
   // Log the current domain
-  console.log("Current domain:", window.location.hostname);
+  if (typeof window !== 'undefined') {
+    console.log("Current domain:", window.location.hostname);
+  }
 
 } catch (error) {
   console.error("Error initializing Firebase:", error);
@@ -37,4 +39,9 @@ try {
   }
 }
 
-export { app, auth, googleProvider };
+// Function to initiate Google Sign-In with redirect
+const signInWithGoogle = () => {
+  return signInWithRedirect(auth, googleProvider);
+};
+
+export { app, auth, googleProvider, signInWithGoogle };

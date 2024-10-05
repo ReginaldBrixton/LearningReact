@@ -82,9 +82,8 @@ export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     console.log('LoginPage: Google Sign-in initiated');
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      console.log("LoginPage: Google Sign-in successful, user:", result.user.uid);
-      // The redirection will be handled by the useEffect hook
+      await signInWithGoogle();
+      // The redirect will happen automatically, so we don't need to do anything here
     } catch (error) {
       console.error("LoginPage: Google Sign-in error:", error);
       setError(`Google Sign-in failed: ${error.message}`);
