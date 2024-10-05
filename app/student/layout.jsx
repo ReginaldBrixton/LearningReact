@@ -207,7 +207,7 @@ export default function DashboardLayout({ children }) {
     if (!loading && user) {
       const timer = setTimeout(() => {
         setShowLoader(false);
-      }, 2000);
+      }, 3000);
 
       return () => clearTimeout(timer);
     }
