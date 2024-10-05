@@ -4,8 +4,8 @@
 import { Bell, Calendar as CalendarIcon, ChevronRight, Home, Layout, List, Menu, PieChart, Plus, Search, Settings, Users, FileText, Archive, HelpCircle, Trophy } from "lucide-react"
 // Importing Link component from next/link for navigation
 import Link from "next/link"
-// Importing useState hook from react for state management
-import { useState } from "react"
+// Importing useState, useEffect, and Suspense hooks from react
+import { useState, useEffect, Suspense } from "react"
 
 import { Button } from "./components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card"
@@ -15,6 +15,8 @@ import { Sheet, SheetContent, SheetTrigger } from "./components/ui/sheet"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./components/ui/tooltip"
 import Calendar from "./components/ui/calendar"
 import DashboardLayout from "../layout"
+import DashboardLoading from './loading'
+import NoRecentActivities from './components/ui/no-activity'
 
 function StatCard({ title, value, change, icon: Icon }) {
   return (
@@ -52,8 +54,6 @@ function CompletionRateCard() {
 }
 
 // Component to display recent activities in a card
-import NoRecentActivities from './components/ui/no-activity';
-
 function RecentActivities() {
   const activities = [
     // { title: "Your project has been reviewed.", time: "2 hours ago" },
@@ -164,10 +164,8 @@ function QuickActions() {
   )
 }
 
-
-
 // Main component to display the project dashboard
-export default function ProjectDashboard() {
+function ProjectDashboard() {
   return (
     <div className="space-y-6 ">
       <h1 className="text-3xl font-bold">Project Dashboard</h1>
@@ -195,3 +193,31 @@ export default function ProjectDashboard() {
     </div>
   )
 }
+
+// Modify the DashboardWrapper component
+function DashboardWrapper() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate a loading delay
+    // Uncomment the following lines to enable the loading delay for debugging
+    // const timer = setTimeout(() => {
+    //   setIsLoading(false);
+    // }, 3000); // 3 seconds delay
+
+    // Comment out the next line when using the loading delay
+    setIsLoading(false);
+
+    // Uncomment the following line when using the loading delay
+    // return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <Suspense fallback={<DashboardLoading />}>
+      {isLoading ? <DashboardLoading /> : <ProjectDashboard />}
+    </Suspense>
+  );
+}
+
+// Export the wrapped component as the default export
+export default DashboardWrapper;

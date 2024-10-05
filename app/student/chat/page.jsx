@@ -213,9 +213,8 @@ export default function ChatInterfaceComponent() {
         </div>
         <ScrollArea className="h-[calc(100vh-5rem)]">
           {getFilteredChats().map((chat) => (
-            <motion.div
+            <div
               key={chat.id}
-              whileHover={{ backgroundColor: "rgba(0,0,0,0.05)" }}
               onClick={() => handleChatSelect(chat)}
               className={`flex items-center p-4 cursor-pointer ${selectedChat.id === chat.id ? 'bg-gray-100 dark:bg-gray-700' : ''}`}>
               <Avatar className="w-12 h-12">
@@ -232,7 +231,7 @@ export default function ChatInterfaceComponent() {
               {chat.online && (
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
               )}
-            </motion.div>
+            </div>
           ))}
         </ScrollArea>
       </div>
@@ -298,31 +297,26 @@ export default function ChatInterfaceComponent() {
   function renderChatMessages() {
     return (
       <ScrollArea className="flex-1 p-2 ">
-        <AnimatePresence>
-          {selectedChat.messages.map((message) => (
-            <motion.div
-              key={message.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className={`flex ${message.sent ? 'justify-end' : 'justify-start'} mb-4`}>
-              <div
-                className={`max-w-[70%] ${
-                  message.sent
-                    ? 'bg-blue-500 text-white rounded-br-none'
-                    : 'bg-gray-200 dark:bg-gray-700 rounded-bl-none'
-                } rounded-xl p-3 relative`}>
-                <p>{message.text}</p>
-                <p
-                  className={`text-xs mt-1 ${
-                    message.sent ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
-                  }`}>
-                  {message.time}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
+        {selectedChat.messages.map((message) => (
+          <div
+            key={message.id}
+            className={`flex ${message.sent ? 'justify-end' : 'justify-start'} mb-4`}>
+            <div
+              className={`max-w-[70%] ${
+                message.sent
+                  ? 'bg-blue-500 text-white rounded-br-none'
+                  : 'bg-gray-200 dark:bg-gray-700 rounded-bl-none'
+              } rounded-xl p-3 relative`}>
+              <p>{message.text}</p>
+              <p
+                className={`text-xs mt-1 ${
+                  message.sent ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'
+                }`}>
+                {message.time}
+              </p>
+            </div>
+          </div>
+        ))}
         <div ref={messagesEndRef} />
       </ScrollArea>
     );
