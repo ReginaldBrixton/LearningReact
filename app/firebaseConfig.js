@@ -24,9 +24,17 @@ try {
   console.log("Auth instance obtained successfully");
   
   googleProvider = new GoogleAuthProvider();
+  console.log("Google Auth Provider created successfully");
+
+  // Log the current domain
+  console.log("Current domain:", window.location.hostname);
 
 } catch (error) {
   console.error("Error initializing Firebase:", error);
+  // Log more details about the error
+  if (error.code === 'auth/unauthorized-domain') {
+    console.error("Unauthorized domain. Please add this domain to your Firebase console's authorized domains list.");
+  }
 }
 
 export { app, auth, googleProvider };
