@@ -1,4 +1,3 @@
-
 'use client';
 import React, { useState, useEffect } from 'react'
 import { 
@@ -15,10 +14,10 @@ import {
   ChevronRight
 } from 'lucide-react'
 
-import { Button } from "./components/ui/button"
-import { Input } from "./components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./components/ui/table"
-import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { 
   Tooltip,
   TooltipContent,
