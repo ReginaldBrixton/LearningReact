@@ -5,7 +5,7 @@ import { Eye, EyeOff, LogIn } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
-import { auth, signInWithGoogle } from '../firebaseConfig'
+import { auth, signInWithGoogle, setSessionCookie } from '../firebaseConfig'
 
 import { Button } from "./components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./components/ui/card"
@@ -46,6 +46,7 @@ export default function LoginPage() {
   const handleLogin = async (email, password) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      await setSessionCookie(userCredential.user);
       console.log("User signed in:", userCredential.user);
       return userCredential.user;
     } catch (error) {

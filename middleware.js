@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from './app/firebaseConfig';
 
 export async function middleware(request) {
-  const session = await auth.getIdToken().catch(() => null);
+  const session = request.cookies.get('session');
 
   if (!session && !request.nextUrl.pathname.startsWith('/login')) {
     return NextResponse.redirect(new URL('/login', request.url));

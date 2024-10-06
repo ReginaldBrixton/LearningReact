@@ -48,17 +48,28 @@ try {
   }
 }
 
-/**
- * Initiates Google Sign-In with popup
- * @returns {Promise} A promise that resolves with the user credential
- */
-const signInWithGoogle = () => {
-  return signInWithPopup(auth, googleProvider)
-    .catch(error => {
-      console.error("Error during Google Sign-In:", error);
-      throw error; // Re-throw the error for the caller to handle
-    });
+const setSessionCookie = async (user) => {
+  const idToken = await user.getIdToken(true);
+  // Set the cookie using an API route
+  await fetch('/api/session', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ idToken }),
+  });
+};
+
+const signInWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    await setSessionCookie(result.user);
+    return result;
+  } catch (error) {
+    console.error("Error during Google Sign-In:", error);
+    throw error;
+  }
 };
 
 // Export Firebase instances and authentication function
-export { app, auth, googleProvider, signInWithGoogle };
+export { app, auth, googleProvider, signInWithGoogle, setSessionCookie };
