@@ -6,7 +6,7 @@ export async function middleware(request) {
 
   // Check if the user is authenticated
   const isAuthenticated = await checkAuthentication(request);
-
+ 
   if (!isAuthenticated && path.startsWith('/student')) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
