@@ -2,36 +2,19 @@ import { NextResponse } from 'next/server';
 import { auth } from './app/firebaseConfig';
 
 export async function middleware(request) {
-  const path = request.nextUrl.pathname;
+  const session = await auth.getIdToken().catch(() => null);
 
-  // Check if the user is authenticated
-  const isAuthenticated = await checkAuthentication(request);
- 
-  if (!isAuthenticated && path.startsWith('/student')) {
+  if (!session && !request.nextUrl.pathname.startsWith('/login')) {
     return NextResponse.redirect(new URL('/login', request.url));
+  }
+
+  if (session && request.nextUrl.pathname === '/login') {
+    return NextResponse.redirect(new URL('/student/dashboard', request.url));
   }
 
   return NextResponse.next();
 }
 
-async function checkAuthentication(request) {
-  // Get the Firebase ID token from the request cookies
-  const idToken = request.cookies.get('firebaseIdToken');
-
-  if (!idToken) {
-    return false;
-  }
-
-  try {
-    // Verify the ID token
-    await auth.verifyIdToken(idToken);
-    return true;
-  } catch (error) {
-    console.error('Error verifying Firebase ID token:', error);
-    return false;
-  }
-}
-
 export const config = {
-  matcher: ['/student/:path*', '/api/student/:path*'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };

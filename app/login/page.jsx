@@ -5,7 +5,7 @@ import { Eye, EyeOff, LogIn } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
-import { auth, googleProvider } from '../firebaseConfig'
+import { auth, signInWithGoogle } from '../firebaseConfig'
 
 import { Button } from "./components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./components/ui/card"
@@ -80,13 +80,12 @@ export default function LoginPage() {
   }
 
   const handleGoogleSignIn = async () => {
-    console.log('LoginPage: Google Sign-in initiated');
     try {
-      await signInWithGoogle();
-      // The redirect will happen automatically, so we don't need to do anything here
+      const result = await signInWithGoogle();
+      console.log('Google sign-in successful:', result.user);
     } catch (error) {
-      console.error("LoginPage: Google Sign-in error:", error);
-      setError(`Google Sign-in failed: ${error.message}`);
+      console.error('Google sign-in error:', error);
+      setError(error.message);
       setShowErrorBanner(true);
     }
   };

@@ -1,6 +1,6 @@
 // Import necessary Firebase modules
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 // Firebase configuration object
 // TODO: Move these credentials to environment variables for better security
@@ -49,11 +49,11 @@ try {
 }
 
 /**
- * Initiates Google Sign-In with redirect
- * @returns {Promise} A promise that resolves when the redirect is complete
+ * Initiates Google Sign-In with popup
+ * @returns {Promise} A promise that resolves with the user credential
  */
 const signInWithGoogle = () => {
-  return signInWithRedirect(auth, googleProvider)
+  return signInWithPopup(auth, googleProvider)
     .catch(error => {
       console.error("Error during Google Sign-In:", error);
       throw error; // Re-throw the error for the caller to handle

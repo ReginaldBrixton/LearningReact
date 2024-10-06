@@ -4,11 +4,19 @@ import Link from "next/link"
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "../components/ui/navigation-menu"
 import { useState, useEffect } from "react";
 import Image from 'next/image';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 // Header Component
 function Header() {
+  const { scrollY } = useScroll();
+  const headerOpacity = useTransform(scrollY, [0, 100], [1, 0.8]);
+  const headerScale = useTransform(scrollY, [0, 100], [1, 0.98]);
+
   return (
-    <header className="sticky top-0 z-50 w-full bg-background shadow-sm">
+    <motion.header 
+      className="sticky top-0 z-50 w-full bg-background shadow-sm"
+      style={{ opacity: headerOpacity, scale: headerScale }}
+    >
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2" prefetch={false}>
           <BookIcon className="h-6 w-6 text-primary" />
@@ -35,17 +43,28 @@ function Header() {
           </NavigationMenuList>
         </NavigationMenu>
       </div>
-    </header>
+    </motion.header>
   )
 }
 
 // Hero Section Component
 function HeroSection() {
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+
   return (
-    <section className="bg-gradient-to-r from-primary to-primary/80 py-20 md:py-32">
+    <motion.section 
+      className="bg-gradient-to-r from-primary to-primary/80 py-20 md:py-32 overflow-hidden"
+      style={{ y }}
+    >
       <div className="container mx-auto max-w-7xl px-4 md:px-6">
         <div className="grid items-center gap-8 md:grid-cols-2">
-          <div className="space-y-4">
+          <motion.div 
+            className="space-y-4"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             <h1 className="text-4xl font-bold tracking-tight text-primary-foreground sm:text-5xl lg:text-6xl">
               Welcome to the Research Portal
             </h1>
@@ -59,26 +78,36 @@ function HeroSection() {
             >
               Get Started
             </Link>
-          </div>
-          <div className="justify-self-center md:justify-self-end">
+          </motion.div>
+          <motion.div 
+            className="justify-self-center md:justify-self-end"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             <Image
-              src="/images/research-illustration.jpg"
-              width={400}
-              height={300}
+              src="/research-illustration.jpg"
+              width={800}
+              height={600}
               alt="Research illustration"
               className="rounded-lg shadow-md"
+              priority
             />
-          </div>
+          </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   )
 }
 
 // Feature Card Component
 function FeatureCard({ icon: Icon, title, description, learnMoreHref }) {
   return (
-    <div className="group rounded-lg bg-background p-6 shadow-sm transition-all hover:bg-muted">
+    <motion.div 
+      className="group rounded-lg bg-background p-6 shadow-sm transition-all hover:bg-muted"
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
       <div className="flex items-center gap-4">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
           <Icon className="h-6 w-6" />
@@ -94,18 +123,21 @@ function FeatureCard({ icon: Icon, title, description, learnMoreHref }) {
         Learn More
         <ArrowRightIcon className="h-4 w-4" />
       </Link>
-    </div>
+    </motion.div>
   )
 }
 
 // Features Section Component
 function FeaturesSection() {
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], ['50%', '0%']);
+
   const features = [
     {
       icon: SchoolIcon,
       title: "Student",
       description: "Submit your research papers, view feedback, and track your progress.",
-      learnMoreHref: "/student",
+      learnMoreHref: "/student/dashboard",
     },
     {
       icon: LecternIcon,
@@ -128,7 +160,7 @@ function FeaturesSection() {
   ]
 
   return (
-    <section className="py-12 md:py-24">
+    <motion.section className="py-12 md:py-24" style={{ y }}>
       <div className="container mx-auto max-w-7xl px-4 md:px-6">
         <h2 className="text-3xl font-bold text-center mb-8">Our Features</h2>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
@@ -137,7 +169,7 @@ function FeaturesSection() {
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   )
 }
 
