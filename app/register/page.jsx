@@ -28,14 +28,14 @@ export default function Register() {
     setError(null)
 
     try {
-      console.log("Starting user registration process...");
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("User registered successfully:", userCredential.user);
+      console.log("Starting user registration process...")
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+      console.log("User registered successfully:", userCredential.user)
       
       await updateProfile(userCredential.user, {
         displayName: `${firstName} ${lastName}`,
       })
-      console.log("User profile updated successfully");
+      console.log("User profile updated successfully")
       
       console.log('Registration successful, attempting to redirect...');
       router.push('/student/dashboard');
