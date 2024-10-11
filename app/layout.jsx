@@ -19,6 +19,7 @@ export const metadata = {
   description: "Accra Institute of Technology - Capstone Project System",
 };
 
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
