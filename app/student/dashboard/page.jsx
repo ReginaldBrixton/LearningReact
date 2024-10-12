@@ -7,7 +7,7 @@ import Link from "next/link"
 // Importing useState, useEffect, and Suspense hooks from react
 import { useState, useEffect, Suspense } from "react"
 
-import { Button } from "components/ui/button"
+import { Button, buttonVariants } from "components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card"
 import { Progress } from "components/ui/progress"
 import Calendar from "components/ui/calendar"

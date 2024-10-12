@@ -16,7 +16,7 @@ import { Switch } from "./scoreboard/components/ui/switch"
 
 // Import UI components individually
 import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover"
-import { Button } from "./dashboard/components/ui/button"
+import { Button } from "components/ui/button"
 import { Input } from "../../components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "../../components/ui/sheet"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip"
