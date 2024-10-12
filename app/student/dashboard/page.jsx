@@ -192,25 +192,9 @@ function ProjectDashboard() {
 
 // Modify the DashboardWrapper component
 function DashboardWrapper() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate a loading delay
-    // Uncomment the following lines to enable the loading delay for debugging
-    // const timer = setTimeout(() => {
-    //   setIsLoading(false);
-    // }, 3000); // 3 seconds delay
-
-    // Comment out the next line when using the loading delay
-    setIsLoading(false);
-
-    // Uncomment the following line when using the loading delay
-    // return () => clearTimeout(timer);
-  }, []);
-
   return (
     <Suspense fallback={<DashboardLoading />}>
-      {isLoading ? <DashboardLoading /> : <ProjectDashboard />}
+      <ProjectDashboard />
     </Suspense>
   );
 }
