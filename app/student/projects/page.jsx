@@ -3,13 +3,13 @@ import { useState } from 'react'
 import { motion } from 'framer-motion';
 import { Check, Upload, Video } from 'lucide-react';
 
-import { Button } from "./components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./components/ui/card"
-import { Input } from "./components/ui/input"
-import { Label } from "./components/ui/label"
-import { Progress } from "./components/ui/progress"
-import { ScrollArea } from "./components/ui/scroll-area"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/ui/accordion"
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "components/ui/card"
+import { Input } from "components/ui/input"
+import { Label } from "components/ui/label"
+import { Progress } from "components/ui/progress"
+import { ScrollArea } from "components/ui/scroll-area"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "components/ui/accordion"
 
 const initialProject = {
   id: '1',
