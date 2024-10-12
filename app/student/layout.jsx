@@ -15,11 +15,11 @@ import { useRouter, usePathname } from 'next/navigation'
 import { Switch } from "./scoreboard/components/ui/switch"
 
 // Import UI components individually
-import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover"
+import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover"
 import { Button } from "components/ui/button"
 import { Input } from "components/ui/input"
-import { Sheet, SheetContent, SheetTrigger } from "../../components/ui/sheet"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip"
+import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip"
 
 // Custom breakpoints
 const breakpoints = {
@@ -30,7 +30,7 @@ const breakpoints = {
   '2xl': '1536px',
 };
 
-import { MolecularStructureLoaderComponent } from "../../components/LoadingScreens/molecular-structure-loader"
+import { MolecularStructureLoaderComponent } from "components/LoadingScreens/molecular-structure-loader"
 
 const footbarItems = [
   { icon: Home, label: "Dashboard", route: "/student/dashboard" },
