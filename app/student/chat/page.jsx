@@ -4,12 +4,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Phone, Video, MoreHorizontal, Search, Paperclip, Smile, Mic } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import { Button } from "./components/ui/button"
-import { Input } from "./components/ui/input"
-import { ScrollArea } from "./components/ui/scroll-area"
-import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./components/ui/tooltip"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./components/ui/dropdown-menu"
+import { Button } from "components/ui/button"
+import { Input } from "components/ui/input"
+import { ScrollArea } from "components/ui/scroll-area"
+import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "components/ui/dropdown-menu"
 
 // Mock data for chats
 const chatData = [
@@ -218,7 +218,15 @@ export default function ChatInterfaceComponent() {
               onClick={() => handleChatSelect(chat)}
               className={`flex items-center p-4 cursor-pointer ${selectedChat.id === chat.id ? 'bg-gray-100 dark:bg-gray-700' : ''}`}>
               <Avatar className="w-12 h-12">
-                <AvatarImage src={chat.avatar} alt={chat.name} />
+                <AvatarImage 
+                  src={chat.avatar} 
+                  alt={chat.name} 
+                  fetchPriority="high"
+                  onLoad={(e) => {
+                    e.target.setAttribute('fetchpriority', 'low');
+                    e.target.setAttribute('loading', 'lazy');
+                  }}
+                />
                 <AvatarFallback>{chat.name[0]}</AvatarFallback>
               </Avatar>
               <div className="ml-4 flex-1">
@@ -243,7 +251,15 @@ export default function ChatInterfaceComponent() {
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-2 sm:pt-2 pb-2 flex items-center justify-between">
         <div className="flex items-center">
           <Avatar className="w-10 h-10">
-            <AvatarImage src={selectedChat.avatar} alt={selectedChat.name} />
+            <AvatarImage 
+              src={selectedChat.avatar} 
+              alt={selectedChat.name}
+              fetchPriority="high"
+              onLoad={(e) => {
+                e.target.setAttribute('fetchpriority', 'low');
+                e.target.setAttribute('loading', 'lazy');
+              }}
+            />
             <AvatarFallback>{selectedChat.name[0]}</AvatarFallback>
           </Avatar>
           <div className="ml-4">

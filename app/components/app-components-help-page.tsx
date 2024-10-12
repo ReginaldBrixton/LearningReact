@@ -93,10 +93,10 @@ const videoTutorials = [
 
 const allCategories = ["All", "Basics", "Submission", "Progress", "Communication", "Advice"]
 
-export default function HelpPage() {
+export function HelpPageComponent() {
   const [searchTerm, setSearchTerm] = useState('')
   const [activeCategory, setActiveCategory] = useState('All')
-  const [feedbackGiven, setFeedbackGiven] = useState({})
+  const [feedbackGiven, setFeedbackGiven] = useState<Record<string, boolean>>({})
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -106,18 +106,18 @@ export default function HelpPage() {
     return () => window.removeEventListener('resize', checkIsMobile)
   }, [])
 
-  const filteredContent = (content) =>
+  const filteredContent = (content: any[]) =>
     content.filter(item => 
       (item.question || item.title).toLowerCase().includes(searchTerm.toLowerCase()) &&
       (activeCategory === 'All' || item.category === activeCategory)
     )
 
-  const handleFeedback = (id, isPositive) => {
+  const handleFeedback = (id: string, isPositive: boolean) => {
     setFeedbackGiven(prev => ({ ...prev, [id]: true }))
     console.log(`Feedback for ${id}: ${isPositive ? 'Positive' : 'Negative'}`)
   }
 
-  const ContentCard = ({ title, icon: Icon, children }) => (
+  const ContentCard = ({ title, icon: Icon, children }: { title: string, icon: any, children: React.ReactNode }) => (
     <Card className="bg-white dark:bg-gray-800 mb-6">
       <CardHeader>
         <CardTitle className="text-xl md:text-2xl font-bold flex items-center text-indigo-600 dark:text-indigo-400">
