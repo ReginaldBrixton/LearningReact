@@ -74,10 +74,6 @@ const fetchArchivedProjects = async () => {
         { id: '6', title: 'Nanotechnology in Medicine', completionDate: '2023-10-12', status: 'Completed', department: 'Biomedical Engineering', description: 'Exploring the use of nanotechnology for targeted drug delivery and disease treatment.', supervisor: 'Dr. Robert Langer', score: 94 },
         { id: '7', title: 'Machine Learning for Climate Prediction', completionDate: '2023-11-25', status: 'Completed', department: 'Earth Sciences', description: 'Utilizing machine learning algorithms to improve long-term climate predictions.', supervisor: 'Dr. Syukuro Manabe', score: 91 },
         { id: '8', title: 'Augmented Reality in Education', completionDate: '2023-12-18', status: 'Completed', department: 'Education Technology', description: 'Developing AR applications to enhance learning experiences in classrooms.', supervisor: 'Dr. Sugata Mitra', score: 89 },
-        { id: '9', title: 'Genetic Engineering for Crop Resilience', completionDate: '2024-01-30', status: 'Completed', department: 'Agricultural Science', description: 'Applying genetic engineering techniques to develop crops resistant to climate change effects.', supervisor: 'Dr. Norman Borlaug', score: 93 },
-        { id: '10', title: 'Advanced Materials for Space Exploration', completionDate: '2024-02-28', status: 'Completed', department: 'Materials Science', description: 'Developing new materials to withstand extreme conditions in space exploration.', supervisor: 'Dr. Mae Jemison', score: 96 },
-        { id: '11', title: 'Cybersecurity in IoT Devices', completionDate: '2024-03-15', status: 'Completed', department: 'Information Security', description: 'Enhancing security measures for Internet of Things (IoT) devices to prevent cyber attacks.', supervisor: 'Dr. Bruce Schneier', score: 88 },
-        { id: '12', title: 'Behavioral Economics in Public Policy', completionDate: '2024-04-20', status: 'Completed', department: 'Economics', description: 'Applying behavioral economics principles to improve public policy effectiveness.', supervisor: 'Dr. Daniel Kahneman', score: 91 }
       ])
     }, 1000)
   })
@@ -310,7 +306,7 @@ function ArchivedProjectsContent() {
 const queryClient = new QueryClient()
 
 // Wrap the component with QueryClientProvider
-export default function ArchivedProjectsPage() {
+export function ArchivedProjectsComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ArchivedProjectsContent />

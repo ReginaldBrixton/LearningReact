@@ -15,11 +15,11 @@ import { useRouter, usePathname } from 'next/navigation'
 import { Switch } from "./scoreboard/components/ui/switch"
 
 // Import UI components individually
-import { Popover, PopoverContent, PopoverTrigger } from "./dashboard/components/ui/popover"
+import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover"
 import { Button } from "./dashboard/components/ui/button"
-import { Input } from "./dashboard/components/ui/input"
-import { Sheet, SheetContent, SheetTrigger } from "./dashboard/components/ui/sheet"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./dashboard/components/ui/tooltip"
+import { Input } from "../../components/ui/input"
+import { Sheet, SheetContent, SheetTrigger } from "../../components/ui/sheet"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../components/ui/tooltip"
 
 // Custom breakpoints
 const breakpoints = {

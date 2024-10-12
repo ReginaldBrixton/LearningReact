@@ -7,16 +7,12 @@ import Link from "next/link"
 // Importing useState, useEffect, and Suspense hooks from react
 import { useState, useEffect, Suspense } from "react"
 
-import { Button } from "./components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card"
-import { Input } from "./components/ui/input"
-import { Progress } from "./components/ui/progress"
-import { Sheet, SheetContent, SheetTrigger } from "./components/ui/sheet"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./components/ui/tooltip"
-import Calendar from "./components/ui/calendar"
-import DashboardLayout from "../layout"
+import { Button } from "components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card"
+import { Progress } from "components/ui/progress"
+import Calendar from "components/ui/calendar"
 import DashboardLoading from './loading'
-import NoRecentActivities from './components/ui/no-activity'
+import NoRecentActivities from 'components/ui/no-activity'
 
 function StatCard({ title, value, change, icon: Icon }) {
   return (
