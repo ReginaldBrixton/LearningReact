@@ -8,8 +8,6 @@ import {
   TrendingUp, 
   TrendingDown, 
   Minus,
-  Sun,
-  Moon,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react'
@@ -24,7 +22,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./components/ui/tooltip"
-import { Switch } from "./components/ui/switch"
 import { Progress } from "./components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs"
 
@@ -47,7 +44,6 @@ const useScoreboardState = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [studentsPerPage] = useState(5)
-  const [isDarkMode, setIsDarkMode] = useState(false)
   const [activeTab, setActiveTab] = useState('overall')
 
   return {
@@ -56,7 +52,6 @@ const useScoreboardState = () => {
     searchTerm, setSearchTerm,
     currentPage, setCurrentPage,
     studentsPerPage,
-    isDarkMode, setIsDarkMode,
     activeTab, setActiveTab
   }
 }
@@ -90,17 +85,8 @@ const SemesterProjectScoreboardComponent = () => {
     searchTerm, setSearchTerm,
     currentPage, setCurrentPage,
     studentsPerPage,
-    isDarkMode, setIsDarkMode,
     activeTab, setActiveTab
   } = useScoreboardState()
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }, [isDarkMode])
 
   const handleSort = (column) => {
     if (column === sortColumn) {
@@ -122,17 +108,9 @@ const SemesterProjectScoreboardComponent = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
   return (
-    <div className={`container mx-auto p-4 space-y-4 ${isDarkMode ? 'dark' : ''}`}>
+    <div className="container mx-auto p-4 space-y-4">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-primary">Semester Project Scoreboard</h1>
-        <div className="flex items-center space-x-2">
-          <Sun className="h-4 w-4 text-primary" />
-          <Switch
-            checked={isDarkMode}
-            onCheckedChange={setIsDarkMode}
-            aria-label="Toggle dark mode" />
-          <Moon className="h-4 w-4 text-primary" />
-        </div>
       </div>
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
         <div className="relative w-full sm:w-64">

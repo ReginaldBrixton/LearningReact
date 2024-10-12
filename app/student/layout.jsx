@@ -3,7 +3,8 @@
 import {
   Bell, Calendar as CalendarIcon, ChevronRight, Home, Layout,
   ClipboardCheck, List, Menu, PieChart, Plus, Search, Settings,
-  Users, FileText, Archive, HelpCircle, MessageSquare
+  Users, FileText, Archive, HelpCircle, MessageSquare,
+  Sun, Moon
 } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -11,6 +12,7 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
 import { app } from "../firebaseConfig"
 import Image from 'next/image'
 import { useRouter, usePathname } from 'next/navigation'
+import { Switch } from "./scoreboard/components/ui/switch"
 
 // Import UI components individually
 import { Popover, PopoverContent, PopoverTrigger } from "./dashboard/components/ui/popover"
@@ -87,6 +89,7 @@ function Sidebar() {
 
 function Header() {
   const [user, setUser] = useState(null)
+  const [isDarkMode, setIsDarkMode] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -97,6 +100,14 @@ function Header() {
 
     return () => unsubscribe()
   }, [])
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [isDarkMode])
 
   const handleLogout = async () => {
     const auth = getAuth(app)
@@ -121,6 +132,15 @@ function Header() {
             />
           </div>
         </form>
+        <div className="flex items-center space-x-2">
+          <Sun className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+          <Switch
+            checked={isDarkMode}
+            onCheckedChange={setIsDarkMode}
+            aria-label="Toggle dark mode"
+          />
+          <Moon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+        </div>
         <Button className="rounded-full" size="icon" variant="ghost">
           <Bell className="w-4 h-4" />
           <span className="sr-only">Notifications</span>
