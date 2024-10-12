@@ -40,8 +40,8 @@
     "components/ui/badge.jsx",
     "components/ui/dropdown-menu.jsx",
     "components/ui/dialog.jsx"
-, "app/components/ui/accordion.jsx", "app/components/ui/accordion.jsx"  ],
+, "app/components/ui/accordion.jsx", "app/components/ui/accordion.jsx", "components/ui/alert.jsx"  ],
   "exclude": [
     "node_modules"
   ]
-}
+}, "components/ui/alert.jsx"
