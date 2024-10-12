@@ -12,18 +12,18 @@ import {
   ChevronRight
 } from 'lucide-react'
 
-import { Button } from "./components/ui/button"
-import { Input } from "./components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./components/ui/table"
-import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar"
+import { Button } from "components/ui/button"
+import { Input } from "components/ui/input"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "components/ui/table"
+import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar"
 import { 
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./components/ui/tooltip"
-import { Progress } from "./components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs"
+} from "components/ui/tooltip"
+import { Progress } from "components/ui/progress"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "components/ui/tabs"
 
 const students = [
   { id: 1, name: "Alice Johnson", avatar: "/avatars/alice.jpg", projectTitle: "AI-Powered Smart Home", scores: { proposal: 95, capstone1: 92, capstone2: 98 }, totalScore: 285, rank: 1, previousRank: 2, progress: 100 },

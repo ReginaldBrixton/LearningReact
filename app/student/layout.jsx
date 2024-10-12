@@ -54,6 +54,17 @@ const sidebarItems = [
 
 function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+
+  useEffect(() => {
+    // Prefetch all routes after initial page load
+    sidebarItems.forEach(item => {
+      router.prefetch(item.route)
+    })
+    footbarItems.forEach(item => {
+      router.prefetch(item.route)
+    })
+  }, [router])
 
   return (
     <aside className={`hidden sm:flex flex-col w-14 lg:w-[12rem] h-screen bg-gray-100 dark:bg-gray-800`}>
@@ -176,6 +187,14 @@ function Header() {
 
 function BottomNav() {
   const pathname = usePathname()
+  const router = useRouter()
+
+  useEffect(() => {
+    // Prefetch all routes after initial page load
+    footbarItems.forEach(item => {
+      router.prefetch(item.route)
+    })
+  }, [router])
 
   return (
     <nav className="sm:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
@@ -183,7 +202,7 @@ function BottomNav() {
         {footbarItems.map((item, index) => (
           <Link 
             key={index} 
-            href={item.route} 
+            href={item.route}
             className={`flex flex-col items-center py-2 ${
               pathname === item.route ? 'text-blue-500' : ''
             }`}
@@ -200,6 +219,7 @@ function BottomNav() {
 export default function DashboardLayout({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
   useEffect(() => {
     const auth = getAuth(app)
@@ -210,6 +230,15 @@ export default function DashboardLayout({ children }) {
 
     return () => unsubscribe()
   }, [])
+
+  useEffect(() => {
+    // Prefetch all routes after initial page load
+    if (!loading && user) {
+      [...sidebarItems, ...footbarItems].forEach(item => {
+        router.prefetch(item.route)
+      })
+    }
+  }, [loading, user, router])
 
   const [showLoader, setShowLoader] = useState(true);
 
