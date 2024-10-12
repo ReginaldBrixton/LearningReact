@@ -4,6 +4,7 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 @layer utilities {
@@ -44,6 +45,9 @@ body {
     --primary-color: #3498db;
     --secondary-color: #2ecc71;
     --accent-color: #e74c3c;
+    --background-color: #f5f7fa;
+    --text-color: #2c3e50;
+    --muted-color: #95a5a6;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -87,13 +91,19 @@ body {
   --primary-color: #ff6b6b;
   --secondary-color: #4ecdc4;
   --accent-color: #feca57;
+  --background-color: #f7f1e3;
+  --text-color: #2d3436;
+  --muted-color: #778ca3;
 }
 
 /* Monochrome scheme */
 [data-color-scheme="monochrome"] {
-  --primary-color: #333333;
-  --secondary-color: #666666;
-  --accent-color: #999999;
+  --primary-color: #4a4a4a;
+  --secondary-color: #7a7a7a;
+  --accent-color: #9a9a9a;
+  --background-color: #f0f0f0;
+  --text-color: #2c2c2c;
+  --muted-color: #b0b0b0;
 }
 
 /* Pastel scheme */
@@ -101,13 +111,19 @@ body {
   --primary-color: #a8d8ea;
   --secondary-color: #aa96da;
   --accent-color: #fcbad3;
+  --background-color: #ffffd2;
+  --text-color: #5d576b;
+  --muted-color: #e6e6e6;
 }
 
 /* Neon scheme */
 [data-color-scheme="neon"] {
-  --primary-color: #39ff14;
+  --primary-color: #00ff00;
   --secondary-color: #ff00ff;
   --accent-color: #00ffff;
+  --background-color: #121212;
+  --text-color: #ffffff;
+  --muted-color: #444444;
 }
 
 /* Custom scheme */
@@ -115,6 +131,9 @@ body {
   --primary-color: var(--custom-primary-color, #3498db);
   --secondary-color: var(--custom-secondary-color, #2ecc71);
   --accent-color: var(--custom-accent-color, #e74c3c);
+  --background-color: var(--custom-background-color, #f5f7fa);
+  --text-color: var(--custom-text-color, #2c3e50);
+  --muted-color: var(--custom-muted-color, #95a5a6);
 }
 
 /* Utility classes */
@@ -127,6 +146,12 @@ body {
 .text-accent {
   color: var(--accent-color);
 }
+.text-main {
+  color: var(--text-color);
+}
+.text-muted {
+  color: var(--muted-color);
+}
 
 .bg-primary {
   background-color: var(--primary-color);
@@ -137,8 +162,10 @@ body {
 .bg-accent {
   background-color: var(--accent-color);
 }
+.bg-main {
+  background-color: var(--background-color);
+}
 
-/* Add more utility classes for flexibility */
 .border-primary {
   border-color: var(--primary-color);
 }
