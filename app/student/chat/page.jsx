@@ -4,12 +4,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Phone, Video, MoreHorizontal, Search, Paperclip, Smile, Mic } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import { Button } from "components/ui/button"
-import { Input } from "components/ui/input"
-import { ScrollArea } from "components/ui/scroll-area"
-import { Avatar, AvatarFallback, AvatarImage } from "components/ui/avatar"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 // Mock data for chats
 const chatData = [

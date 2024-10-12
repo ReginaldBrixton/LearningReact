@@ -4,16 +4,16 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Upload, Video, Calendar, Clock, AlertTriangle, Award, ChevronRight, FileText, Zap } from 'lucide-react';
 
-import { Button } from "components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "components/ui/card"
-import { Input } from "components/ui/input"
-import { Label } from "components/ui/label"
-import { Progress } from "components/ui/progress"
-import { ScrollArea } from "components/ui/scroll-area"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "components/ui/accordion"
-import { Badge } from "components/ui/badge"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "components/ui/tooltip"
-import { Alert, AlertDescription, AlertTitle } from "components/ui/alert"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Progress } from "@/components/ui/progress"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { Badge } from "@/components/ui/badge"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 const initialProject = {
   id: '1',
