@@ -12,7 +12,7 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
 import { app } from "../firebaseConfig"
 import Image from 'next/image'
 import { useRouter, usePathname } from 'next/navigation'
-import { Switch } from "./scoreboard/components/ui/switch"
+import { Switch } from "components/ui/switch"
 
 // Import UI components individually
 import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover"
