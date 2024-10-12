@@ -1,44 +1,23 @@
 "use client"
 
 import {
-  Bell,
-  Calendar as CalendarIcon,
-  ChevronRight,
-  Home,
-  Layout,
-  ClipboardCheck,
-  List,
-  Menu,
-  PieChart,
-  Plus,
-  Search,
-  Settings,
-  Users,
-  FileText,
-  Archive,
-  HelpCircle
+  Bell, Calendar as CalendarIcon, ChevronRight, Home, Layout,
+  ClipboardCheck, List, Menu, PieChart, Plus, Search, Settings,
+  Users, FileText, Archive, HelpCircle, MessageSquare
 } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
 import { app } from "../firebaseConfig"
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "./dashboard/components/ui/popover"
+import { useRouter, usePathname } from 'next/navigation'
 
+// Import UI components individually
+import { Popover, PopoverContent, PopoverTrigger } from "./dashboard/components/ui/popover"
 import { Button } from "./dashboard/components/ui/button"
 import { Input } from "./dashboard/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "./dashboard/components/ui/sheet"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from "./dashboard/components/ui/tooltip"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./dashboard/components/ui/tooltip"
 
 // Custom breakpoints
 const breakpoints = {
@@ -49,7 +28,6 @@ const breakpoints = {
   '2xl': '1536px',
 };
 
-import { MessageSquare } from "lucide-react"
 import { MolecularStructureLoaderComponent } from "../../components/LoadingScreens/molecular-structure-loader"
 
 const footbarItems = [
@@ -59,7 +37,6 @@ const footbarItems = [
   { icon: MessageSquare, label: "Chat", route: "/student/chat" },
   { icon: Settings, label: "Settings", route: "/student/settings" },
 ]
-
 
 const sidebarItems = [
   { icon: Home, label: "Dashboard", route: "/student/dashboard" },
@@ -74,6 +51,8 @@ const sidebarItems = [
 ]
 
 function Sidebar() {
+  const pathname = usePathname()
+
   return (
     <aside className={`hidden sm:flex flex-col w-14 lg:w-[12rem] h-screen bg-gray-100 dark:bg-gray-800`}>
       <div className="flex items-center justify-center h-[3rem] bg-gray-200 dark:bg-gray-700">
@@ -87,7 +66,9 @@ function Sidebar() {
               <TooltipTrigger asChild>
                 <Link
                   href={item.route}
-                  className="flex items-center h-12 px-4 text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className={`flex items-center h-12 px-4 text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700 ${
+                    pathname === item.route ? 'bg-gray-200 dark:bg-gray-700' : ''
+                  }`}
                 >
                   <item.icon className="h-5 w-5" />
                   <span className="ml-4 hidden lg:inline">{item.label}</span>
@@ -104,7 +85,7 @@ function Sidebar() {
   )
 }
 
-function Header({ sidebarOpen, setSidebarOpen }) {
+function Header() {
   const [user, setUser] = useState(null)
   const router = useRouter()
 
@@ -174,11 +155,19 @@ function Header({ sidebarOpen, setSidebarOpen }) {
 }
 
 function BottomNav() {
+  const pathname = usePathname()
+
   return (
     <nav className="sm:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
       <div className="flex justify-around">
         {footbarItems.map((item, index) => (
-          <Link key={index} href={item.route} className="flex flex-col items-center py-2">
+          <Link 
+            key={index} 
+            href={item.route} 
+            className={`flex flex-col items-center py-2 ${
+              pathname === item.route ? 'text-blue-500' : ''
+            }`}
+          >
             <item.icon className="h-5 w-5" />
             <span className="text-xs mt-1">{item.label}</span>
           </Link>
@@ -201,13 +190,14 @@ export default function DashboardLayout({ children }) {
 
     return () => unsubscribe()
   }, [])
+
   const [showLoader, setShowLoader] = useState(true);
 
   useEffect(() => {
     if (!loading && user) {
       const timer = setTimeout(() => {
         setShowLoader(false);
-      }, 3000);
+      }, 1000);
 
       return () => clearTimeout(timer);
     }
