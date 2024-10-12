@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "target": "es5",
     "lib": [
       "dom",
       "dom.iterable",
@@ -7,25 +8,24 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "incremental": true,
-    "module": "esnext",
     "esModuleInterop": true,
+    "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "incremental": true,
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "strictNullChecks": true,
-    "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./app/*"
+        "./*"
       ]
     }
   },
@@ -33,15 +33,9 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "app/login/page.jsx",
-    "components/ui/button.jsx",
-    "app/components/app-components-archived-projects.jsx",
-    "components/ui/badge.jsx",
-    "components/ui/dropdown-menu.jsx",
-    "components/ui/dialog.jsx"
-, "app/components/ui/accordion.jsx", "app/components/ui/accordion.jsx", "components/ui/alert.jsx"  ],
+    ".next/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]
-}, "components/ui/alert.jsx"
+}
