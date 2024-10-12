@@ -25,7 +25,6 @@ import {
   TableHeader, 
   TableRow 
 } from "components/ui/table"
-import { Input } from "components/ui/input"
 import { Button } from "components/ui/button"
 import { 
   Select, 
@@ -153,12 +152,12 @@ function ArchivedProjectsContent() {
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <div className="relative flex-grow">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <Input
+          <input
             type="text"
             placeholder="Search projects..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-primary focus:border-primary"
+            className="pl-10 w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-primary focus:border-primary"
           />
         </div>
         <Select value={filterYear} onValueChange={setFilterYear}>
