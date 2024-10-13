@@ -9,7 +9,7 @@ function ProjectProgress() {
   ]
 
   return (
-    <Card className="col-span-4">
+    <Card className="col-span-2">
       <CardHeader>
         <CardTitle>Project Progress</CardTitle>
       </CardHeader>
