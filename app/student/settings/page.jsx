@@ -420,20 +420,20 @@ export default function EnhancedSettingsPage() {
       <Tabs defaultValue="profile" className="space-y-4">
         <TabsList className="flex flex-wrap w-full">
           <TabsTrigger value="profile" className="flex-grow text-center py-1 px-4">
-            <User className="h-4 w-4 sm:hidden" />
-            <span className="hidden sm:inline">Profile</span>
+            <User className="h-4 w-4 md:hidden" />
+            <span className="hidden md:inline">Profile</span>
           </TabsTrigger>
           <TabsTrigger value="notifications" className="flex-grow text-center py-1 px-4">
-            <Bell className="h-4 w-4 sm:hidden" />
-            <span className="hidden sm:inline">Notifications</span>
+            <Bell className="h-4 w-4 md:hidden" />
+            <span className="hidden md:inline">Notifications</span>
           </TabsTrigger>
           <TabsTrigger value="appearance" className="flex-grow text-center py-1 px-4">
-            <Palette className="h-4 w-4 sm:hidden" />
-            <span className="hidden sm:inline">Appearance</span>
+            <Palette className="h-4 w-4 md:hidden" />
+            <span className="hidden md:inline">Appearance</span>
           </TabsTrigger>
           <TabsTrigger value="projects" className="flex-grow text-center py-1 px-4">
-            <Folder className="h-4 w-4 sm:hidden" />
-            <span className="hidden sm:inline">Projects</span>
+            <Folder className="h-4 w-4 md:hidden" />
+            <span className="hidden md:inline">Projects</span>
           </TabsTrigger>
         </TabsList>
         <ProfileTab 

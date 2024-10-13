@@ -115,7 +115,7 @@ function Header() {
   }, []);
 
   const handleLogout = async () => {
-    const auth = getAuth(app);
+    const auth = getAuth(app)
     try {
       await signOut(auth);
       router.push('/login');

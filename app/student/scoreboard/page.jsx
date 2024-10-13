@@ -78,6 +78,236 @@ const getRankChangeIcon = (current, previous) => {
   return <Minus className="text-gray-500" />;
 }
 
+const SearchBar = ({ searchTerm, setSearchTerm }) => (
+  <div className="relative w-full sm:w-64">
+    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+    <Input
+      type="text"
+      placeholder="Search students or projects..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="pl-8"
+    />
+  </div>
+)
+
+const ScoreboardHeader = ({ sortColumn, sortDirection, handleSort }) => (
+  <TableHeader>
+    <TableRow>
+      <TableHead className="w-[100px]">
+        <Button variant="ghost" onClick={() => handleSort('rank')} className="font-bold">
+          Rank
+          {sortColumn === 'rank' && (sortDirection === 'asc' ? <ChevronUp className="ml-2" /> : <ChevronDown className="ml-2" />)}
+        </Button>
+      </TableHead>
+      <TableHead>
+        <Button variant="ghost" onClick={() => handleSort('name')} className="font-bold">
+          Name
+          {sortColumn === 'name' && (sortDirection === 'asc' ? <ChevronUp className="ml-2" /> : <ChevronDown className="ml-2" />)}
+        </Button>
+      </TableHead>
+      <TableHead>
+        <Button variant="ghost" onClick={() => handleSort('projectTitle')} className="font-bold">
+          Project Title
+          {sortColumn === 'projectTitle' && (sortDirection === 'asc' ? <ChevronUp className="ml-2" /> : <ChevronDown className="ml-2" />)}
+        </Button>
+      </TableHead>
+      <TableHead>
+        <Button variant="ghost" onClick={() => handleSort('totalScore')} className="font-bold">
+          Total Score
+          {sortColumn === 'totalScore' && (sortDirection === 'asc' ? <ChevronUp className="ml-2" /> : <ChevronDown className="ml-2" />)}
+        </Button>
+      </TableHead>
+      <TableHead>Change</TableHead>
+      <TableHead>
+        <Button variant="ghost" onClick={() => handleSort('progress')} className="font-bold">
+          Progress
+          {sortColumn === 'progress' && (sortDirection === 'asc' ? <ChevronUp className="ml-2" /> : <ChevronDown className="ml-2" />)}
+        </Button>
+      </TableHead>
+    </TableRow>
+  </TableHeader>
+)
+
+const StudentRow = ({ student }) => (
+  <TableRow key={student.id}>
+    <TableCell>
+      <div className="flex items-center gap-2">
+        {student.rank <= 3 && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Trophy
+                  className={`w-5 h-5 ${
+                    student.rank === 1 ? 'text-yellow-500' :
+                    student.rank === 2 ? 'text-gray-400' :
+                    'text-amber-600'
+                  }`}
+                />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{student.rank === 1 ? 'Gold' : student.rank === 2 ? 'Silver' : 'Bronze'} Trophy</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+        {student.rank}
+      </div>
+    </TableCell>
+    <TableCell>
+      <div className="flex items-center gap-2">
+        <Avatar>
+          <AvatarImage src={student.avatar} alt={student.name} />
+          <AvatarFallback>{student.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+        </Avatar>
+        {student.name}
+      </div>
+    </TableCell>
+    <TableCell>{student.projectTitle}</TableCell>
+    <TableCell>{student.totalScore}</TableCell>
+    <TableCell>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            {getRankChangeIcon(student.rank, student.previousRank)}
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>
+              {student.rank < student.previousRank
+                ? `Up ${student.previousRank - student.rank} place(s)`
+                : student.rank > student.previousRank
+                ? `Down ${student.rank - student.previousRank} place(s)`
+                : 'No change'}
+            </p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </TableCell>
+    <TableCell>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <Progress value={student.progress} className="w-[60px]" />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{student.progress}% Complete</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </TableCell>
+  </TableRow>
+)
+
+const Pagination = ({ currentPage, totalPages, paginate }) => (
+  <div className="flex space-x-2">
+    <Button
+      onClick={() => paginate(currentPage - 1)}
+      disabled={currentPage === 1}
+      variant="outline"
+      size="sm">
+      <ChevronLeft className="h-4 w-4" />
+    </Button>
+    {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+      <Button
+        key={number}
+        onClick={() => paginate(number)}
+        variant={currentPage === number ? "default" : "outline"}
+        size="sm">
+        {number}
+      </Button>
+    ))}
+    <Button
+      onClick={() => paginate(currentPage + 1)}
+      disabled={currentPage === totalPages}
+      variant="outline"
+      size="sm">
+      <ChevronRight className="h-4 w-4" />
+    </Button>
+  </div>
+)
+
+const OverallTab = ({ currentStudents, sortColumn, sortDirection, handleSort }) => (
+  <div className="rounded-md border border-border">
+    <Table>
+      <ScoreboardHeader sortColumn={sortColumn} sortDirection={sortDirection} handleSort={handleSort} />
+      <TableBody>
+        {currentStudents.map((student) => (
+          <StudentRow key={student.id} student={student} />
+        ))}
+      </TableBody>
+    </Table>
+  </div>
+)
+
+const ProposalTab = ({ currentStudents }) => (
+  <div className="rounded-md border border-border">
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Name</TableHead>
+          <TableHead>Project Title</TableHead>
+          <TableHead>Proposal Score</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {currentStudents.map((student) => (
+          <TableRow key={student.id}>
+            <TableCell>{student.name}</TableCell>
+            <TableCell>{student.projectTitle}</TableCell>
+            <TableCell>{student.scores.proposal}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </div>
+)
+
+const Capstone1Tab = ({ currentStudents }) => (
+  <div className="rounded-md border border-border">
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Name</TableHead>
+          <TableHead>Project Title</TableHead>
+          <TableHead>Capstone 1 Score</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {currentStudents.map((student) => (
+          <TableRow key={student.id}>
+            <TableCell>{student.name}</TableCell>
+            <TableCell>{student.projectTitle}</TableCell>
+            <TableCell>{student.scores.capstone1}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </div>
+)
+
+const Capstone2Tab = ({ currentStudents }) => (
+  <div className="rounded-md border border-border">
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Name</TableHead>
+          <TableHead>Project Title</TableHead>
+          <TableHead>Capstone 2 Score</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {currentStudents.map((student) => (
+          <TableRow key={student.id}>
+            <TableCell>{student.name}</TableCell>
+            <TableCell>{student.projectTitle}</TableCell>
+            <TableCell>{student.scores.capstone2}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </div>
+)
+
 const SemesterProjectScoreboardComponent = () => {
   const {
     sortColumn, setSortColumn,
@@ -113,16 +343,7 @@ const SemesterProjectScoreboardComponent = () => {
         <h1 className="text-2xl font-bold text-primary">Semester Project Scoreboard</h1>
       </div>
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-        <div className="relative w-full sm:w-64">
-          <Search
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-          <Input
-            type="text"
-            placeholder="Search students or projects..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8" />
-        </div>
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       </div>
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
@@ -132,193 +353,21 @@ const SemesterProjectScoreboardComponent = () => {
           <TabsTrigger value="capstone2">Capstone 2</TabsTrigger>
         </TabsList>
         <TabsContent value="overall">
-          <div className="rounded-md border border-border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[100px]">
-                    <Button variant="ghost" onClick={() => handleSort('rank')} className="font-bold">
-                      Rank
-                      {sortColumn === 'rank' && (sortDirection === 'asc' ? <ChevronUp className="ml-2" /> : <ChevronDown className="ml-2" />)}
-                    </Button>
-                  </TableHead>
-                  <TableHead>
-                    <Button variant="ghost" onClick={() => handleSort('name')} className="font-bold">
-                      Name
-                      {sortColumn === 'name' && (sortDirection === 'asc' ? <ChevronUp className="ml-2" /> : <ChevronDown className="ml-2" />)}
-                    </Button>
-                  </TableHead>
-                  <TableHead>
-                    <Button
-                      variant="ghost"
-                      onClick={() => handleSort('projectTitle')}
-                      className="font-bold">
-                      Project Title
-                      {sortColumn === 'projectTitle' && (sortDirection === 'asc' ? <ChevronUp className="ml-2" /> : <ChevronDown className="ml-2" />)}
-                    </Button>
-                  </TableHead>
-                  <TableHead>
-                    <Button
-                      variant="ghost"
-                      onClick={() => handleSort('totalScore')}
-                      className="font-bold">
-                      Total Score
-                      {sortColumn === 'totalScore' && (sortDirection === 'asc' ? <ChevronUp className="ml-2" /> : <ChevronDown className="ml-2" />)}
-                    </Button>
-                  </TableHead>
-                  <TableHead>Change</TableHead>
-                  <TableHead>
-                    <Button
-                      variant="ghost"
-                      onClick={() => handleSort('progress')}
-                      className="font-bold">
-                      Progress
-                      {sortColumn === 'progress' && (sortDirection === 'asc' ? <ChevronUp className="ml-2" /> : <ChevronDown className="ml-2" />)}
-                    </Button>
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {currentStudents.map((student) => (
-                  <TableRow key={student.id}>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        {student.rank <= 3 && (
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger>
-                                <Trophy
-                                  className={`w-5 h-5 ${
-                                    student.rank === 1 ? 'text-yellow-500' :
-                                    student.rank === 2 ? 'text-gray-400' :
-                                    'text-amber-600'
-                                  }`} />
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>{
-                                  student.rank === 1 ? 'Gold' :
-                                  student.rank === 2 ? 'Silver' :
-                                  'Bronze'
-                                } Trophy</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        )}
-                        {student.rank}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Avatar>
-                          <AvatarImage src={student.avatar} alt={student.name} />
-                          <AvatarFallback>{student.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                        </Avatar>
-                        {student.name}
-                      </div>
-                    </TableCell>
-                    <TableCell>{student.projectTitle}</TableCell>
-                    <TableCell>{student.totalScore}</TableCell>
-                    <TableCell>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            {getRankChangeIcon(student.rank, student.previousRank)}
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>
-                              {student.rank < student.previousRank
-                                ? `Up ${student.previousRank - student.rank} place(s)`
-                                : student.rank > student.previousRank
-                                ? `Down ${student.rank - student.previousRank} place(s)`
-                                : 'No change'}
-                            </p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </TableCell>
-                    <TableCell>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Progress value={student.progress} className="w-[60px]" />
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>{student.progress}% Complete</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+          <OverallTab 
+            currentStudents={currentStudents}
+            sortColumn={sortColumn}
+            sortDirection={sortDirection}
+            handleSort={handleSort}
+          />
         </TabsContent>
         <TabsContent value="proposal">
-          <div className="rounded-md border border-border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Project Title</TableHead>
-                  <TableHead>Proposal Score</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {currentStudents.map((student) => (
-                  <TableRow key={student.id}>
-                    <TableCell>{student.name}</TableCell>
-                    <TableCell>{student.projectTitle}</TableCell>
-                    <TableCell>{student.scores.proposal}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+          <ProposalTab currentStudents={currentStudents} />
         </TabsContent>
         <TabsContent value="capstone1">
-          <div className="rounded-md border border-border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Project Title</TableHead>
-                  <TableHead>Capstone 1 Score</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {currentStudents.map((student) => (
-                  <TableRow key={student.id}>
-                    <TableCell>{student.name}</TableCell>
-                    <TableCell>{student.projectTitle}</TableCell>
-                    <TableCell>{student.scores.capstone1}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+          <Capstone1Tab currentStudents={currentStudents} />
         </TabsContent>
         <TabsContent value="capstone2">
-          <div className="rounded-md border border-border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Project Title</TableHead>
-                  <TableHead>Capstone 2 Score</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {currentStudents.map((student) => (
-                  <TableRow key={student.id}>
-                    <TableCell>{student.name}</TableCell>
-                    <TableCell>{student.projectTitle}</TableCell>
-                    <TableCell>{student.scores.capstone2}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+          <Capstone2Tab currentStudents={currentStudents} />
         </TabsContent>
       </Tabs>
       {/* Pagination */}
@@ -326,31 +375,7 @@ const SemesterProjectScoreboardComponent = () => {
         <p className="text-sm text-muted-foreground">
           Showing {indexOfFirstStudent + 1} to {Math.min(indexOfLastStudent, filteredAndSortedStudents.length)} of {filteredAndSortedStudents.length} entries
         </p>
-        <div className="flex space-x-2">
-          <Button
-            onClick={() => paginate(currentPage - 1)}
-            disabled={currentPage === 1}
-            variant="outline"
-            size="sm">
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
-            <Button
-              key={number}
-              onClick={() => paginate(number)}
-              variant={currentPage === number ? "default" : "outline"}
-              size="sm">
-              {number}
-            </Button>
-          ))}
-          <Button
-            onClick={() => paginate(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            variant="outline"
-            size="sm">
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
+        <Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate} />
       </div>
     </div>
   );
