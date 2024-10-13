@@ -33,6 +33,9 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 import { MolecularStructureLoaderComponent } from "@/components/LoadingScreens/molecular-structure-loader"
 
+// Import the ThemeSwitcher component
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+
 const footbarItems = [
   { icon: Home, label: "Dashboard", route: "/student/dashboard", color: "text-blue-500 dark:text-blue-400" },
   { icon: List, label: "Projects", route: "/student/projects", color: "text-green-500 dark:text-green-400" },
@@ -99,38 +102,27 @@ function Sidebar() {
 }
 
 function Header() {
-  const [user, setUser] = useState(null)
-  const [isDarkMode, setIsDarkMode] = useState(false)
-  const router = useRouter()
+  const [user, setUser] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
-    const auth = getAuth(app)
+    const auth = getAuth(app);
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser)
-    })
+      setUser(currentUser);
+    });
 
-    return () => unsubscribe()
-  }, [])
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }, [isDarkMode])
+    return () => unsubscribe();
+  }, []);
 
   const handleLogout = async () => {
-    const auth = getAuth(app)
+    const auth = getAuth(app);
     try {
-      await signOut(auth)
-      router.push('/login') 
+      await signOut(auth);
+      router.push('/login');
     } catch (error) {
-      console.error("Error signing out: ", error)
+      console.error("Error signing out: ", error);
     }
-  }
-
-  const springConfig = { type: "spring", stiffness: 700, damping: 30 };
+  };
 
   return (
     <header className={`flex items-center h-[3rem] px-4 border-b shrink-0 md:px-6`}>
@@ -145,39 +137,7 @@ function Header() {
             />
           </div>
         </form>
-        <div className="flex items-center space-x-2">
-          <motion.div
-            initial={false}
-            animate={{
-              scale: isDarkMode ? 0.7 : 1,
-              opacity: isDarkMode ? 0.3 : 1,
-            }}
-            transition={springConfig}
-          >
-            <Sun className="h-4 w-4 text-yellow-500" />
-          </motion.div>
-          <Switch
-            checked={isDarkMode}
-            onCheckedChange={setIsDarkMode}
-            className="data-[state=checked]:bg-blue-600 data-[state=unchecked]:bg-gray-200"
-          >
-            <motion.div
-              className="switch-thumb"
-              layout
-              transition={springConfig}
-            />
-          </Switch>
-          <motion.div
-            initial={false}
-            animate={{
-              scale: isDarkMode ? 1 : 0.7,
-              opacity: isDarkMode ? 1 : 0.3,
-            }}
-            transition={springConfig}
-          >
-            <Moon className="h-4 w-4 text-blue-500" />
-          </motion.div>
-        </div>
+        <ThemeSwitcher />
         <Button className="rounded-full" size="icon" variant="ghost">
           <Bell className="w-4 h-4" />
           <span className="sr-only">Notifications</span>
