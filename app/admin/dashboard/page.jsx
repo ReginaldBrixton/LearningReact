@@ -24,7 +24,7 @@ export default function AdminDashboard() {
             <CardTitle className="text-sm font-medium">Active Projects</CardTitle>
             <Briefcase className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
+          <CardContent> 
             <div className="text-2xl font-bold">23</div>
             <p className="text-xs text-muted-foreground">+2 new this week</p>
           </CardContent>
