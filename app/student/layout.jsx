@@ -21,14 +21,14 @@ import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
-// Custom breakpoints
-const breakpoints = {
-  sm: '600px',
-  md: '668px',
-  lg: '1024px',
-  xl: '1280px',
-  '2xl': '1536px',
-};
+// // Custom breakpoints
+// const breakpoints = {
+//   sm: '600px',
+//   md: '668px',
+//   lg: '1024px',
+//   xl: '1280px',
+//   '2xl': '1536px',
+// };
 
 import { MolecularStructureLoaderComponent } from "@/components/LoadingScreens/molecular-structure-loader"
 
@@ -67,10 +67,10 @@ function Sidebar() {
   }, [router])
 
   return (
-    <aside className={`hidden sm:flex flex-col w-14 lg:w-[12rem] h-screen bg-gray-100 dark:bg-gray-800`}>
+    <aside className={`hidden layout-sm:flex flex-col w-14 layout-lg:w-[12rem] h-screen bg-gray-100 dark:bg-gray-800`}>
       <div className="flex items-center justify-center h-[3rem] bg-gray-200 dark:bg-gray-700">
         <Layout className="h-6 w-6 lg:hidden" />
-        <span className="hidden lg:inline text-lg font-semibold">Capstone Project</span>
+        <span className="hidden layout-lg:inline text-lg font-semibold">Capstone Project</span>
       </div>
       <nav className="flex-1 overflow-y-auto">
         {sidebarItems.map((item, index) => (
@@ -84,10 +84,10 @@ function Sidebar() {
                   }`}
                 >
                   <item.icon className="h-5 w-5" />
-                  <span className="ml-4 hidden lg:inline">{item.label}</span>
+                  <span className="ml-4 hidden layout-lg:inline">{item.label}</span>
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right" className="lg:hidden">
+              <TooltipContent side="right" className="layout-lg:hidden">
                 {item.label}
               </TooltipContent>
             </Tooltip>
@@ -132,12 +132,12 @@ function Header() {
 
   return (
     <header className={`flex items-center h-[3rem] px-4 border-b shrink-0 md:px-6`}>
-      <div className={`flex items-center w-full gap-4 md:ml-auto md:gap-2 lg:gap-4`}>
-        <form className="flex-1 ml-auto sm:flex-initial">
+      <div className={`flex items-center w-full gap-4 layout-sm:ml-auto layout-sm:gap-2 layout-lg:gap-4`}>
+        <form className="flex-1 ml-auto layout-sm:flex-initial">
           <div className="relative">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
             <Input
-              className={`pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]`}
+              className={`pl-8 layout-sm:w-[300px] layout-md:w-[200px] layout-lg:w-[300px]`}
               placeholder="Search projects..."
               type="search"
             />
@@ -197,7 +197,7 @@ function BottomNav() {
   }, [router])
 
   return (
-    <nav className="sm:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+    <nav className="layout-sm:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
       <div className="flex justify-around">
         {footbarItems.map((item, index) => (
           <Link 
@@ -259,12 +259,12 @@ export default function DashboardLayout({ children }) {
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header />
-        <main className={`flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 pb-16 sm:pb-4`}>
-          {children}
+      <div className="flex-1 flex flex-col">
+        <Header className="sticky top-0 z-10" />
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pb-16 sm:pb-4">
+          <div className="h-full">{children}</div>
         </main>
-        <BottomNav />
+        <BottomNav className="sticky bottom-0 z-10" />
       </div>
     </div>
   )

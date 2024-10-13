@@ -8,6 +8,18 @@ module.exports = {
   ],
   theme: {
   	extend: {
+		screens: {
+			'xsm': {'min': '320px', 'max': '439px'}, // Range: 320px to 439px
+			'sm': {'min': '440px', 'max': '554px'},  // Range: 440px to 554px
+			'md': {'min': '555px', 'max': '1023px'}, // Range: 555px to 1023px
+			'lg': {'min': '1024px', 'max': '1279px'}, // Range: 1024px to 1279px
+			'xl': {'min': '1280px'}, // From 1280px and above (no max)
+			'layout-sm': '600px',
+			'layout-md': '668px',
+			'layout-lg': '1024px',
+			'layout-xl': '1280px',
+			'layout-2xl': '1536px',
+      },
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
