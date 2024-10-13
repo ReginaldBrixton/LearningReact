@@ -10,7 +10,7 @@ function RecentActivities() {
   ]
 
   return (
-    <Card className="col-span-4 bg-gradient-to-br from-cyan-50 to-teal-50 dark:from-cyan-950 dark:to-teal-950 border-2 border-cyan-200 dark:border-cyan-800">
+    <Card className="col-span-1 bg-gradient-to-br from-cyan-50 to-teal-50 dark:from-cyan-950 dark:to-teal-950 border-2 border-cyan-200 dark:border-cyan-800">
       <CardHeader className="bg-cyan-100 dark:bg-cyan-900">
         <CardTitle className="text-2xl font-bold text-cyan-800 dark:text-cyan-200">Recent Activities</CardTitle>
       </CardHeader>

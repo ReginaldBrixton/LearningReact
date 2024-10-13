@@ -9,7 +9,7 @@ function ProjectProgress() {
   ]
 
   return (
-    <Card className="col-span-2 bg-gradient-to-br from-violet-50 to-fuchsia-50 dark:from-violet-950 dark:to-fuchsia-950 border-2 border-violet-200 dark:border-violet-800">
+    <Card className="col-span-1 bg-gradient-to-br from-violet-50 to-fuchsia-50 dark:from-violet-950 dark:to-fuchsia-950 border-2 border-violet-200 dark:border-violet-800">
       <CardHeader className="bg-violet-100 dark:bg-violet-900">
         <CardTitle className="text-2xl font-bold text-violet-800 dark:text-violet-200">Project Progress</CardTitle>
       </CardHeader>

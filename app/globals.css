@@ -178,3 +178,19 @@ body {
 .focus\:ring-accent:focus {
   --tw-ring-color: var(--accent-color);
 }
+
+/* Add this to your existing global styles */
+
+.switch-thumb {
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 9999px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+[data-state="checked"] .switch-thumb {
+  transform: translateX(16px);
+}

@@ -21,7 +21,7 @@ function UpcomingDeadlines() {
   }
 
   return (
-    <Card className="col-span-3 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border-2 border-indigo-200 dark:border-indigo-800">
+    <Card className="col-span-1 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border-2 border-indigo-200 dark:border-indigo-800">
       <CardHeader className="bg-indigo-100 dark:bg-indigo-900">
         <CardTitle className="text-2xl font-bold text-indigo-800 dark:text-indigo-200">Upcoming Deadlines</CardTitle>
       </CardHeader>

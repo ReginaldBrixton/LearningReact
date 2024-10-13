@@ -13,6 +13,7 @@ import { app } from "../firebaseConfig"
 import Image from 'next/image'
 import { useRouter, usePathname } from 'next/navigation'
 import { Switch } from "@/components/ui/switch"
+import { motion } from "framer-motion"
 
 // Import UI components individually
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -33,23 +34,23 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { MolecularStructureLoaderComponent } from "@/components/LoadingScreens/molecular-structure-loader"
 
 const footbarItems = [
-  { icon: Home, label: "Dashboard", route: "/student/dashboard" },
-  { icon: List, label: "Projects", route: "/student/projects" },
-  { icon: PieChart, label: "Score Board", route: "/student/scoreboard" },
-  { icon: MessageSquare, label: "Chat", route: "/student/chat" },
-  { icon: Settings, label: "Settings", route: "/student/settings" },
+  { icon: Home, label: "Dashboard", route: "/student/dashboard", color: "text-blue-500 dark:text-blue-400" },
+  { icon: List, label: "Projects", route: "/student/projects", color: "text-green-500 dark:text-green-400" },
+  { icon: PieChart, label: "Score Board", route: "/student/scoreboard", color: "text-purple-500 dark:text-purple-400" },
+  { icon: MessageSquare, label: "Chat", route: "/student/chat", color: "text-pink-500 dark:text-pink-400" },
+  { icon: Settings, label: "Settings", route: "/student/settings", color: "text-gray-500 dark:text-gray-400" },
 ]
 
 const sidebarItems = [
-  { icon: Home, label: "Dashboard", route: "/student/dashboard" },
-  { icon: List, label: "Projects", route: "/student/projects" },
-  { icon: ClipboardCheck, label: "Review", route: "/student/review" },
-  { icon: PieChart, label: "Score Board", route: "/student/scoreboard" },
-  { icon: MessageSquare, label: "Chat", route: "/student/chat" },
-  { icon: Settings, label: "Settings", route: "/student/settings" },
-  { icon: FileText, label: "Reports", route: "/student/reports" },
-  { icon: Archive, label: "Archived", route: "/student/archived" },
-  { icon: HelpCircle, label: "Help", route: "/student/help" },
+  { icon: Home, label: "Dashboard", route: "/student/dashboard", color: "text-blue-600 dark:text-blue-300" },
+  { icon: List, label: "Projects", route: "/student/projects", color: "text-green-600 dark:text-green-300" },
+  { icon: ClipboardCheck, label: "Review", route: "/student/review", color: "text-yellow-600 dark:text-yellow-300" },
+  { icon: PieChart, label: "Score Board", route: "/student/scoreboard", color: "text-purple-600 dark:text-purple-300" },
+  { icon: MessageSquare, label: "Chat", route: "/student/chat", color: "text-pink-600 dark:text-pink-300" },
+  { icon: Settings, label: "Settings", route: "/student/settings", color: "text-gray-600 dark:text-gray-300" },
+  { icon: FileText, label: "Reports", route: "/student/reports", color: "text-indigo-600 dark:text-indigo-300" },
+  { icon: Archive, label: "Archived", route: "/student/archived", color: "text-orange-600 dark:text-orange-300" },
+  { icon: HelpCircle, label: "Help", route: "/student/help", color: "text-teal-600 dark:text-teal-300" },
 ]
 
 function Sidebar() {
@@ -57,7 +58,6 @@ function Sidebar() {
   const router = useRouter()
 
   useEffect(() => {
-    // Prefetch all routes after initial page load
     sidebarItems.forEach(item => {
       router.prefetch(item.route)
     })
@@ -130,10 +130,12 @@ function Header() {
     }
   }
 
+  const springConfig = { type: "spring", stiffness: 700, damping: 30 };
+
   return (
     <header className={`flex items-center h-[3rem] px-4 border-b shrink-0 md:px-6`}>
       <div className={`flex items-center w-full gap-4 layout-sm:ml-auto layout-sm:gap-2 layout-lg:gap-4`}>
-        <form className="flex-1 ml-auto layout-sm:flex-initial">
+        <form className="flex-1 mr-auto layout-sm:flex-initial">
           <div className="relative">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
             <Input
@@ -144,13 +146,37 @@ function Header() {
           </div>
         </form>
         <div className="flex items-center space-x-2">
-          <Sun className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+          <motion.div
+            initial={false}
+            animate={{
+              scale: isDarkMode ? 0.7 : 1,
+              opacity: isDarkMode ? 0.3 : 1,
+            }}
+            transition={springConfig}
+          >
+            <Sun className="h-4 w-4 text-yellow-500" />
+          </motion.div>
           <Switch
             checked={isDarkMode}
             onCheckedChange={setIsDarkMode}
-            aria-label="Toggle dark mode"
-          />
-          <Moon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+            className="data-[state=checked]:bg-blue-600 data-[state=unchecked]:bg-gray-200"
+          >
+            <motion.div
+              className="switch-thumb"
+              layout
+              transition={springConfig}
+            />
+          </Switch>
+          <motion.div
+            initial={false}
+            animate={{
+              scale: isDarkMode ? 1 : 0.7,
+              opacity: isDarkMode ? 1 : 0.3,
+            }}
+            transition={springConfig}
+          >
+            <Moon className="h-4 w-4 text-blue-500" />
+          </motion.div>
         </div>
         <Button className="rounded-full" size="icon" variant="ghost">
           <Bell className="w-4 h-4" />

@@ -18,16 +18,13 @@ function DashboardPage() {
         <h1 className="text-3xl font-bold">Project Dashboard</h1>
         <div className="flex flex-col space-y-6">
           <StatCards />
-          <RecentActivities />
-        </div>
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          <UpcomingDeadlines />
-        </div>
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          <div className="md:col-span-2 lg:col-span-2">
-            <ProjectProgress />
+          {/* Updated grid layout for RecentActivities and UpcomingDeadlines */}
+          <div className="grid gap-6 grid-cols-1 lg:grid-cols-2 md:grid-cols-2">
+            <RecentActivities />
+            <UpcomingDeadlines />
           </div>
-          <div className="md:col-span-2 lg:col-span-1">
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+            <ProjectProgress />
             <QuickActions />
           </div>
         </div>

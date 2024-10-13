@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
-import { Edit, Trash } from 'lucide-react'; // Import icons from lucide-react
+import React, { useState, useEffect } from 'react';
+import { Edit, Trash, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [task, setTask] = useState('');
-  const [tasks, setTasks] = useState({}); // Store tasks by date
-  const [editIndex, setEditIndex] = useState(null); // Track which task is being edited
-  const [editingTask, setEditingTask] = useState(''); // Store the task being edited
+  const [tasks, setTasks] = useState({});
+  const [editIndex, setEditIndex] = useState(null);
+  const [editingTask, setEditingTask] = useState('');
+
+  useEffect(() => {
+    const savedTasks = localStorage.getItem('calendarTasks');
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('calendarTasks', JSON.stringify(tasks));
+  }, [tasks]);
 
   const handlePrevMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
@@ -27,16 +38,15 @@ const Calendar = () => {
     if (selectedDate && task) {
       setTasks((prevTasks) => ({
         ...prevTasks,
-        [selectedDate]: [...(prevTasks[selectedDate] || []), task],
+        [selectedDate]: [...(prevTasks[selectedDate] || []), { text: task, completed: false }],
       }));
       setTask('');
-      setSelectedDate(null); // Deselect after adding task
     }
   };
 
   const handleEditTask = (index) => {
     if (tasks[selectedDate] && tasks[selectedDate][index]) {
-      setEditingTask(tasks[selectedDate][index]);
+      setEditingTask(tasks[selectedDate][index].text);
       setEditIndex(index);
     }
   };
@@ -45,7 +55,7 @@ const Calendar = () => {
     e.preventDefault();
     if (selectedDate && editingTask) {
       const updatedTasks = [...(tasks[selectedDate] || [])];
-      updatedTasks[editIndex] = editingTask; // Update the specific task
+      updatedTasks[editIndex] = { ...updatedTasks[editIndex], text: editingTask };
       setTasks((prevTasks) => ({
         ...prevTasks,
         [selectedDate]: updatedTasks,
@@ -65,6 +75,17 @@ const Calendar = () => {
     }
   };
 
+  const handleToggleTaskCompletion = (index) => {
+    if (tasks[selectedDate]) {
+      const updatedTasks = [...tasks[selectedDate]];
+      updatedTasks[index] = { ...updatedTasks[index], completed: !updatedTasks[index].completed };
+      setTasks((prevTasks) => ({
+        ...prevTasks,
+        [selectedDate]: updatedTasks,
+      }));
+    }
+  };
+
   const renderDaysInMonth = () => {
     const month = currentDate.getMonth();
     const year = currentDate.getFullYear();
@@ -72,32 +93,39 @@ const Calendar = () => {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
     const days = [];
-    // Fill the first week with empty cells
     for (let i = 0; i < firstDay; i++) {
-      days.push(<div key={`empty-${i}`} className="border p-2 text-center"></div>);
+      days.push(<div key={`empty-${i}`} className="border border-gray-200 dark:border-gray-700 p-2 text-center"></div>);
     }
-    // Fill the days of the month
     for (let day = 1; day <= daysInMonth; day++) {
       const isToday = day === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear();
       const isSelected = selectedDate === new Date(year, month, day).toDateString();
+      const hasTask = tasks[new Date(year, month, day).toDateString()]?.length > 0;
       days.push(
         <div
           key={day}
-          className={`border p-2 text-center cursor-pointer ${isToday ? 'bg-blue-200' : ''} ${isSelected ? 'bg-green-200' : ''}`}
+          className={`border p-2 text-center cursor-pointer transition-all duration-200
+            border-gray-200 dark:border-gray-700 hover:bg-indigo-100 dark:hover:bg-indigo-900
+            ${isToday ? 'bg-yellow-200 dark:bg-yellow-700 font-bold' : ''}
+            ${isSelected ? 'bg-indigo-200 dark:bg-indigo-700 font-semibold' : ''}
+            ${hasTask ? 'border-indigo-500 dark:border-indigo-400 border-2' : ''}
+          `}
           onClick={() => handleDateClick(day)}
         >
           {day}
           {tasks[new Date(year, month, day).toDateString()] && (
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">
               {tasks[new Date(year, month, day).toDateString()].map((t, index) => (
-                <div key={index} className="flex justify-between items-center group">
-                  <span>{t}</span>
-                  <div className="invisible group-hover:visible flex space-x-2">
-                    <button onClick={() => handleEditTask(index)} className="text-blue-500">
-                      <Edit className="h-4 w-4" />
+                <div key={index} className="flex justify-between items-center group bg-white dark:bg-gray-800 rounded-md p-1 mb-1 shadow-sm">
+                  <span className={`truncate ${t.completed ? 'line-through' : ''}`}>{t.text}</span>
+                  <div className="invisible group-hover:visible flex space-x-1">
+                    <button onClick={() => handleToggleTaskCompletion(index)} className="text-green-500 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300">
+                      {t.completed ? '✓' : '○'}
                     </button>
-                    <button onClick={() => handleRemoveTask(index)} className="text-red-500">
-                      <Trash className="h-4 w-4" />
+                    <button onClick={() => handleEditTask(index)} className="text-blue-500 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
+                      <Edit className="h-3 w-3" />
+                    </button>
+                    <button onClick={() => handleRemoveTask(index)} className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300">
+                      <Trash className="h-3 w-3" />
                     </button>
                   </div>
                 </div>
@@ -111,29 +139,37 @@ const Calendar = () => {
   };
 
   return (
-    <div className="border rounded-lg p-4">
-      <div className="flex justify-between items-center mb-4">
-        <button onClick={handlePrevMonth} className="text-gray-600 hover:text-gray-800">Prev</button>
-        <h2 className="text-lg font-semibold">{currentDate.toLocaleString('default', { month: 'long' })} {currentDate.getFullYear()}</h2>
-        <button onClick={handleNextMonth} className="text-gray-600 hover:text-gray-800">Next</button>
+    <div className="border rounded-lg p-6 shadow-lg bg-white dark:bg-gray-900 text-black dark:text-white">
+      <div className="flex justify-between items-center mb-6">
+        <button onClick={handlePrevMonth} className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors duration-200">
+          <ChevronLeft className="h-6 w-6" />
+        </button>
+        <h2 className="text-2xl font-bold text-indigo-800 dark:text-indigo-300">
+          {currentDate.toLocaleString('default', { month: 'long' })} {currentDate.getFullYear()}
+        </h2>
+        <button onClick={handleNextMonth} className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors duration-200">
+          <ChevronRight className="h-6 w-6" />
+        </button>
       </div>
-      <div className="grid grid-cols-7 gap-2">
-        {/* Days of the week */}
+      <div className="grid grid-cols-7 gap-2 mb-4">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-          <div key={day} className="font-bold text-center">{day}</div>
+          <div key={day} className="font-bold text-center text-indigo-600 dark:text-indigo-300">{day}</div>
         ))}
         {renderDaysInMonth()}
       </div>
       {selectedDate && (
-        <form onSubmit={editIndex !== null ? handleUpdateTask : handleTaskSubmit} className="mt-4">
+        <form onSubmit={editIndex !== null ? handleUpdateTask : handleTaskSubmit} className="mt-6">
           <input
             type="text"
             value={editIndex !== null ? editingTask : task}
             onChange={(e) => editIndex !== null ? setEditingTask(e.target.value) : setTask(e.target.value)}
             placeholder="Enter task"
-            className="border p-2 w-full"
+            className="border p-2 w-full rounded-md focus:outline-none focus:ring-2 bg-white dark:bg-gray-800 text-black dark:text-white border-gray-300 dark:border-gray-700 focus:ring-indigo-500"
           />
-          <button type="submit" className="mt-2 bg-blue-500 text-white p-2 rounded">
+          <button
+            type="submit"
+            className="mt-2 p-2 rounded-md w-full transition-colors duration-200 bg-indigo-500 dark:bg-indigo-600 text-white hover:bg-indigo-600 dark:hover:bg-indigo-700"
+          >
             {editIndex !== null ? 'Update Task' : 'Add Task'}
           </button>
         </form>
