@@ -1,13 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
+import { projects } from "@/app/data/dashboardData"
 
 function ProjectProgress() {
-  const projects = [
-    { name: "Research Proposal", progress: 75, color: "bg-emerald-500 dark:bg-emerald-600" },
-    { name: "Capstone One", progress: 3, color: "bg-red-500 dark:bg-red-600" },
-    { name: "Capstone Two", progress: 2, color: "bg-amber-500 dark:bg-amber-600" },
-  ]
-
   return (
     <Card className="col-span-1 bg-gradient-to-br from-violet-50 to-fuchsia-50 dark:from-violet-950 dark:to-fuchsia-950 border-2 border-violet-200 dark:border-violet-800">
       <CardHeader className="bg-violet-100 dark:bg-violet-900">

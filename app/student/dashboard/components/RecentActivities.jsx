@@ -1,14 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import NoRecentActivities from '@/components/ui/no-activity'
-import { Clock, Bell, UserPlus } from 'lucide-react'
+import { activities } from "@/app/data/dashboardData"
 
 function RecentActivities() {
-  const activities = [
-    { title: "Your project has been reviewed.", time: "2 hours ago", icon: Clock },
-    { title: "Mr. Ofei made an announcement.", time: "5 hours ago", icon: Bell },
-    { title: "New team member added", time: "1 day ago", icon: UserPlus },
-  ]
-
   return (
     <Card className="col-span-1 bg-gradient-to-br from-cyan-50 to-teal-50 dark:from-cyan-950 dark:to-teal-950 border-2 border-cyan-200 dark:border-cyan-800">
       <CardHeader className="bg-cyan-100 dark:bg-cyan-900">

@@ -1,12 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { deadlines } from "@/app/data/dashboardData"
 
 function UpcomingDeadlines() {
-  const deadlines = [
-    { title: "Capstone Proposal", dueIn: "Due in 2 days", urgency: "high" },
-    { title: "Capstone One", dueIn: "Due in 5 days", urgency: "medium" },
-    { title: "Capstone Two", dueIn: "Due in 7 weeks", urgency: "low" },
-  ]
-
   const getUrgencyColor = (urgency) => {
     switch (urgency) {
       case "high":
