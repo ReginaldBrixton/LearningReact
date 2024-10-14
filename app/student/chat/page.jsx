@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Bell, Book, File, Moon, Paperclip, Send, Sun } from "lucide-react"
+import { ArrowLeft, Bell, Book, File, Moon, Paperclip, Send, Sun, Search } from "lucide-react"
 
 const contacts = [
   { id: 1, name: "Dr. Smith", avatar: "/placeholder.svg?height=40&width=40", lastMessage: "How's your research going?", time: "2m ago", status: "Online" },
@@ -43,6 +43,7 @@ export default function ColorfulResponsiveResearchChatComponent() {
   const [isTyping, setIsTyping] = useState(false)
   const [theme, setTheme] = useState("light")
   const [submissionProgress, setSubmissionProgress] = useState(60)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   useEffect(() => {
     const typingTimeout = setTimeout(() => setIsTyping(false), 3000)
@@ -68,69 +69,83 @@ export default function ColorfulResponsiveResearchChatComponent() {
     setTheme(theme === "light" ? "dark" : "light")
   }
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen)
+  }
+
   return (
-    <div className={`flex flex-col md:flex-row h-screen ${theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-100"}`}>
-      {/* Contact List */}
-      <div className={`w-full md:w-1/3 lg:w-1/4 ${activeContact ? 'hidden md:block' : ''} ${theme === "dark" ? "bg-gray-800" : "bg-white"} border-r border-gray-200`}>
-        <div className="p-4">
-          <Input placeholder="Search chats" className="mb-4" />
-          <ScrollArea className="h-[calc(100vh-8rem)]">
-            {contacts.map((contact) => (
-              <div
-                key={contact.id}
-                className={`flex items-center p-3 cursor-pointer rounded-lg mb-2 ${
-                  activeContact?.id === contact.id
-                    ? theme === "dark"
-                      ? "bg-indigo-900"
-                      : "bg-indigo-100"
-                    : theme === "dark"
-                    ? "hover:bg-gray-700"
-                    : "hover:bg-gray-100"
-                }`}
-                onClick={() => setActiveContact(contact)}
-              >
-                <Avatar className="h-12 w-12">
-                  <AvatarImage src={contact.avatar} alt={contact.name} />
-                  <AvatarFallback>{contact.name[0]}</AvatarFallback>
-                </Avatar>
-                <div className="ml-3 flex-1">
-                  <div className="flex justify-between">
-                    <span className={`font-semibold ${theme === "dark" ? "text-gray-200" : "text-gray-900"}`}>{contact.name}</span>
-                    <span className={`text-xs ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>{contact.time}</span>
-                  </div>
-                  <p className={`text-sm ${theme === "dark" ? "text-gray-400" : "text-gray-600"} truncate`}>{contact.lastMessage}</p>
-                </div>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <div className={`w-3 h-3 rounded-full ${statusColors[contact.status]}`}></div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{contact.status}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            ))}
-          </ScrollArea>
+    <div className={`flex h-screen ${theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-100"}`}>
+      {/* Sidebar */}
+      <div className={`w-full md:w-80 lg:w-96 ${isSidebarOpen ? 'block' : 'hidden'} md:block ${theme === "dark" ? "bg-gray-800" : "bg-white"} border-r border-gray-200 flex flex-col`}>
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold">Chats</h2>
+            <Button size="sm" variant="outline" onClick={toggleTheme}>
+              {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+            </Button>
+          </div>
+          <div className="relative">
+            <Input placeholder="Search chats" className="pl-10" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          </div>
         </div>
+        <ScrollArea className="flex-grow">
+          {contacts.map((contact) => (
+            <div
+              key={contact.id}
+              className={`flex items-center p-4 cursor-pointer ${
+                activeContact?.id === contact.id
+                  ? theme === "dark"
+                    ? "bg-indigo-900"
+                    : "bg-indigo-100"
+                  : theme === "dark"
+                  ? "hover:bg-gray-700"
+                  : "hover:bg-gray-100"
+              }`}
+              onClick={() => {
+                setActiveContact(contact)
+                setIsSidebarOpen(false)
+              }}
+            >
+              <Avatar className="h-12 w-12">
+                <AvatarImage src={contact.avatar} alt={contact.name} />
+                <AvatarFallback>{contact.name[0]}</AvatarFallback>
+              </Avatar>
+              <div className="ml-3 flex-1 overflow-hidden">
+                <div className="flex justify-between items-center">
+                  <span className={`font-semibold truncate ${theme === "dark" ? "text-gray-200" : "text-gray-900"}`}>{contact.name}</span>
+                  <span className={`text-xs ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>{contact.time}</span>
+                </div>
+                <p className={`text-sm ${theme === "dark" ? "text-gray-400" : "text-gray-600"} truncate`}>{contact.lastMessage}</p>
+              </div>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <div className={`w-3 h-3 rounded-full ${statusColors[contact.status]}`}></div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{contact.status}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          ))}
+        </ScrollArea>
       </div>
 
       {/* Chat Area */}
-      <div className={`flex-1 flex flex-col ${!activeContact ? 'hidden md:flex' : ''}`}>
+      <div className="flex-1 flex flex-col">
         {/* Chat Header */}
         <div className={`${theme === "dark" ? "bg-gray-800" : "bg-white"} border-b border-gray-200 p-4 flex items-center justify-between`}>
           <div className="flex items-center">
-            {activeContact && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="mr-2 md:hidden"
-                onClick={() => setActiveContact(null)}
-              >
-                <ArrowLeft className="h-6 w-6" />
-              </Button>
-            )}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="mr-2 md:hidden"
+              onClick={toggleSidebar}
+            >
+              <ArrowLeft className="h-6 w-6" />
+            </Button>
             {activeContact && (
               <>
                 <Avatar className="h-10 w-10">
@@ -144,14 +159,9 @@ export default function ColorfulResponsiveResearchChatComponent() {
               </>
             )}
           </div>
-          <div className="flex items-center space-x-2">
-            <Button size="sm" variant="outline" onClick={toggleTheme}>
-              {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-            </Button>
-            <Button size="sm" variant="outline">
-              <Bell className="h-4 w-4" />
-            </Button>
-          </div>
+          <Button size="sm" variant="outline">
+            <Bell className="h-4 w-4" />
+          </Button>
         </div>
 
         {/* Research Progress */}
@@ -236,10 +246,6 @@ export default function ColorfulResponsiveResearchChatComponent() {
                   <Paperclip className="h-4 w-4" />
                   <span className="sr-only">Attach file</span>
                 </Button>
-                {/* <Button size="icon" variant="outline">
-                  <Microphone className="h-4 w-4" />
-                  <span className="sr-only">Voice message</span>
-                </Button> */}
               </div>
             </TabsContent>
             <TabsContent value="files">
@@ -259,7 +265,7 @@ export default function ColorfulResponsiveResearchChatComponent() {
               </div>
             </TabsContent>
             <TabsContent value="citations">
-              <div  className="space-y-2">
+              <div className="space-y-2">
                 <Button variant="outline" className="w-full justify-start">
                   Generate APA Citation
                 </Button>
