@@ -34,7 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "components/colorful-responsive-research-chat.jsx", "components/colorful-responsive-research-chat.jsx"  ],
   "exclude": [
     "node_modules"
   ]

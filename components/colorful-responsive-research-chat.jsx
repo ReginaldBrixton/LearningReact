@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Bell, Book, File, Moon, Paperclip, Send, Sun } from "lucide-react"
+import { ArrowLeftIcon, AttachmentIcon, BookIcon, FileIcon, MicrophoneIcon, PaperclipIcon, SendIcon, SunIcon, MoonIcon, BellIcon } from "lucide-react"
 
 const contacts = [
   { id: 1, name: "Dr. Smith", avatar: "/placeholder.svg?height=40&width=40", lastMessage: "How's your research going?", time: "2m ago", status: "Online" },
@@ -35,7 +35,7 @@ const statusColors = {
   "Office Hours": "bg-amber-500",
 }
 
-export default function ColorfulResponsiveResearchChatComponent() {
+export function ColorfulResponsiveResearchChatComponent() {
   const [activeContact, setActiveContact] = useState(null)
   const [messages, setMessages] = useState(initialMessages)
   const [newMessage, setNewMessage] = useState("")
@@ -128,7 +128,7 @@ export default function ColorfulResponsiveResearchChatComponent() {
                 className="mr-2 md:hidden"
                 onClick={() => setActiveContact(null)}
               >
-                <ArrowLeft className="h-6 w-6" />
+                <ArrowLeftIcon className="h-6 w-6" />
               </Button>
             )}
             {activeContact && (
@@ -146,10 +146,10 @@ export default function ColorfulResponsiveResearchChatComponent() {
           </div>
           <div className="flex items-center space-x-2">
             <Button size="sm" variant="outline" onClick={toggleTheme}>
-              {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+              {theme === "light" ? <MoonIcon className="h-4 w-4" /> : <SunIcon className="h-4 w-4" />}
             </Button>
             <Button size="sm" variant="outline">
-              <Bell className="h-4 w-4" />
+              <BellIcon className="h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -189,7 +189,7 @@ export default function ColorfulResponsiveResearchChatComponent() {
                     <p className="text-sm">{message.content}</p>
                     {message.attachment && (
                       <div className="mt-2 flex items-center text-xs">
-                        <File className="w-4 h-4 mr-1" />
+                        <FileIcon className="w-4 h-4 mr-1" />
                         <span>{message.attachment}</span>
                       </div>
                     )}
@@ -229,31 +229,31 @@ export default function ColorfulResponsiveResearchChatComponent() {
                   className="flex-1"
                 />
                 <Button size="icon" onClick={sendMessage}>
-                  <Send className="h-4 w-4" />
+                  <SendIcon className="h-4 w-4" />
                   <span className="sr-only">Send message</span>
                 </Button>
                 <Button size="icon" variant="outline">
-                  <Paperclip className="h-4 w-4" />
+                  <AttachmentIcon className="h-4 w-4" />
                   <span className="sr-only">Attach file</span>
                 </Button>
-                {/* <Button size="icon" variant="outline">
-                  <Microphone className="h-4 w-4" />
+                <Button size="icon" variant="outline">
+                  <MicrophoneIcon className="h-4 w-4" />
                   <span className="sr-only">Voice message</span>
-                </Button> */}
+                </Button>
               </div>
             </TabsContent>
             <TabsContent value="files">
               <div className="space-y-2">
                 <Button variant="outline" className="w-full justify-start">
-                  <Paperclip className="mr-2 h-4 w-4" />
+                  <PaperclipIcon className="mr-2 h-4 w-4" />
                   Upload Research Paper Draft
                 </Button>
                 <Button variant="outline" className="w-full justify-start">
-                  <Paperclip className="mr-2 h-4 w-4" />
+                  <PaperclipIcon className="mr-2 h-4 w-4" />
                   Upload Data Set
                 </Button>
                 <Button variant="outline" className="w-full justify-start">
-                  <Paperclip className="mr-2 h-4 w-4" />
+                  <PaperclipIcon className="mr-2 h-4 w-4" />
                   Upload Bibliography
                 </Button>
               </div>
@@ -274,15 +274,15 @@ export default function ColorfulResponsiveResearchChatComponent() {
             <TabsContent value="resources">
               <div className="space-y-2">
                 <Button variant="outline" className="w-full justify-start">
-                  <Book className="mr-2 h-4 w-4" />
+                  <BookIcon className="mr-2 h-4 w-4" />
                   Research Paper Guidelines
                 </Button>
                 <Button variant="outline" className="w-full justify-start">
-                  <Book className="mr-2 h-4 w-4" />
+                  <BookIcon className="mr-2 h-4 w-4" />
                   Citation Style Guide
                 </Button>
                 <Button variant="outline" className="w-full justify-start">
-                  <Book className="mr-2 h-4 w-4" />
+                  <BookIcon className="mr-2 h-4 w-4" />
                   Data Analysis Tools
                 </Button>
               </div>
