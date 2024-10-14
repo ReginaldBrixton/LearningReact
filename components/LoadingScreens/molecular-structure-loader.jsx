@@ -38,8 +38,7 @@ const Bond = ({
 
 export function MolecularStructureLoaderComponent() {
   return (
-    (<div
-      className="flex items-center justify-center min-h-screen bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900">
+    (<div className="flex items-center justify-center min-h-screen">
       <div className="text-center">
         <svg
           className="w-64 h-64 mx-auto mb-8"

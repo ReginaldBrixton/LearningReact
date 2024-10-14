@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { Header } from "@/components/Header"
 import { Sidebar } from "@/components/Sidebar"
 import { BottomNav } from "@/components/BottomNav"
-import { MolecularStructureLoaderComponent } from "@/components/LoadingScreens/molecular-structure-loader"
+import Loading from "./loading"
 
 export default function DashboardLayout({ children }) {
   const [user, setUser] = useState(null)
@@ -19,25 +19,20 @@ export default function DashboardLayout({ children }) {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser)
       setLoading(false)
+      if (!currentUser) {
+        router.push('/login')
+      }
     })
 
     return () => unsubscribe()
-  }, [])
+  }, [router])
 
-  const [showLoader, setShowLoader] = useState(true);
+  if (loading) {
+    return <Loading />
+  }
 
-  useEffect(() => {
-    if (!loading && user) {
-      const timer = setTimeout(() => {
-        setShowLoader(false);
-      }, 1000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [loading, user]);
-
-  if (showLoader || loading || !user) {
-    return <MolecularStructureLoaderComponent />;
+  if (!user) {
+    return null
   }
 
   return (
