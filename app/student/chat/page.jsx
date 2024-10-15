@@ -74,7 +74,8 @@ export default function ColorfulResponsiveResearchChatComponent() {
   }
 
   return (
-    <div className={`flex h-screen ${theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-100"}`}>
+    <div className={`flex h-[100%] w-[100%] ${theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-100"}`}>
+
       {/* Sidebar */}
       <div className={`w-full md:w-80 lg:w-96 ${isSidebarOpen ? 'block' : 'hidden'} md:block ${theme === "dark" ? "bg-gray-800" : "bg-white"} border-r border-gray-200 flex flex-col`}>
         <div className="p-4 border-b border-gray-200">
@@ -136,7 +137,7 @@ export default function ColorfulResponsiveResearchChatComponent() {
       {/* Chat Area */}
       <div className="flex-1 flex flex-col">
         {/* Chat Header */}
-        <div className={`${theme === "dark" ? "bg-gray-800" : "bg-white"} border-b border-gray-200 p-4 flex items-center justify-between`}>
+        <div className={`${theme === "dark" ? "bg-gray-800" : "bg-white"} border-b border-gray-200 pb-2 flex items-center justify-between`}>
           <div className="flex items-center">
             <Button
               variant="ghost"
@@ -165,10 +166,11 @@ export default function ColorfulResponsiveResearchChatComponent() {
         </div>
 
         {/* Research Progress */}
-        <div className={`p-4 ${theme === "dark" ? "bg-gray-800" : "bg-white"}`}>
+        <div className={`p-3 w-[100%] ${theme === "dark" ? "bg-gray-800" : "bg-white"}`}>
           <h3 className={`text-lg font-semibold ${theme === "dark" ? "text-gray-200" : "text-gray-900"}`}>Research Progress</h3>
           <Progress value={submissionProgress} className="mt-2" />
           <div className="flex justify-between mt-1 text-sm text-gray-500">
+            <span>Introduction</span>
             <span>Literature Review</span>
             <span>Methodology</span>
             <span>Data Analysis</span>
@@ -177,7 +179,7 @@ export default function ColorfulResponsiveResearchChatComponent() {
         </div>
 
         {/* Messages */}
-        <ScrollArea className={`flex-1 p-4 ${theme === "dark" ? "bg-gray-700" : "bg-gray-50"}`}>
+        <ScrollArea className={`flex-1 p-3 ${theme === "dark" ? "bg-gray-700" : "bg-gray-50"}`}>
           {messages.map((message, index) => (
             <div key={message.id}>
               {(index === 0 || message.thread !== messages[index - 1].thread) && (
@@ -221,7 +223,7 @@ export default function ColorfulResponsiveResearchChatComponent() {
         </ScrollArea>
 
         {/* Input Area */}
-        <div className={`${theme === "dark" ? "bg-gray-800" : "bg-white"} border-t border-gray-200 p-4`}>
+        <div className={`${theme === "dark" ? "bg-gray-800" : "bg-white"} border-t border-gray-200 p-2`}>
           <Tabs defaultValue="chat">
             <TabsList className="mb-4">
               <TabsTrigger value="chat">Chat</TabsTrigger>
@@ -229,8 +231,12 @@ export default function ColorfulResponsiveResearchChatComponent() {
               <TabsTrigger value="citations">Citations</TabsTrigger>
               <TabsTrigger value="resources">Resources</TabsTrigger>
             </TabsList>
-            <TabsContent value="chat" className="space-y-4">
+            <TabsContent value="chat" className="space-y-4 w-[100%]">
               <div className="flex items-center space-x-2">
+                <Button size="icon" variant="outline">
+                  <Paperclip className="h-4 w-4" />
+                  <span className="sr-only">Attach file</span>
+                </Button>
                 <Input
                   placeholder="Type your message..."
                   value={newMessage}
@@ -242,10 +248,7 @@ export default function ColorfulResponsiveResearchChatComponent() {
                   <Send className="h-4 w-4" />
                   <span className="sr-only">Send message</span>
                 </Button>
-                <Button size="icon" variant="outline">
-                  <Paperclip className="h-4 w-4" />
-                  <span className="sr-only">Attach file</span>
-                </Button>
+                
               </div>
             </TabsContent>
             <TabsContent value="files">
