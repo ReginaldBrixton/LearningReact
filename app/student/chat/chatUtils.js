@@ -15,8 +15,8 @@ export const initialMessages = [
 ];
 
 export const statusColors = {
-  Online: "bg-emerald-500",
-  Busy: "bg-rose-500",
-  Offline: "bg-slate-500",
-  "Office Hours": "bg-amber-500",
+  Online: "bg-green-500",
+  Offline: "bg-gray-500",
+  Busy: "bg-red-500",
+  "Office Hours": "bg-yellow-500",
 };
