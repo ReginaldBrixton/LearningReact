@@ -1,336 +1,232 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "../components/ui/navigation-menu";
-import { useState, useEffect } from "react";
-import Image from 'next/image';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { ArrowLeft, Send, Bell, File, Paperclip, Book } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 
-// Header Component
-function Header() {
-  const { scrollY } = useScroll();
-  const headerOpacity = useTransform(scrollY, [0, 100], [1, 0.8]);
-  const headerScale = useTransform(scrollY, [0, 100], [1, 0.98]);
+const contacts = [
+  { id: 1, name: "Dr. Smith", avatar: "/placeholder.svg?height=40&width=40", lastMessage: "How's your research going?", time: "2m ago", status: "Online" },
+  // ... other contacts
+]
 
-  return (
-    <motion.header 
-      className="sticky top-0 z-50 w-full bg-background shadow-sm"
-      style={{ opacity: headerOpacity, scale: headerScale }}
-    >
-      <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
-        <Link href="/" className="flex items-center gap-2" prefetch={false}>
-          <BookIcon className="h-6 w-6 text-primary" />
-          <span className="text-xl font-bold">Research Portal</span>
-        </Link>
-        <NavigationMenu>
-          <NavigationMenuList>
-            {[
-              { href: "/student", icon: SchoolIcon, text: "Student" },
-              { href: "/lecturer", icon: LecternIcon, text: "Lecturer" },
-              { href: "/supervisor", icon: MonitorIcon, text: "Supervisor" },
-              { href: "/admin", icon: ServerIcon, text: "Admin" },
-            ].map(({ href, icon: Icon, text }) => (
-              <NavigationMenuItem key={href}>
-                <NavigationMenuLink
-                  href={href}
-                  className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-primary/50 data-[state=open]:bg-primary/50"
-                >
-                  <Icon className="h-5 w-5 mr-2" />
-                  <span>{text}</span>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
-      </div>
-    </motion.header>
-  );
-}
+const initialMessages = [
+  { id: 1, sender: "Dr. Smith", content: "How's your research paper coming along?", timestamp: "10:00 AM", thread: "General" },
+  // ... other messages
+]
 
-// Hero Section Component with Parallax
-function HeroSection() {
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.5]);
-
-  return (
-    <motion.section 
-      className="bg-gradient-to-r from-primary to-primary/80 py-20 md:py-32 overflow-hidden"
-      style={{ y, opacity }}
-    >
-      <div className="container mx-auto max-w-7xl px-4 md:px-6">
-        <div className="grid items-center gap-8 md:grid-cols-2">
-          <motion.div 
-            className="space-y-4"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h1 className="text-4xl font-bold tracking-tight text-primary-foreground sm:text-5xl lg:text-6xl">
-              Welcome to the Research Portal
-            </h1>
-            <p className="text-lg text-primary-foreground/90 sm:text-xl">
-              Streamline your research submission process with our user-friendly platform.
-            </p>
-            <Link
-              href="/student"
-              className="inline-flex h-10 items-center justify-center rounded-md bg-primary-foreground px-6 py-2 text-sm font-medium text-primary shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-              prefetch={false}
-            >
-              Get Started
-            </Link>
-          </motion.div>
-          <motion.div 
-            className="justify-self-center md:justify-self-end"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <Image
-              src="/research-illustration.jpg"
-              width={800}
-              height={600}
-              alt="Research illustration"
-              className="rounded-lg shadow-md"
-              priority
-            />
-          </motion.div>
-        </div>
-      </div>
-    </motion.section>
-  );
-}
-
-// Feature Card Component
-function FeatureCard({ icon: Icon, title, description, learnMoreHref }) {
-  return (
-    <motion.div 
-      className="group rounded-lg bg-background p-6 shadow-sm transition-all hover:bg-muted"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      <div className="flex items-center gap-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
-          <Icon className="h-6 w-6" />
-        </div>
-        <h3 className="text-xl font-semibold">{title}</h3>
-      </div>
-      <p className="mt-4 text-muted-foreground">{description}</p>
-      <Link
-        href={learnMoreHref}
-        className="mt-4 inline-flex items-center gap-2 text-primary hover:underline"
-        prefetch={false}
-      >
-        Learn More
-        <ArrowRightIcon className="h-4 w-4" />
-      </Link>
-    </motion.div>
-  );
-}
-
-// Features Section Component with Parallax
-function FeaturesSection() {
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ['50%', '0%']);
-
-  const features = [
-    {
-      icon: SchoolIcon,
-      title: "Student",
-      description: "Submit your research papers, view feedback, and track your progress.",
-      learnMoreHref: "/student/dashboard",
-    },
-    {
-      icon: LecternIcon,
-      title: "Lecturer",
-      description: "Review student submissions, provide feedback, and manage your courses.",
-      learnMoreHref: "/lecturer",
-    },
-    {
-      icon: MonitorIcon,
-      title: "Supervisor",
-      description: "Oversee student research, provide guidance, and manage submissions.",
-      learnMoreHref: "/supervisor",
-    },
-    {
-      icon: ServerIcon,
-      title: "Admin",
-      description: "Manage the research portal, users, and overall system administration.",
-      learnMoreHref: "/admin",
-    },
-  ];
-
-  return (
-    <motion.section className="py-12 md:py-24" style={{ y }}>
-      <div className="container mx-auto max-w-7xl px-4 md:px-6">
-        <h2 className="text-3xl font-bold text-center mb-8">Our Features</h2>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature, index) => (
-            <FeatureCard key={index} {...feature} />
-          ))}
-        </div>
-      </div>
-    </motion.section>
-  );
-}
-
-// Footer Component
-function Footer() {
-  return (
-    <footer className="bg-muted py-6 text-center text-muted-foreground">
-      <div className="container mx-auto max-w-7xl px-4 md:px-6">
-        <p>&copy; {new Date().getFullYear()} Research Portal. All rights reserved.</p>
-      </div>
-    </footer>
-  );
-}
-
-// Main Page Component
-export default function Page() {
-  const [mounted, setMounted] = useState(false);
+export default function ChatPage({ params }) {
+  const router = useRouter()
+  const { chatId } = params
+  const [activeContact, setActiveContact] = useState(null)
+  const [messages, setMessages] = useState(initialMessages)
+  const [newMessage, setNewMessage] = useState("")
+  const [theme, setTheme] = useState("light") // You might want to implement theme switching
+  const [submissionProgress, setSubmissionProgress] = useState(60) // Example progress value
+  const [isTyping, setIsTyping] = useState(false)
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    const contact = contacts.find(c => c.id.toString() === chatId)
+    setActiveContact(contact)
+  }, [chatId])
 
-  if (!mounted) {
-    return null;
+  const sendMessage = () => {
+    if (newMessage.trim() !== "") {
+      const newMsg = {
+        id: messages.length + 1,
+        sender: "You",
+        content: newMessage,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        thread: "General"
+      }
+      setMessages([...messages, newMsg])
+      setNewMessage("")
+    }
+  }
+
+  const toggleSidebar = () => {
+    // Implement sidebar toggle functionality
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <main className="flex-1">
-        <HeroSection />
-        <FeaturesSection />
-      </main>
-      <Footer />
+    <div className="flex flex-col h-screen bg-gray-100">
+      {/* Chat Area */}
+      <div className="flex-1 flex flex-col">
+        {/* Chat Header */}
+        <div className={`${theme === "dark" ? "bg-gray-800" : "bg-white"} border-b border-gray-200 pb-2 flex 
+        items-center justify-between`}>
+          <div className="flex items-center">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="mr-2 md:hidden"
+              onClick={toggleSidebar}
+            >
+              <ArrowLeft className="h-6 w-6" />
+            </Button>
+            {activeContact && (
+              <>
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src={activeContact.avatar} alt={activeContact.name} />
+                  <AvatarFallback>{activeContact.name[0]}</AvatarFallback>
+                </Avatar>
+                <div className="ml-3">
+                  <h2 className={`text-lg font-semibold ${theme === "dark" ? "text-gray-200" : "text-gray-900"}`}>
+                  {activeContact.name}</h2>
+                  <p className={`text-sm ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}>{activeContact.
+                  status}</p>
+                </div>
+              </>
+            )}
+          </div>
+          <Button size="sm" variant="outline">
+            <Bell className="h-4 w-4" />
+          </Button>
+        </div>
+
+        {/* Research Progress */}
+        <div className={`p-3 w-[100%] ${theme === "dark" ? "bg-gray-800" : "bg-white"}`}>
+          <h3 className={`text-lg font-semibold ${theme === "dark" ? "text-gray-200" : "text-gray-900"}`}>Research 
+          Progress</h3>
+          <Progress value={submissionProgress} className="mt-2" />
+          <div className="flex justify-between mt-1 text-sm text-gray-500">
+            <span>Introduction</span>
+            <span>Literature Review</span>
+            <span>Methodology</span>
+            <span>Data Analysis</span>
+            <span>Conclusion</span>
+          </div>
+        </div>
+
+        {/* Messages */}
+        <ScrollArea className={`flex-1 p-3 ${theme === "dark" ? "bg-gray-700" : "bg-gray-50"}`}>
+          {messages.map((message, index) => (
+            <div key={message.id}>
+              {(index === 0 || message.thread !== messages[index - 1].thread) && (
+                <div className={`flex justify-center my-4 ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>
+                  <Badge variant="outline">{message.thread}</Badge>
+                </div>
+              )}
+              <div className={`flex ${message.sender === 'You' ? 'justify-end' : 'justify-start'} mb-4`}>
+                <Card className={`max-w-[70%] ${
+                  message.sender === 'You'
+                    ? theme === "dark"
+                      ? "bg-indigo-700 text-white"
+                      : "bg-indigo-500 text-white"
+                    : theme === "dark"
+                    ? "bg-gray-600"
+                    : "bg-white"
+                }`}>
+                  <CardContent className="p-3">
+                    <p className="text-sm">{message.content}</p>
+                    {message.attachment && (
+                      <div className="mt-2 flex items-center text-xs">
+                        <File className="w-4 h-4 mr-1" />
+                        <span>{message.attachment}</span>
+                      </div>
+                    )}
+                    <p className={`text-xs mt-1 ${theme === "dark" ? "opacity-70" : "opacity-50"}`}>{message.timestamp}
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          ))}
+          {isTyping && (
+            <div className={`flex justify-start mb-4 ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>
+              <Card className={theme === "dark" ? "bg-gray-600" : "bg-white"}>
+                <CardContent className="p-3">
+                  <p className="text-sm">Typing...</p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+        </ScrollArea>
+
+        {/* Input Area */}
+        <div className={`${theme === "dark" ? "bg-gray-800" : "bg-white"} border-t border-gray-200 p-2`}>
+          <Tabs defaultValue="chat">
+            <TabsList className="mb-4">
+              <TabsTrigger value="chat">Chat</TabsTrigger>
+              <TabsTrigger value="files">Files</TabsTrigger>
+              <TabsTrigger value="citations">Citations</TabsTrigger>
+              <TabsTrigger value="resources">Resources</TabsTrigger>
+            </TabsList>
+            <TabsContent value="chat" className="space-y-4 w-[100%]">
+              <div className="flex items-center space-x-2">
+                <Button size="icon" variant="outline">
+                  <Paperclip className="h-4 w-4" />
+                  <span className="sr-only">Attach file</span>
+                </Button>
+                <Input
+                  placeholder="Type your message..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                  className="flex-1"
+                />
+                <Button size="icon" onClick={sendMessage}>
+                  <Send className="h-4 w-4" />
+                  <span className="sr-only">Send message</span>
+                </Button>
+                
+              </div>
+            </TabsContent>
+            <TabsContent value="files">
+              <div className="space-y-2">
+                <Button variant="outline" className="w-full justify-start">
+                  <Paperclip className="mr-2 h-4 w-4" />
+                  Upload Research Paper Draft
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <Paperclip className="mr-2 h-4 w-4" />
+                  Upload Data Set
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <Paperclip className="mr-2 h-4 w-4" />
+                  Upload Bibliography
+                </Button>
+              </div>
+            </TabsContent>
+            <TabsContent value="citations">
+              <div className="space-y-2">
+                <Button variant="outline" className="w-full justify-start">
+                  Generate APA Citation
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  Generate MLA Citation
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  Generate Chicago Citation
+                </Button>
+              </div>
+            </TabsContent>
+            <TabsContent value="resources">
+              <div className="space-y-2">
+                <Button variant="outline" className="w-full justify-start">
+                  <Book className="mr-2 h-4 w-4" />
+                  Research Paper Guidelines
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <Book className="mr-2 h-4 w-4" />
+                  Citation Style Guide
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <Book className="mr-2 h-4 w-4" />
+                  Data Analysis Tools
+                </Button>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
     </div>
-  );
-}
-
-// Icon Components
-function ArrowRightIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="m12 5 7 7-7 7" />
-    </svg>
-  );
-}
-
-function BookIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-      <path d="M4 4.5A2.5 2.5 0 0 1 6.5 7H20" />
-      <path d="M6.5 7v10" />
-    </svg>
-  );
-}
-
-function SchoolIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M22 10L12 15 2 10l10-5 10 5z" />
-      <path d="M2 10v6l10 5 10-5v-6" />
-      <path d="M6 12v-2" />
-    </svg>
-  );
-}
-
-function LecternIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M22 10L12 15 2 10l10-5 10 5z" />
-      <path d="M6 12v-2" />
-    </svg>
-  );
-}
-
-function MonitorIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-      <path d="M8 21h8" />
-      <path d="M12 17v4" />
-    </svg>
-  );
-}
-
-function ServerIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect x="3" y="4" width="18" height="8" rx="2" ry="2" />
-      <rect x="3" y="12" width="18" height="8" rx="2" ry="2" />
-      <path d="M7 8v.01" />
-      <path d="M7 16v.01" />
-    </svg>
-  );
+  )
 }
