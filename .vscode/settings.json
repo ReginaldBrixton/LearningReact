@@ -11,8 +11,6 @@
         "pnpm-lock.yaml": true,
         "postcss.config.mjs": true,
         "app/fonts": true,
-        "next.config.mjs": true,
-        "next.config.js": true,
         ".next": true
     },
     "hide-files.files": [
