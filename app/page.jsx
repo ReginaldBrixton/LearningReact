@@ -50,7 +50,7 @@ export default function HomePage() {
               <span className="text-xl font-bold text-gray-800 dark:text-white">Research Portal</span>
             </Link>
             <nav className="hidden md:flex space-x-4">
-              <NavLink href="/student" icon={<User className="h-4 w-4" />} text="Student" />
+              <NavLink href="/student/dashboard" icon={<User className="h-4 w-4" />} text="Student" />
               <NavLink href="/lecturer" icon={<UserPlus className="h-4 w-4" />} text="Lecturer" />
               <NavLink href="/supervisor" icon={<Users className="h-4 w-4" />} text="Supervisor" />
               <NavLink href="/admin" icon={<Settings className="h-4 w-4" />} text="Admin" />
