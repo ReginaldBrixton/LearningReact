@@ -4,16 +4,9 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ParallaxProvider, Parallax } from 'react-scroll-parallax'
-import { Book, User, UserPlus, Users, Settings, Sun, Moon, Search, ChevronDown, Star } from 'lucide-react'
+import { Book, User, UserPlus, Users, Settings, Sun, Moon, ChevronDown, Star } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 export default function HomePage() {
@@ -171,120 +164,63 @@ export default function HomePage() {
                   <FeatureCard
                     title="Project Management"
                     description="Efficiently manage your research projects from inception to completion."
-          <section className="relative min-h-screen flex items-center overflow-hidden">
-            <Parallax translateY={['-50%', '50%']} className="absolute inset-0 z-0">
-              <div className="h-full w-full bg-gradient-to-r from-blue-500 to-purple-500 dark:from-blue-700 dark:to-purple-700 opacity-50" />
-            </Parallax>
-            <div className="container mx-auto px-4 z-10 flex flex-col md:flex-row items-center justify-between">
-              <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-                className="text-center md:text-left md:w-1/2"
-              >
-                <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-                  Empower Your Research Journey
-                </h1>
-                <p className="text-xl text-white mb-8">
-                  Collaborate, innovate, and accelerate your research with our cutting-edge platform.
-                </p>
-                <Button
-                  size="lg"
-                  className="bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-gray-700"
-                >
-                  Get Started Now
-                </Button>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="mt-8 md:mt-0 md:w-1/2"
-              >
-                <Parallax translateY={['-20%', '20%']}>
-                  <Image
-                    src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                    alt="Research collaboration illustration"
-                    width={600}
-                    height={400}
-                    className="rounded-lg shadow-2xl object-cover"
+                    icon={<Settings className="h-12 w-12 text-purple-600 dark:text-purple-400" />}
+                    image="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
                   />
-                </Parallax>
-              </motion.div>
-            </div>
-          </section>
-
-          <section className="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
-            <div className="container mx-auto px-4">
-              <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">Our Features</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <FeatureCard
-                  title="Collaborative Research"
-                  description="Work together with peers and mentors on groundbreaking projects."
-                  icon={<Users className="h-12 w-12 text-blue-600 dark:text-blue-400" />}
-                  image="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                />
-                <FeatureCard
-                  title="Resource Library"
-                  description="Access a vast collection of academic papers and research materials."
-                  icon={<Book className="h-12 w-12 text-green-600 dark:text-green-400" />}
-                  image="https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1590&q=80"
-                />
-                <FeatureCard
-                  title="Project Management"
-                  description="Efficiently manage your research projects from inception to completion."
-                  icon={<Settings className="h-12 w-12 text-purple-600 dark:text-purple-400" />}
-                  image="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-                />
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
+          </Parallax>
 
-          <section className="py-20 bg-gray-100 dark:bg-gray-800 transition-colors duration-300">
-            <div className="container mx-auto px-4">
-              <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">What Our Users Say</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <TestimonialCard
-                  quote="The Research Portal has revolutionized how I collaborate with my team. It's an indispensable tool for modern researchers."
-                  author="Dr. Jane Smith"
-                  role="Professor of Biology"
-                  image="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
-                />
-                <TestimonialCard
-                  quote="As a student, I've found the resource library invaluable. It's helped me discover new areas of study and stay up-to-date with the latest research."
-                  author="Alex Johnson"
-                  role="PhD Candidate"
-                  image="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
-                />
-                <TestimonialCard
-                  quote="The project management features have streamlined our research process. We're more productive than ever before."
-                  author="Prof. Michael Lee"
-                  role="Department Head, Chemistry"
-                  image="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
-                />
+          <Parallax speed={-10}>
+            <section className="py-20 bg-gray-100 dark:bg-gray-800 transition-colors duration-300">
+              <div className="container mx-auto px-4">
+                <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">What Our Users Say</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  <TestimonialCard
+                    quote="The Research Portal has revolutionized how I collaborate with my team. It's an indispensable tool for modern researchers."
+                    author="Dr. Jane Smith"
+                    role="Professor of Biology"
+                    image="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
+                  />
+                  <TestimonialCard
+                    quote="As a student, I've found the resource library invaluable. It's helped me discover new areas of study and stay up-to-date with the latest research."
+                    author="Alex Johnson"
+                    role="PhD Candidate"
+                    image="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
+                  />
+                  <TestimonialCard
+                    quote="The project management features have streamlined our research process. We're more productive than ever before."
+                    author="Prof. Michael Lee"
+                    role="Department Head, Chemistry"
+                    image="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
+                  />
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
+          </Parallax>
 
-          <section className="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
-            <div className="container mx-auto px-4">
-              <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">Frequently Asked Questions</h2>
-              <div className="max-w-3xl mx-auto">
-                <FAQItem
-                  question="How do I get started with the Research Portal?"
-                  answer="To get started, simply click the 'Get Started' button and create an account. Once registered, you can explore our features, join research projects, and access our resource library."
-                />
-                <FAQItem
-                  question="Is the Research Portal free to use?"
-                  answer="We offer a free tier with basic features for individual researchers. For advanced collaboration tools and increased storage, we have premium plans available for teams and institutions."
-                />
-                <FAQItem
-                  question="Can I integrate the Research Portal with other tools?"
-                  answer="Yes, the Research Portal offers integrations with popular academic tools and reference managers. Check our integrations page for a full list of supported platforms."
-                />
+          <Parallax speed={5}>
+            <section className="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+              <div className="container mx-auto px-4">
+                <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">Frequently Asked Questions</h2>
+                <div className="max-w-3xl mx-auto">
+                  <FAQItem
+                    question="How do I get started with the Research Portal?"
+                    answer="To get started, simply click the 'Get Started' button and create an account. Once registered, you can explore our features, join research projects, and access our resource library."
+                  />
+                  <FAQItem
+                    question="Is the Research Portal free to use?"
+                    answer="We offer a free tier with basic features for individual researchers. For advanced collaboration tools and increased storage, we have premium plans available for teams and institutions."
+                  />
+                  <FAQItem
+                    question="Can I integrate the Research Portal with other tools?"
+                    answer="Yes, the Research Portal offers integrations with popular academic tools and reference managers. Check our integrations page for a full list of supported platforms."
+                  />
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
+          </Parallax>
 
           <section className="relative py-20 overflow-hidden">
             <Parallax translateY={['-30%', '30%']} className="absolute inset-0 z-0">
