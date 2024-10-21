@@ -82,18 +82,20 @@ export default function HomePage() {
           </div>
           <AnimatePresence>
             {isMenuOpen && (
-              <motion.nav
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.3 }}
-                className="md:hidden bg-white dark:bg-gray-800 px-4 py-2 space-y-2"
+                className="fixed top-16 right-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 z-50"
               >
-                <NavLink href="/student/dashboard" icon={<User className="h-4 w-4" />} text="Student" />
-                <NavLink href="/lecturer" icon={<UserPlus className="h-4 w-4" />} text="Lecturer" />
-                <NavLink href="/supervisor" icon={<Users className="h-4 w-4" />} text="Supervisor" />
-                <NavLink href="/admin" icon={<Settings className="h-4 w-4" />} text="Admin" />
-              </motion.nav>
+                <nav className="space-y-2">
+                  <NavLink href="/student/dashboard" icon={<User className="h-4 w-4" />} text="Student" />
+                  <NavLink href="/lecturer" icon={<UserPlus className="h-4 w-4" />} text="Lecturer" />
+                  <NavLink href="/supervisor" icon={<Users className="h-4 w-4" />} text="Supervisor" />
+                  <NavLink href="/admin" icon={<Settings className="h-4 w-4" />} text="Admin" />
+                </nav>
+              </motion.div>
             )}
           </AnimatePresence>
         </header>
@@ -285,7 +287,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="mt-8 pt-8 border-t border-gray-700 text-center">
-              <p className="text-sm text-gray-400">&copy; 2024 Research Portal. All rights reserved.</p>
+              <p className="text-sm text-gray-400">&copy; {new Date().getFullYear()} Research Portal. All rights reserved.</p>
             </div>
           </div>
         </footer>
