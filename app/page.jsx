@@ -9,11 +9,14 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
+// Main component for the home page
 export default function HomePage() {
+  // State hooks
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
+  // Effect for initializing theme and scroll listener
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme')
     setIsDarkMode(savedTheme === 'dark')
@@ -26,16 +29,19 @@ export default function HomePage() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Effect for updating theme
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDarkMode)
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light')
   }, [isDarkMode])
 
+  // Function to toggle theme
   const toggleTheme = () => setIsDarkMode(!isDarkMode)
 
   return (
     <ParallaxProvider>
       <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark' : ''}`}>
+        {/* Header component */}
         <header className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 transition-all duration-300 ${isScrolled ? 'shadow-md' : ''}`}>
           <div className="container mx-auto px-4 py-4 flex justify-between items-center">
             <Link href="/" className="flex items-center space-x-2">
@@ -101,6 +107,7 @@ export default function HomePage() {
         </header>
 
         <main className="pt-16 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+          {/* Hero section */}
           <Parallax speed={-20}>
             <section className="relative min-h-screen flex items-center overflow-hidden">
               <Parallax translateY={['-50%', '50%']} className="absolute inset-0 z-0">
@@ -146,6 +153,7 @@ export default function HomePage() {
             </section>
           </Parallax>
 
+          {/* Features section */}
           <Parallax speed={10}>
             <section className="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
               <div className="container mx-auto px-4">
@@ -174,6 +182,7 @@ export default function HomePage() {
             </section>
           </Parallax>
 
+          {/* Testimonials section */}
           <Parallax speed={-10}>
             <section className="py-20 bg-gray-100 dark:bg-gray-800 transition-colors duration-300">
               <div className="container mx-auto px-4">
@@ -202,6 +211,7 @@ export default function HomePage() {
             </section>
           </Parallax>
 
+          {/* FAQ section */}
           <Parallax speed={5}>
             <section className="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
               <div className="container mx-auto px-4">
@@ -224,6 +234,7 @@ export default function HomePage() {
             </section>
           </Parallax>
 
+          {/* Call to action section */}
           <section className="relative py-20 overflow-hidden">
             <Parallax translateY={['-30%', '30%']} className="absolute inset-0 z-0">
               <div className="h-full w-full bg-gradient-to-r from-green-400 to-blue-500 dark:from-green-600 dark:to-blue-700 opacity-30" />
@@ -242,6 +253,7 @@ export default function HomePage() {
           </section>
         </main>
 
+        {/* Footer component */}
         <footer className="bg-gray-800 dark:bg-gray-900 text-white py-12 transition-colors duration-300">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -296,6 +308,7 @@ export default function HomePage() {
   )
 }
 
+// Navigation link component
 function NavLink({ href, icon, text }) {
   return (
     <Link href={href} className="flex items-center space-x-1 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">
@@ -305,6 +318,7 @@ function NavLink({ href, icon, text }) {
   )
 }
 
+// Feature card component
 function FeatureCard({ title, description, icon, image }) {
   return (
     <motion.div
@@ -325,6 +339,7 @@ function FeatureCard({ title, description, icon, image }) {
   )
 }
 
+// Testimonial card component
 function TestimonialCard({ quote, author, role, image }) {
   return (
     <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md">
@@ -353,6 +368,7 @@ function TestimonialCard({ quote, author, role, image }) {
   )
 }
 
+// FAQ item component
 function FAQItem({ question, answer }) {
   const [isOpen, setIsOpen] = useState(false)
 
