@@ -9,7 +9,8 @@ import {
   TrendingDown, 
   Minus,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Download
 } from 'lucide-react'
 
 import { Button } from "@/components/ui/button"
@@ -24,6 +25,7 @@ import {
 } from "@/components/ui/tooltip"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Card } from "@/components/ui/card"
 
 const students = [
   { id: 1, name: "Alice Johnson", avatar: "/avatars/alice.jpg", projectTitle: "AI-Powered Smart Home", scores: { proposal: 95, capstone1: 92, capstone2: 98 }, totalScore: 285, rank: 1, previousRank: 2, progress: 100 },
@@ -64,6 +66,11 @@ const useFilterAndSort = (students, searchTerm, sortColumn, sortDirection) => {
     .sort((a, b) => {
       if (sortColumn === 'rank' || sortColumn === 'totalScore' || sortColumn === 'progress') {
         return sortDirection === 'asc' ? a[sortColumn] - b[sortColumn] : b[sortColumn] - a[sortColumn]
+      } else if (sortColumn.startsWith('scores.')) {
+        const scoreType = sortColumn.split('.')[1]
+        return sortDirection === 'asc' ? 
+          a.scores[scoreType] - b.scores[scoreType] : 
+          b.scores[scoreType] - a.scores[scoreType]
       } else {
         return sortDirection === 'asc' 
           ? a[sortColumn].localeCompare(b[sortColumn]) 
@@ -226,6 +233,29 @@ const Pagination = ({ currentPage, totalPages, paginate }) => (
   </div>
 )
 
+const ScoreboardStats = ({ students }) => {
+  const avgScore = (students.reduce((acc, student) => acc + student.totalScore, 0) / students.length).toFixed(1)
+  const highestScore = Math.max(...students.map(s => s.totalScore))
+  const lowestScore = Math.min(...students.map(s => s.totalScore))
+  
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <Card className="p-4">
+        <h3 className="font-semibold text-sm text-muted-foreground">Average Score</h3>
+        <p className="text-2xl font-bold">{avgScore}</p>
+      </Card>
+      <Card className="p-4">
+        <h3 className="font-semibold text-sm text-muted-foreground">Highest Score</h3>
+        <p className="text-2xl font-bold text-green-600">{highestScore}</p>
+      </Card>
+      <Card className="p-4">
+        <h3 className="font-semibold text-sm text-muted-foreground">Lowest Score</h3>
+        <p className="text-2xl font-bold text-red-600">{lowestScore}</p>
+      </Card>
+    </div>
+  )
+}
+
 const OverallTab = ({ currentStudents, sortColumn, sortDirection, handleSort }) => (
   <div className="rounded-md border border-border">
     <Table>
@@ -239,68 +269,45 @@ const OverallTab = ({ currentStudents, sortColumn, sortDirection, handleSort }) 
   </div>
 )
 
-const ProposalTab = ({ currentStudents }) => (
+const ScoreTab = ({ currentStudents, scoreType, handleSort, sortColumn, sortDirection }) => (
   <div className="rounded-md border border-border">
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Project Title</TableHead>
-          <TableHead>Proposal Score</TableHead>
+          <TableHead>
+            <Button variant="ghost" onClick={() => handleSort('name')} className="font-bold">
+              Name
+              {sortColumn === 'name' && (sortDirection === 'asc' ? <ChevronUp className="ml-2" /> : <ChevronDown className="ml-2" />)}
+            </Button>
+          </TableHead>
+          <TableHead>
+            <Button variant="ghost" onClick={() => handleSort('projectTitle')} className="font-bold">
+              Project Title
+              {sortColumn === 'projectTitle' && (sortDirection === 'asc' ? <ChevronUp className="ml-2" /> : <ChevronDown className="ml-2" />)}
+            </Button>
+          </TableHead>
+          <TableHead>
+            <Button variant="ghost" onClick={() => handleSort(`scores.${scoreType}`)} className="font-bold">
+              {scoreType.charAt(0).toUpperCase() + scoreType.slice(1)} Score
+              {sortColumn === `scores.${scoreType}` && (sortDirection === 'asc' ? <ChevronUp className="ml-2" /> : <ChevronDown className="ml-2" />)}
+            </Button>
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {currentStudents.map((student) => (
           <TableRow key={student.id}>
-            <TableCell>{student.name}</TableCell>
+            <TableCell>
+              <div className="flex items-center gap-2">
+                <Avatar>
+                  <AvatarImage src={student.avatar} alt={student.name} />
+                  <AvatarFallback>{student.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                </Avatar>
+                {student.name}
+              </div>
+            </TableCell>
             <TableCell>{student.projectTitle}</TableCell>
-            <TableCell>{student.scores.proposal}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </div>
-)
-
-const Capstone1Tab = ({ currentStudents }) => (
-  <div className="rounded-md border border-border">
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Project Title</TableHead>
-          <TableHead>Capstone 1 Score</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {currentStudents.map((student) => (
-          <TableRow key={student.id}>
-            <TableCell>{student.name}</TableCell>
-            <TableCell>{student.projectTitle}</TableCell>
-            <TableCell>{student.scores.capstone1}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </div>
-)
-
-const Capstone2Tab = ({ currentStudents }) => (
-  <div className="rounded-md border border-border">
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Project Title</TableHead>
-          <TableHead>Capstone 2 Score</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {currentStudents.map((student) => (
-          <TableRow key={student.id}>
-            <TableCell>{student.name}</TableCell>
-            <TableCell>{student.projectTitle}</TableCell>
-            <TableCell>{student.scores.capstone2}</TableCell>
+            <TableCell>{student.scores[scoreType]} %</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -327,6 +334,29 @@ const SemesterProjectScoreboardComponent = () => {
     }
   }
 
+  const handleExport = () => {
+    const csvContent = [
+      ['Name', 'Project Title', 'Proposal', 'Capstone 1', 'Capstone 2', 'Total Score', 'Rank'],
+      ...students.map(student => [
+        student.name,
+        student.projectTitle,
+        student.scores.proposal,
+        student.scores.capstone1,
+        student.scores.capstone2,
+        student.totalScore,
+        student.rank
+      ])
+    ].map(row => row.join(',')).join('\n')
+
+    const blob = new Blob([csvContent], { type: 'text/csv' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'scoreboard.csv'
+    a.click()
+    window.URL.revokeObjectURL(url)
+  }
+
   const filteredAndSortedStudents = useFilterAndSort(students, searchTerm, sortColumn, sortDirection)
 
   // Pagination
@@ -338,15 +368,23 @@ const SemesterProjectScoreboardComponent = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
   return (
-    <div className="container mx-auto p-4 space-y-4">
+    <div className="container mx-auto p-1 space-y-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-primary">Semester Project Scoreboard</h1>
+        <h1 className="text-2xl font-bold ">Semester Project Scoreboard</h1>
+        <Button onClick={handleExport} variant="outline">
+          <Download className="mr-2 h-4 w-4" />
+          Export CSV
+        </Button>
       </div>
+
+      <ScoreboardStats students={students} />
+
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       </div>
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="w-full justify-start">
           <TabsTrigger value="overall">Overall</TabsTrigger>
           <TabsTrigger value="proposal">Proposal</TabsTrigger>
           <TabsTrigger value="capstone1">Capstone 1</TabsTrigger>
@@ -361,16 +399,34 @@ const SemesterProjectScoreboardComponent = () => {
           />
         </TabsContent>
         <TabsContent value="proposal">
-          <ProposalTab currentStudents={currentStudents} />
+          <ScoreTab 
+            currentStudents={currentStudents} 
+            scoreType="proposal"
+            handleSort={handleSort}
+            sortColumn={sortColumn}
+            sortDirection={sortDirection}
+          />
         </TabsContent>
         <TabsContent value="capstone1">
-          <Capstone1Tab currentStudents={currentStudents} />
+          <ScoreTab 
+            currentStudents={currentStudents} 
+            scoreType="capstone1"
+            handleSort={handleSort}
+            sortColumn={sortColumn}
+            sortDirection={sortDirection}
+          />
         </TabsContent>
         <TabsContent value="capstone2">
-          <Capstone2Tab currentStudents={currentStudents} />
+          <ScoreTab 
+            currentStudents={currentStudents} 
+            scoreType="capstone2"
+            handleSort={handleSort}
+            sortColumn={sortColumn}
+            sortDirection={sortDirection}
+          />
         </TabsContent>
       </Tabs>
-      {/* Pagination */}
+
       <div className="flex justify-between items-center mt-4">
         <p className="text-sm text-muted-foreground">
           Showing {indexOfFirstStudent + 1} to {Math.min(indexOfLastStudent, filteredAndSortedStudents.length)} of {filteredAndSortedStudents.length} entries
