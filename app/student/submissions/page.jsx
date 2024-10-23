@@ -16,6 +16,67 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
+const theme = {
+  light: {
+    primary: {
+      bg: 'bg-blue-600',
+      hover: 'hover:bg-blue-700',
+      text: 'text-blue-600'
+    },
+    secondary: {
+      bg: 'bg-teal-600', 
+      hover: 'hover:bg-teal-700',
+      text: 'text-teal-600'
+    },
+    accent: {
+      bg: 'bg-amber-500',
+      hover: 'hover:bg-amber-600', 
+      text: 'text-amber-500'
+    },
+    background: {
+      primary: 'bg-white',
+      secondary: 'bg-gray-50',
+      hover: 'hover:bg-gray-100'
+    },
+    text: {
+      primary: 'text-gray-900',
+      secondary: 'text-gray-600', 
+      muted: 'text-gray-400'
+    },
+    border: 'border-gray-200',
+    divider: 'divide-gray-200'
+  },
+  dark: {
+    primary: {
+      bg: 'dark:bg-blue-500',
+      hover: 'dark:hover:bg-blue-600',
+      text: 'dark:text-blue-400'
+    },
+    secondary: {
+      bg: 'dark:bg-teal-500',
+      hover: 'dark:hover:bg-teal-600',
+      text: 'dark:text-teal-400'
+    },
+    accent: {
+      bg: 'dark:bg-amber-400',
+      hover: 'dark:hover:bg-amber-500',
+      text: 'dark:text-amber-400'
+    },
+    background: {
+      primary: 'dark:bg-gray-900',
+      secondary: 'dark:bg-gray-800',
+      hover: 'dark:hover:bg-gray-700'
+    },
+    text: {
+      primary: 'dark:text-gray-50',
+      secondary: 'dark:text-gray-300',
+      muted: 'dark:text-gray-500'
+    },
+    border: 'dark:border-gray-700',
+    divider: 'dark:divide-gray-700'
+  }
+}
+
 const initialProject = {
   id: '1',
   title: 'My Capstone Project',
@@ -83,7 +144,7 @@ const useProjectState = () => {
         setTimeRemaining('Completed')
         clearInterval(timer)
       }
-    }, 60000) // Update every minute instead of every second
+    }, 60000)
 
     return () => clearInterval(timer)
   }, [project.endDate])
@@ -91,7 +152,6 @@ const useProjectState = () => {
   const handleSubmission = async (sectionIndex, submissionKey) => {
     setLoading(true)
     try {
-      // Simulated API call
       await new Promise(resolve => setTimeout(resolve, 1000))
       
       setProject(prev => {
@@ -206,26 +266,26 @@ const OverallProgressCard = ({ project, timeRemaining }) => {
   const progressPercentage = (completedSections / (project.sections.length - 1)) * 100
   
   return (
-    <Card className="mb-8 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
+    <Card className={`mb-8 ${theme.light.primary.bg} ${theme.dark.primary.bg} text-white`}>
       <CardHeader>
         <CardTitle className="text-2xl">Overall Progress</CardTitle>
-        <CardDescription className="text-indigo-100">Your journey through the capstone project</CardDescription>
+        <CardDescription className="text-blue-100">Your journey through the capstone project</CardDescription>
       </CardHeader>
       <CardContent>
         <Progress
           value={progressPercentage}
-          className="h-2 bg-indigo-200" />
+          className="h-2 bg-blue-200" />
         <div className="mt-4 grid grid-cols-3 gap-4">
           <div>
-            <p className="text-sm text-indigo-100">Current Phase</p>
+            <p className="text-sm text-blue-100">Current Phase</p>
             <p className="text-lg font-semibold">{project.sections[project.currentSection].name}</p>
           </div>
           <div>
-            <p className="text-sm text-indigo-100">Completion</p>
+            <p className="text-sm text-blue-100">Completion</p>
             <p className="text-lg font-semibold">{Math.round(progressPercentage)}%</p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-indigo-100">Time Remaining</p>
+            <p className="text-sm text-blue-100">Time Remaining</p>
             <p className="text-lg font-semibold">{timeRemaining}</p>
           </div>
         </div>
@@ -244,14 +304,14 @@ const SubmissionItem = ({ submission, sectionIndex, submissionKey, submissionInd
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: submissionIndex * 0.1 }}
-      className="border p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 bg-white dark:bg-gray-800">
+      className={`border p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 ${theme.light.background.primary} ${theme.dark.background.primary}`}>
       <div className="flex justify-between items-start mb-2">
         <div>
           <h3 className="font-semibold flex items-center">
-            <FileText className="mr-2 h-4 w-4 text-indigo-500" />
+            <FileText className={`mr-2 h-4 w-4 ${theme.light.primary.text} ${theme.dark.primary.text}`} />
             <span>{submissionKey}</span>
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+          <p className={`text-sm ${theme.light.text.secondary} ${theme.dark.text.secondary} mt-1`}>
             {submission.description}
           </p>
         </div>
@@ -260,13 +320,13 @@ const SubmissionItem = ({ submission, sectionIndex, submissionKey, submissionInd
         </Badge>
       </div>
       
-      <div className="text-sm text-gray-500 dark:text-gray-400 mb-4 flex items-center justify-between">
+      <div className={`text-sm ${theme.light.text.muted} ${theme.dark.text.muted} mb-4 flex items-center justify-between`}>
         <div className="flex items-center">
           <Calendar className="mr-2 h-4 w-4" />
           Due: {new Date(submission.dueDate).toLocaleDateString()}
         </div>
         {!isOverdue && submission.status === 'pending' && (
-          <Badge variant="outline" className="bg-blue-50 text-blue-700">
+          <Badge variant="outline" className="bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-200">
             {daysUntilDue} days left
           </Badge>
         )}
@@ -295,7 +355,7 @@ const SubmissionItem = ({ submission, sectionIndex, submissionKey, submissionInd
           />
           <Button 
             onClick={() => handleSubmission(sectionIndex, submissionKey)} 
-            className="w-full bg-indigo-500 hover:bg-indigo-600"
+            className={`w-full ${theme.light.primary.bg} ${theme.light.primary.hover} ${theme.dark.primary.bg} ${theme.dark.primary.hover}`}
             disabled={loading}
           >
             {loading ? (
@@ -370,10 +430,10 @@ const SectionAccordion = ({ project, handleSubmission, handleApproval, loading }
             <div className="flex items-center justify-between w-full">
               <div>
                 <span className="text-xl font-semibold flex items-center">
-                  <ChevronRight className="mr-2 h-5 w-5 text-indigo-500" />
+                  <ChevronRight className={`mr-2 h-5 w-5 ${theme.light.primary.text} ${theme.dark.primary.text}`} />
                   {section.name}
                 </span>
-                <p className="text-sm text-gray-600 dark:text-gray-400 text-left mt-1">
+                <p className={`text-sm ${theme.light.text.secondary} ${theme.dark.text.secondary} text-left mt-1`}>
                   {section.description}
                 </p>
               </div>
@@ -469,7 +529,7 @@ export default function ProjectsPage() {
     <div className="container mx-auto sm:px-6 lg:px-8 py-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-4xl font-bold text-gray-800 dark:text-white flex items-center">
-          <Zap className="mr-2 h-8 w-8 text-indigo-500" />
+          <Zap className="mr-2 h-8 w-8 text-blue-500" />
           {project.title}
         </h1>
         <Dialog>
@@ -527,10 +587,10 @@ export default function ProjectsPage() {
           />
         </div>
         <div className="space-y-8">
-          <Card className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+          <Card className="bg-gradient-to-r from-teal-500 to-blue-500 text-white">
             <CardHeader>
               <CardTitle className="text-2xl">Final Steps</CardTitle>
-              <CardDescription className="text-purple-100">
+              <CardDescription className="text-teal-100">
                 Prepare for your defense and final submission
               </CardDescription>
             </CardHeader>
@@ -545,7 +605,7 @@ export default function ProjectsPage() {
                 ) : (
                   <Button 
                     onClick={() => handleVideoUpload(project.id)} 
-                    className="w-full bg-white text-purple-600 hover:bg-purple-100"
+                    className="w-full bg-white text-teal-600 hover:bg-teal-100"
                     disabled={loading}
                   >
                     {loading ? (
