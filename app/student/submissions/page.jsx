@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
@@ -409,6 +409,7 @@ const SectionAccordion = ({ project, handleSubmission, handleApproval, loading }
                       />
                     ))}
                   </div>
+                  <ScrollBar orientation="vertical" />
                 </ScrollArea>
               </CardContent>
               <CardFooter className="flex justify-between items-center">
@@ -455,6 +456,7 @@ const ActivityFeed = ({ feedback }) => (
             </div>
           </div>
         ))}
+        <ScrollBar orientation="vertical" />
       </ScrollArea>
     </CardContent>
   </Card>
