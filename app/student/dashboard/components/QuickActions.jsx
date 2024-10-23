@@ -1,14 +1,27 @@
 import { Plus, FileText, Calendar, MessageSquare, HelpCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { cn } from "@/lib/utils"
 
 function QuickActions() {
   const [isProjectDialogOpen, setIsProjectDialogOpen] = useState(false)
   const [isTaskDialogOpen, setIsTaskDialogOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkIfMobile()
+    window.addEventListener('resize', checkIfMobile)
+    
+    return () => window.removeEventListener('resize', checkIfMobile)
+  }, [])
 
   const handleProjectSubmit = (e) => {
     e.preventDefault()
@@ -23,19 +36,22 @@ function QuickActions() {
   }
 
   return (
-    <Card className="col-span-1 bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-950 dark:to-pink-950 border-2 border-rose-200 dark:border-rose-800">
-      <CardHeader className="bg-rose-100 dark:bg-rose-900">
-        <CardTitle className="text-2xl font-bold text-rose-800 dark:text-rose-200">Quick Actions</CardTitle>
+    <Card className="col-span-1 bg-card">
+      <CardHeader className="bg-primary/10">
+        <CardTitle className="text-2xl font-bold text-primary">Quick Actions</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4 p-6">
         <Dialog open={isProjectDialogOpen} onOpenChange={setIsProjectDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="w-full bg-rose-500 hover:bg-rose-600 text-white dark:bg-rose-700 dark:hover:bg-rose-600">
+            <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
               <Plus className="mr-2 h-4 w-4" />
               Project Submission
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className={cn(
+            "sm:max-w-[425px]",
+            isMobile && "slide-in-from-bottom-2 rounded-b-none"
+          )}>
             <DialogHeader>
               <DialogTitle>Submit Project</DialogTitle>
             </DialogHeader>
@@ -50,12 +66,15 @@ function QuickActions() {
 
         <Dialog open={isTaskDialogOpen} onOpenChange={setIsTaskDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="w-full bg-pink-100 hover:bg-pink-200 text-pink-800 dark:bg-pink-800 dark:hover:bg-pink-700 dark:text-pink-100" variant="outline">
+            <Button className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground" variant="outline">
               <Plus className="mr-2 h-4 w-4" />
               New Task
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className={cn(
+            "sm:max-w-[425px]",
+            isMobile && "slide-in-from-bottom-2 rounded-b-none"
+          )}>
             <DialogHeader>
               <DialogTitle>Create New Task</DialogTitle>
             </DialogHeader>
@@ -68,22 +87,22 @@ function QuickActions() {
           </DialogContent>
         </Dialog>
 
-        <Button className="w-full bg-indigo-100 hover:bg-indigo-200 text-indigo-800 dark:bg-indigo-800 dark:hover:bg-indigo-700 dark:text-indigo-100" variant="outline">
+        <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" variant="outline">
           <FileText className="mr-2 h-4 w-4" />
           View Resources
         </Button>
 
-        <Button className="w-full bg-emerald-100 hover:bg-emerald-200 text-emerald-800 dark:bg-emerald-800 dark:hover:bg-emerald-700 dark:text-emerald-100" variant="outline">
+        <Button className="w-full bg-muted hover:bg-muted/90 text-muted-foreground" variant="outline">
           <Calendar className="mr-2 h-4 w-4" />
           Schedule Meeting
         </Button>
 
-        <Button className="w-full bg-amber-100 hover:bg-amber-200 text-amber-800 dark:bg-amber-800 dark:hover:bg-amber-700 dark:text-amber-100" variant="outline">
+        <Button className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground" variant="outline">
           <MessageSquare className="mr-2 h-4 w-4" />
           Contact Supervisor
         </Button>
 
-        <Button className="w-full bg-cyan-100 hover:bg-cyan-200 text-cyan-800 dark:bg-cyan-800 dark:hover:bg-cyan-700 dark:text-cyan-100" variant="outline">
+        <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" variant="outline">
           <HelpCircle className="mr-2 h-4 w-4" />
           Get Help
         </Button>
