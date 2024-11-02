@@ -1,3 +1,6 @@
+import { db, checkUserPermissions } from '@/lib/firebase';
+import { getDoc, doc } from 'firebase/firestore';
+
 export const ArchivedProject = {
   id: '',
   title: '',
@@ -29,4 +32,23 @@ export const fetchArchivedProjects = async () => {
       ])
     }, 1000)
   })
+}
+
+export async function fetchUserData(userId) {
+  try {
+    const hasPermission = await checkUserPermissions(userId);
+    if (!hasPermission) {
+      throw new Error('User does not have required permissions');
+    }
+
+    const userDoc = await getDoc(doc(db, 'users', userId));
+    if (!userDoc.exists()) {
+      throw new Error('User not found');
+    }
+    
+    return userDoc.data();
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    throw error;
+  }
 }
