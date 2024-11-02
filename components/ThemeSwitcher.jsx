@@ -1,20 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Sun, Moon } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { motion } from 'framer-motion';
+import { useTheme } from 'next-themes';
 
 export function ThemeSwitcher() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [isDarkMode]);
+  const { theme, setTheme } = useTheme();
+  const isDarkMode = theme === 'dark';
 
   const springConfig = { type: 'spring', stiffness: 700, damping: 30 };
+
+  const handleThemeChange = (checked) => {
+    setTheme(checked ? 'dark' : 'light');
+  };
 
   return (
     <div className="flex items-center space-x-2">
@@ -30,7 +28,7 @@ export function ThemeSwitcher() {
       </motion.div>
       <Switch
         checked={isDarkMode}
-        onCheckedChange={setIsDarkMode}
+        onCheckedChange={handleThemeChange}
         className="data-[state=checked]:bg-blue-600 data-[state=unchecked]:bg-gray-200"
       >
         <motion.div

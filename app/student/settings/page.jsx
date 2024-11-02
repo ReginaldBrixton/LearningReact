@@ -115,12 +115,6 @@ function AppearanceTab({ handleSaveChanges }) {
   const { colorScheme, changeColorScheme, customColors, updateCustomColors } = useColorScheme();
   const [showCustomPicker, setShowCustomPicker] = useState(false);
 
-  const handleThemeChange = (newTheme) => {
-    setTheme(newTheme);
-    document.documentElement.setAttribute('data-theme', colorScheme);
-    document.documentElement.setAttribute('data-mode', newTheme);
-  };
-
   const handleColorSchemeChange = (newScheme) => {
     changeColorScheme(newScheme);
     document.documentElement.setAttribute('data-theme', newScheme);
@@ -250,12 +244,20 @@ function NotificationFrequency() {
 }
 
 function ThemeSelector({ theme, setTheme }) {
+  const handleThemeChange = (t) => {
+    setTheme(t);
+  };
+
   return (
     <div className="space-y-2">
       <Label>Theme</Label>
       <div className="flex space-x-2">
         {["light", "dark"].map((t) => (
-          <Button key={t} variant={theme === t ? 'default' : 'outline'} onClick={() => setTheme(t)}>
+          <Button 
+            key={t} 
+            variant={theme === t ? 'default' : 'outline'} 
+            onClick={() => handleThemeChange(t)}
+          >
             {t === 'light' ? <Sun className="h-4 w-4 mr-2" /> : <Moon className="h-4 w-4 mr-2" />}
             {t.charAt(0).toUpperCase() + t.slice(1)}
           </Button>
