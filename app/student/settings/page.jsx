@@ -115,6 +115,17 @@ function AppearanceTab({ handleSaveChanges }) {
   const { colorScheme, changeColorScheme, customColors, updateCustomColors } = useColorScheme();
   const [showCustomPicker, setShowCustomPicker] = useState(false);
 
+  const handleThemeChange = (newTheme) => {
+    setTheme(newTheme);
+    document.documentElement.setAttribute('data-theme', colorScheme);
+    document.documentElement.setAttribute('data-mode', newTheme);
+  };
+
+  const handleColorSchemeChange = (newScheme) => {
+    changeColorScheme(newScheme);
+    document.documentElement.setAttribute('data-theme', newScheme);
+  };
+
   return (
     <TabsContent value="appearance">
       <Card>
@@ -300,6 +311,7 @@ function CustomColorPicker({ customColors, updateCustomColors }) {
             {key}
           </Button>
         ))}
+        
       </div>
       <HexColorPicker color={customColors[currentColor]} onChange={handleColorChange} />
     </div>
