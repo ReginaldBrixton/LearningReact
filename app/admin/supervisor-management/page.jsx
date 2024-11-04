@@ -490,7 +490,7 @@ const SupervisorManagement = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure you want to delete this supervisor?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the supervisor's account and remove their data from our servers.
+              This action cannot be undone. This will permanently delete the supervisor&apos;s account and remove their data from our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
