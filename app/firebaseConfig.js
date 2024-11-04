@@ -31,6 +31,7 @@ try {
   
   // Create Google Auth Provider
   googleProvider = new GoogleAuthProvider();
+  cons
   console.log("Google Auth Provider created successfully");
 
   // Log the current domain (useful for debugging auth domain issues)
