@@ -298,13 +298,17 @@ export default function AdminDashboard() {
                 <ul className="space-y-4">
                   {recentActivities.map((activity, index) => (
                     <li key={index} className="flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
-                      <Image
-                        src={activity.avatar}
-                        alt={`${activity.user}'s avatar`}
-                        width={40}
-                        height={40}
-                        className="rounded-full mr-4 object-cover"
-                      />
+                      <div className="relative w-10 h-10 mr-4">
+                        <Image
+                          src={activity.avatar}
+                          alt={`${activity.user}'s avatar`}
+                          fill
+                          sizes="40px"
+                          className="rounded-full object-cover"
+                          priority={index === 0}
+                          loading={index === 0 ? 'eager' : 'lazy'}
+                        />
+                      </div>
                       <div className="flex-1">
                         <p className="font-semibold">{activity.user} {activity.action}</p>
                         <div className="flex items-center text-sm text-gray-500">
