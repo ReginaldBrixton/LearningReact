@@ -73,7 +73,7 @@ const recentActivities = [
     action: 'logged in', 
     time: '2 minutes ago',
     type: 'auth',
-    avatar: '/avatars/john-doe.jpg',
+    avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
     details: { location: 'New York, US', device: 'Chrome on Windows' }
   },
   { 
@@ -81,7 +81,7 @@ const recentActivities = [
     action: 'created a new project "AI Research"', 
     time: '1 hour ago',
     type: 'project',
-    avatar: '/avatars/jane-smith.jpg',
+    avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
     details: { projectId: 'PRJ-123', department: 'Research & Development' }
   },
   { 
@@ -89,7 +89,7 @@ const recentActivities = [
     action: 'posted an announcement about system maintenance', 
     time: '3 hours ago',
     type: 'announcement',
-    avatar: '/avatars/admin.jpg',
+    avatar: 'https://randomuser.me/api/portraits/lego/1.jpg',
     details: { priority: 'High', affectedUsers: 'All' }
   },
   { 
@@ -97,10 +97,24 @@ const recentActivities = [
     action: 'updated department structure', 
     time: '5 hours ago',
     type: 'department',
-    avatar: '/avatars/mike-johnson.jpg',
+    avatar: 'https://randomuser.me/api/portraits/men/3.jpg',
     details: { changes: ['Added new team', 'Updated reporting lines'] }
   },
-]
+].map(activity => ({
+  ...activity,
+  avatar: (
+    <Image 
+      src={activity.avatar}
+      alt={`${activity.user}'s avatar`}
+      width={40}
+      height={40}
+      className="rounded-full object-cover"
+      loading="lazy"
+      placeholder="blur"
+      blurDataURL="/placeholder.png"
+    />
+  )
+}))
 
 export default function AdminDashboard() {
   const [isDarkMode, setIsDarkMode] = useState(false)
