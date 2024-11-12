@@ -164,8 +164,8 @@ export default function AdminDashboard() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <Card className="max-w-full">
+      <div className="flex items-center justify-center min-h-screen">
+        <Card className="w-full max-w-lg mx-4">
           <CardHeader>
             <CardTitle className="text-red-500">Error</CardTitle>
           </CardHeader>
@@ -179,12 +179,12 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className={cn("min-h-screen bg-background transition-colors duration-300", isDarkMode ? 'dark' : '')}>
-      <div className="flex h-screen overflow-hidden">
+    <div className={cn("min-h-screen bg-background overflow-hidden transition-colors duration-300", isDarkMode ? 'dark' : '')}>
+      <div className="flex min-h-screen">
         {/* Dashboard content */}
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
-          <div className="max-w-full px-6 py-8">
-            <div className="flex justify-between items-center mb-6">
+          <div className="max-w-[2000px] mx-auto px-4 sm:px-6 py-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
               <div>
                 <h1 className="text-3xl font-semibold text-gray-800 dark:text-white">Dashboard</h1>
                 <p className="text-sm text-gray-500 mt-1">Welcome back, Admin</p>
@@ -219,7 +219,7 @@ export default function AdminDashboard() {
             </Tabs>
               
             {/* Stats Grid */}
-            <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-6 mb-8 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
               {statsCards.map((card, index) => (
                 <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -292,7 +292,7 @@ export default function AdminDashboard() {
             {/* Recent Activity */}
             <Card className="mb-8">
               <CardHeader>
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <div>
                     <CardTitle>Recent Activity</CardTitle>
                     <CardDescription>Latest actions from users and system</CardDescription>
@@ -300,7 +300,7 @@ export default function AdminDashboard() {
                   <Input
                     type="search"
                     placeholder="Filter activities..."
-                    className="w-full max-w-xs"
+                    className="w-full sm:w-auto max-w-xs"
                     value={searchQuery}
                     onChange={handleSearch}
                   />
@@ -313,15 +313,15 @@ export default function AdminDashboard() {
                       <div className="relative w-10 h-10 mr-4">
                         {activity.avatar}
                       </div>
-                      <div className="flex-1">
-                        <p className="font-semibold">{activity.user} {activity.action}</p>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold truncate">{activity.user} {activity.action}</p>
                         <div className="flex items-center text-sm text-gray-500">
                           <span>{activity.time}</span>
                           <span className="mx-2">•</span>
                           <span className="capitalize">{activity.type}</span>
                         </div>
                         {activity.details && (
-                          <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                          <div className="mt-2 text-sm text-gray-600 dark:text-gray-400 overflow-hidden text-ellipsis">
                             {Object.entries(activity.details).map(([key, value], i) => (
                               <span key={i} className="mr-4">
                                 {key}: {Array.isArray(value) ? value.join(', ') : value}
