@@ -76,28 +76,28 @@ const recentActivities = [
     action: 'logged in', 
     time: '2 minutes ago',
     type: 'auth',
-    avatar: '/avatars/john-doe.jpg'
+    avatar: '/avatars/default-avatar.png'
   },
   { 
     user: 'Jane Smith', 
     action: 'created a new project "AI Research"', 
     time: '1 hour ago',
     type: 'project',
-    avatar: '/avatars/jane-smith.jpg'
+    avatar: '/avatars/default-avatar.png'
   },
   { 
     user: 'Admin', 
     action: 'posted an announcement about system maintenance', 
     time: '3 hours ago',
     type: 'announcement',
-    avatar: '/avatars/admin.jpg'
+    avatar: '/avatars/default-avatar.png'
   },
   { 
     user: 'Mike Johnson', 
     action: 'updated department structure', 
     time: '5 hours ago',
     type: 'department',
-    avatar: '/avatars/mike-johnson.jpg'
+    avatar: '/avatars/default-avatar.png'
   },
 ]
 
@@ -199,10 +199,11 @@ export default function AdminDashboard() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Image
-                      src="https://via.placeholder.com/100"
+                      src="/avatars/default-avatar.png"
                       width={100}
                       height={100}
                       alt="Admin avatar"
+                      className="rounded-full"
                     />
                   </Button>
                 </DropdownMenuTrigger>

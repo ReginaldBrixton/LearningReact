@@ -5,22 +5,8 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
-        port: '',
-        pathname: '/a/**',
+        hostname: 'via.placeholder.com',
       },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'sample-firebase-ai-app-e4ee2.appspot.com',
-        port: '',
-        pathname: '/**',
-      }
     ],
   },
   async headers() {
