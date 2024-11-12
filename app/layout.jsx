@@ -3,6 +3,7 @@ import "./globals.css";
 import { MainThemeProvider } from '../theme/mainTheme';
 import ClientWrapper from './ClientWrapper';
 
+// Ensure PostCSS configuration is correct
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -18,7 +19,6 @@ export const metadata = {
   title: "Capstone Project System",
   description: "Accra Institute of Technology - Capstone Project System",
 };
-
 
 export default function RootLayout({ children }) {
   return (
