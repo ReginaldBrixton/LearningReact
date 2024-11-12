@@ -1,76 +1,121 @@
-// Import necessary Firebase modules
-import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+// Import the necessary Firebase modules
+import { initializeApp, getApps } from 'firebase/app';
+import { 
+  getAuth, 
+  onAuthStateChanged, 
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut
+} from 'firebase/auth';
+import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
+import { getAnalytics, isSupported } from 'firebase/analytics';
 
-// Firebase configuration object
-// TODO: Move these credentials to environment variables for better security
+// Your Firebase configuration object
 const firebaseConfig = {
-  apiKey: "AIzaSyA5MjFuz1gZgTgmDQfz2xegR8tK7-qJcOM",
-  authDomain: "sample-firebase-ai-app-e4ee2.firebaseapp.com",
-  projectId: "sample-firebase-ai-app-e4ee2",
-  storageBucket: "sample-firebase-ai-app-e4ee2.appspot.com",
-  messagingSenderId: "528387285026",
-  appId: "1:528387285026:web:58648592940288f7e6ea7b"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
-// Declare variables to hold Firebase instances
+// Initialize Firebase
 let app;
 let auth;
-let googleProvider;
+let db;
+let storage;
+let analytics;
 
-try {
-  // Initialize Firebase app
-  console.log("Initializing Firebase app...");
-  app = initializeApp(firebaseConfig);
-  console.log("Firebase app initialized successfully");
-  
-  // Get Firebase Auth instance
-  console.log("Getting auth instance...");
+if (!getApps().length) {
+  try {
+    app = initializeApp(firebaseConfig);
+    
+    auth = getAuth(app);
+    db = getFirestore(app);
+    storage = getStorage(app);
+    
+    // Initialize Analytics only in browser environment
+    if (typeof window !== 'undefined') {
+      // Check if analytics is supported before initializing
+      isSupported().then(supported => {
+        if (supported) {
+          analytics = getAnalytics(app);
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Error initializing Firebase:', error);
+  }
+} else {
+  app = getApps()[0];
   auth = getAuth(app);
-  console.log("Auth instance obtained successfully");
-  
-  // Create Google Auth Provider
-  googleProvider = new GoogleAuthProvider();
-  cons
-  console.log("Google Auth Provider created successfully");
-
-  // Log the current domain (useful for debugging auth domain issues)
-  if (typeof window !== 'undefined') {
-    console.log("Current domain:", window.location.hostname);
-  }
-
-} catch (error) {
-  console.error("Error initializing Firebase:", error);
-  
-  // Provide more detailed error information for unauthorized domain
-  if (error.code === 'auth/unauthorized-domain') {
-    console.error("Unauthorized domain. Please add this domain to your Firebase console's authorized domains list.");
-    console.error("Current domain:", window.location.hostname);
-  }
+  db = getFirestore(app);
+  storage = getStorage(app);
 }
 
-const setSessionCookie = async (user) => {
-  const idToken = await user.getIdToken(true);
-  // Set the cookie using an API route
-  await fetch('/api/session', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ idToken }),
+// Helper function to get current user
+const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        unsubscribe();
+        resolve(user);
+      },
+      reject
+    );
   });
 };
 
+// Google Sign In
+const googleProvider = new GoogleAuthProvider();
 const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
-    await setSessionCookie(result.user);
-    return result;
+    return result.user;
   } catch (error) {
-    console.error("Error during Google Sign-In:", error);
+    console.error('Error signing in with Google:', error);
     throw error;
   }
 };
 
-// Export Firebase instances and authentication function
-export { app, auth, googleProvider, signInWithGoogle, setSessionCookie };
+// Session management
+const setSessionCookie = async (user) => {
+  if (user) {
+    const idToken = await user.getIdToken();
+    // You might want to send this token to your backend to set up a session
+    // For now, we'll just store it in localStorage
+    localStorage.setItem('userToken', idToken);
+  }
+};
+
+// Sign out function
+const signOutUser = async () => {
+  try {
+    await signOut(auth);
+    localStorage.removeItem('userToken');
+  } catch (error) {
+    console.error('Error signing out:', error);
+    throw error;
+  }
+};
+
+export { 
+  app,  // Changed from firebaseApp to app
+  auth, 
+  db, 
+  storage, 
+  analytics,
+  getCurrentUser,
+  signInWithGoogle,
+  setSessionCookie,
+  signOutUser,
+  // Export commonly used Firestore functions
+  collection,
+  getDocs,
+  query,
+  where
+};
