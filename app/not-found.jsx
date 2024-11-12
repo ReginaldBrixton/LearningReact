@@ -19,6 +19,7 @@ const AnimatedNotFound = () => {
   }, []);
 
   const numbers = ['4', '0', '4'];
+  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-50 to-gray-200 p-4">
