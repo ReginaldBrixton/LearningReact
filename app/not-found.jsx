@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { AlertTriangle, Search, Home, RefreshCw } from 'lucide-react';
 import Link from 'next/link'
+import Image from 'next/image'
 
 const AnimatedNotFound = () => {
   const [bounce, setBounce] = useState(false);
