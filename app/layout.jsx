@@ -22,13 +22,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <MainThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-        >
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        <MainThemeProvider>
           <ClientWrapper>{children}</ClientWrapper>
         </MainThemeProvider>
       </body>

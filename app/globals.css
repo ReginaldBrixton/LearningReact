@@ -11,6 +11,9 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+    /* Fallback for older browsers */
+    text-align: justify;
+    hyphens: auto;
   }
 }
 
