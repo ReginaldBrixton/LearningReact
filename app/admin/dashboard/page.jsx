@@ -102,16 +102,16 @@ const recentActivities = [
   },
 ].map(activity => ({
   ...activity,
-  avatar: activity.avatar ? (
+  avatar: activity.avatar && (
     <Image 
-      src={activity.avatar || '/avatars/default-avatar.png'}
+      src={activity.avatar}
       alt={`${activity.user}'s avatar`}
       width={40}
       height={40}
       className="rounded-full object-cover"
       loading="lazy"
     />
-  ) : null
+  )
 }))
 
 export default function AdminDashboard() {
