@@ -73,7 +73,7 @@ const recentActivities = [
     action: 'logged in', 
     time: '2 minutes ago',
     type: 'auth',
-    avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
+    avatar: '/avatars/avatar1.jpg',
     details: { location: 'New York, US', device: 'Chrome on Windows' }
   },
   { 
@@ -81,7 +81,7 @@ const recentActivities = [
     action: 'created a new project "AI Research"', 
     time: '1 hour ago',
     type: 'project',
-    avatar: 'https://randomuser.me/api/portraits/women/2.jpg',
+    avatar: '/avatars/avatar2.jpg',
     details: { projectId: 'PRJ-123', department: 'Research & Development' }
   },
   { 
@@ -89,7 +89,7 @@ const recentActivities = [
     action: 'posted an announcement about system maintenance', 
     time: '3 hours ago',
     type: 'announcement',
-    avatar: 'https://randomuser.me/api/portraits/lego/1.jpg',
+    avatar: '/avatars/avatar3.jpg',
     details: { priority: 'High', affectedUsers: 'All' }
   },
   { 
@@ -97,23 +97,21 @@ const recentActivities = [
     action: 'updated department structure', 
     time: '5 hours ago',
     type: 'department',
-    avatar: 'https://randomuser.me/api/portraits/men/3.jpg',
+    avatar: '/avatars/avatar4.jpg',
     details: { changes: ['Added new team', 'Updated reporting lines'] }
   },
 ].map(activity => ({
   ...activity,
-  avatar: (
+  avatar: activity.avatar ? (
     <Image 
-      src={activity.avatar}
+      src={activity.avatar || '/avatars/default-avatar.png'}
       alt={`${activity.user}'s avatar`}
       width={40}
       height={40}
       className="rounded-full object-cover"
       loading="lazy"
-      placeholder="blur"
-      blurDataURL="/placeholder.png"
     />
-  )
+  ) : null
 }))
 
 export default function AdminDashboard() {
@@ -313,15 +311,7 @@ export default function AdminDashboard() {
                   {recentActivities.map((activity, index) => (
                     <li key={index} className="flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
                       <div className="relative w-10 h-10 mr-4">
-                        <Image
-                          src={activity.avatar}
-                          alt={`${activity.user}'s avatar`}
-                          fill
-                          sizes="40px"
-                          className="rounded-full object-cover"
-                          priority={index === 0}
-                          loading={index === 0 ? 'eager' : 'lazy'}
-                        />
+                        {activity.avatar}
                       </div>
                       <div className="flex-1">
                         <p className="font-semibold">{activity.user} {activity.action}</p>
