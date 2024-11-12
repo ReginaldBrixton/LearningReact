@@ -199,11 +199,10 @@ export default function AdminDashboard() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Image
-                      src="/avatars/admin.jpg"
+                      src="https://via.placeholder.com/100"
+                      width={100}
+                      height={100}
                       alt="Admin avatar"
-                      className="rounded-full object-cover"
-                      width={32}
-                      height={32}
                     />
                   </Button>
                 </DropdownMenuTrigger>
