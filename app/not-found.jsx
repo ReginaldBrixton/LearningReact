@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AlertTriangle, Search, Home, RefreshCw } from 'lucide-react';
+import Link from 'next/link'
 
 const AnimatedNotFound = () => {
   const [bounce, setBounce] = useState(false);
@@ -56,13 +57,14 @@ const AnimatedNotFound = () => {
       </p>
       
       <div className="mt-8 flex flex-col sm:flex-row gap-4">
-        <a
-          href="/"
-          className="group flex items-center justify-center px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all duration-300 transform hover:scale-105"
-        >
-          <Home className="mr-2 w-5 h-5 group-hover:animate-bounce" />
-          Return Home
-        </a>
+        <Link href="/">
+          <a
+            className="group flex items-center justify-center px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all duration-300 transform hover:scale-105"
+          >
+            <Home className="mr-2 w-5 h-5 group-hover:animate-bounce" />
+            Return Home
+          </a>
+        </Link>
         <button
           onClick={() => window.location.reload()}
           className="group flex items-center justify-center px-6 py-3 bg-gray-500 text-white rounded-full hover:bg-gray-600 transition-all duration-300 transform hover:scale-105"
