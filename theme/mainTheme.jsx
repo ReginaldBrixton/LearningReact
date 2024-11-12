@@ -18,7 +18,7 @@ const COLOR_SCHEMES = ['default', 'colorful', 'monochrome', 'pastel', 'neon', 'c
 const THEME_COLORS = {
   default: {
     primary: '#3498db',
-    secondary: '#2ecc71', 
+    secondary: '#2ecc71',
     accent: '#e74c3c',
     background: '#f5f7fa',
     text: '#2c3e50',
@@ -220,7 +220,13 @@ export function ColorSchemeProvider({ children }) {
 
 export function MainThemeProvider({ children, ...props }) {
   return (
-    <NextThemesProvider {...props}>
+    <NextThemesProvider 
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+      {...props}
+    >
       <ColorSchemeProvider>{children}</ColorSchemeProvider>
     </NextThemesProvider>
   );

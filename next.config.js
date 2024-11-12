@@ -2,12 +2,18 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
+    domains: [
+      'randomuser.me',
+      'api.dicebear.com',
+      'images.unsplash.com'
+    ],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'via.placeholder.com',
+        hostname: '**',
       },
     ],
+    unoptimized: true,
   },
   async headers() {
     return [
