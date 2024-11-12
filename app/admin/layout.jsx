@@ -60,7 +60,11 @@ export default function AdminLayout({ children }) {
             </div>
             <nav className="flex-1 px-2 py-4 space-y-2">
               {sidebarItems.map((item, index) => (
-                <Link key={index} href={item.href} passHref>
+                <Link 
+                  key={index} 
+                  href={item.href}
+                  className="w-full"
+                >
                   <Button
                     variant="ghost"
                     className="w-full justify-start hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
@@ -126,10 +130,12 @@ export default function AdminLayout({ children }) {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Image
-                      src="/avatars/admin.jpg"
+                      src="/placeholder.svg"
                       alt="Admin avatar"
                       className="rounded-full object-cover"
-                      layout="fill"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority
                     />
                   </Button>
                 </DropdownMenuTrigger>
