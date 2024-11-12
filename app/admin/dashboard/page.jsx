@@ -165,7 +165,7 @@ export default function AdminDashboard() {
   if (error) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <Card className="w-96">
+        <Card className="max-w-full">
           <CardHeader>
             <CardTitle className="text-red-500">Error</CardTitle>
           </CardHeader>
@@ -183,7 +183,7 @@ export default function AdminDashboard() {
       <div className="flex h-screen overflow-hidden">
         {/* Dashboard content */}
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
-          <div className="container mx-auto px-6 py-8">
+          <div className="max-w-full px-6 py-8">
             <div className="flex justify-between items-center mb-6">
               <div>
                 <h1 className="text-3xl font-semibold text-gray-800 dark:text-white">Dashboard</h1>
@@ -300,7 +300,7 @@ export default function AdminDashboard() {
                   <Input
                     type="search"
                     placeholder="Filter activities..."
-                    className="w-64"
+                    className="w-full max-w-xs"
                     value={searchQuery}
                     onChange={handleSearch}
                   />
