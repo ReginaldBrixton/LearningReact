@@ -57,13 +57,12 @@ const AnimatedNotFound = () => {
       </p>
       
       <div className="mt-8 flex flex-col sm:flex-row gap-4">
-        <Link href="/">
-          <a
-            className="group flex items-center justify-center px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all duration-300 transform hover:scale-105"
-          >
-            <Home className="mr-2 w-5 h-5 group-hover:animate-bounce" />
-            Return Home
-          </a>
+        <Link 
+          href="/"
+          className="group flex items-center justify-center px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all duration-300 transform hover:scale-105"
+        >
+          <Home className="mr-2 w-5 h-5 group-hover:animate-bounce" />
+          Return Home
         </Link>
         <button
           onClick={() => window.location.reload()}
