@@ -20,5 +20,16 @@
         "app/fonts",
         "next.config.mjs",
         ".next"
-    ]
+    ],
+    "css.validate": false,
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    "tailwindCSS.experimental.classRegex": [],
+    "tailwindCSS.includeLanguages": {
+        "plaintext": "html",
+        "javascript": "javascript",
+        "css": "css"
+    },
+    "tailwindCSS.validate": true
 }

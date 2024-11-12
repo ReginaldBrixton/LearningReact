@@ -13,6 +13,7 @@ body {
     text-wrap: balance;
     /* Fallback for older browsers */
     text-align: justify;
+    -webkit-hyphens: auto;
     hyphens: auto;
   }
 }
