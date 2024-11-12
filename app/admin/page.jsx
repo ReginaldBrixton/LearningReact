@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Image from 'next/image'
 
 const sidebarItems = [
   { icon: Layout, label: 'Dashboard', href: '/admin/dashboard' },
@@ -197,10 +198,12 @@ export default function AdminDashboard() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                    <img
+                    <Image
                       src="/avatars/admin.jpg"
                       alt="Admin avatar"
                       className="rounded-full object-cover"
+                      width={32}
+                      height={32}
                     />
                   </Button>
                 </DropdownMenuTrigger>
@@ -287,10 +290,12 @@ export default function AdminDashboard() {
                   <ul className="space-y-4">
                     {recentActivities.map((activity, index) => (
                       <li key={index} className="flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
-                        <img
+                        <Image
                           src={activity.avatar}
                           alt={`${activity.user}'s avatar`}
-                          className="w-10 h-10 rounded-full mr-4 object-cover"
+                          width={40}
+                          height={40}
+                          className="rounded-full mr-4 object-cover"
                         />
                         <div className="flex-1">
                           <p className="font-semibold">{activity.user} {activity.action}</p>
