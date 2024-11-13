@@ -34,7 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "components/colorful-responsive-research-chat.jsx", "components/colorful-responsive-research-chat.jsx"  ],
+, "components/colorful-responsive-research-chat.jsx", "components/colorful-responsive-research-chat.jsx", "app/admin/dashboard/components/NotificationCard.jsx"  ],
   "exclude": [
     "node_modules"
   ]
