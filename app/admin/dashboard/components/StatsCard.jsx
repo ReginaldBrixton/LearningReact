@@ -102,32 +102,82 @@ const NotificationsDisplay = memo(({ notifications }) => {
       setCurrentNotificationIndex((prevIndex) => 
         (prevIndex + 1) % notifications.length
       )
-    }, 5000) // Change notification every 5 seconds
+    }, 5000)
 
     return () => clearInterval(interval)
   }, [notifications])
 
   if (!notifications || notifications.length === 0) return null
 
-  const currentNotification = notifications[currentNotificationIndex]
+  const getNotificationIndices = () => {
+    const prev = (currentNotificationIndex - 1 + notifications.length) % notifications.length
+    const next = (currentNotificationIndex + 1) % notifications.length
+    return [prev, currentNotificationIndex, next]
+  }
+
+  const [prev, current, next] = getNotificationIndices()
 
   return (
-    <motion.div 
-      key={currentNotificationIndex}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.5 }}
-      className="mt-4 bg-gray-100 dark:bg-gray-800 p-3 rounded-lg"
-    >
-      <div className="flex items-center gap-3">
-        <Bell className="h-5 w-5 text-indigo-600" />
-        <div>
-          <p className="text-sm font-medium">{currentNotification.title}</p>
-          <p className="text-xs text-gray-500">{currentNotification.time}</p>
+    <div className="mt-6 relative h-[180px] overflow-hidden rounded-xl bg-white dark:bg-gray-900 shadow-lg border-2 border-indigo-100 dark:border-indigo-800">
+      {/* Header section */}
+      <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-r from-indigo-50 to-white dark:from-indigo-950 dark:to-gray-900 border-b border-indigo-100 dark:border-indigo-800">
+        <div className="flex justify-between items-center">
+          <span className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+            {/* <Bell className="h-4 w-4 text-indigo-600 dark:text-indigo-400" /> */}
+            {/* Announcements */}
+          </span>
+          <span className="text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/50 px-3 py-1 rounded-full">
+            {currentNotificationIndex + 1} / {notifications.length}
+          </span>
         </div>
       </div>
-    </motion.div>
+      
+      <AnimatePresence mode="popLayout">
+        <div className="flex justify-center items-center gap-8 mt-[72px]">
+          {[prev, current, next].map((index, i) => (
+            <motion.div
+              key={index}
+              className={cn(
+                "bg-white dark:bg-gray-800 p-5 rounded-xl absolute w-[35%] border",
+                i === 1 
+                  ? "z-20 shadow-lg border-indigo-200 dark:border-indigo-700" 
+                  : "z-10 opacity-30 border-gray-100 dark:border-gray-700"
+              )}
+              initial={{ 
+                y: i === 0 ? -100 : i === 2 ? 100 : 0,
+                x: `${(i-1) * 110}%`,
+                opacity: 0 
+              }}
+              animate={{ 
+                y: 0,
+                x: `${(i-1) * 110}%`,
+                opacity: i === 1 ? 1 : 0.3,
+                scale: i === 1 ? 1.1 : 0.85
+              }}
+              exit={{ 
+                y: i === 0 ? 100 : i === 2 ? -100 : 0,
+                opacity: 0
+              }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
+              <div className="flex flex-col gap-3">
+                <div className="bg-indigo-50 dark:bg-indigo-900/30 p-2.5 rounded-lg w-fit">
+                  <Bell className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100 leading-snug">
+                    {notifications[index].title}
+                  </p>
+                  <p className="text-xs text-indigo-600 dark:text-indigo-400 mt-1.5 font-medium">
+                    {notifications[index].time}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </AnimatePresence>
+    </div>
   )
 })
 
