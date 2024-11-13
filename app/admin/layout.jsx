@@ -73,33 +73,52 @@ export default function AdminLayout({ children }) {
     // Implement search functionality
   }
 
+  const toggleSidebar = () => {
+    setSidebarCollapsed(prev => !prev)
+  }
+
   return (
     <div className={cn("min-h-screen bg-background transition-colors duration-300", isDarkMode ? 'dark' : '')}>
       <div className="flex h-screen overflow-hidden">
         {/* Sidebar */}
         <aside className={cn(
-          "relative hidden md:flex flex-col border-r bg-gray-50 dark:bg-gray-800 transition-all duration-300",
+          "relative hidden md:flex flex-col border-r bg-gray-50 dark:bg-gray-800 transition-all duration-300 ease-in-out",
           isSidebarCollapsed ? "w-20" : "w-64"
         )}>
           <div className="flex h-full flex-col">
             <div className="flex items-center justify-between h-16 border-b px-4">
-              {!isSidebarCollapsed && (
-                <span className="text-lg font-bold">Admin Dashboard</span>
-              )}
+              <span className={cn(
+                "text-lg font-bold whitespace-nowrap transition-all duration-300 ease-in-out",
+                isSidebarCollapsed ? "opacity-0 w-0" : "opacity-100 w-auto"
+              )}>
+                Admin Dashboard
+              </span>
               <Button
                 variant="ghost"
                 size="sm"
-                className="absolute -right-3 top-7 h-6 w-6 rounded-full bg-gray-200 dark:bg-gray-700 shadow-md"
-                onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
+                className={cn(
+                  "absolute -right-3 top-7 h-6 w-6 rounded-full bg-gray-200 dark:bg-gray-700 shadow-md",
+                  "hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-300",
+                  "transform hover:scale-110 active:scale-95"
+                )}
+                onClick={toggleSidebar}
               >
-                {isSidebarCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+                {isSidebarCollapsed ? (
+                  <ChevronRight className="h-4 w-4 transition-transform duration-300 ease-in-out" />
+                ) : (
+                  <ChevronLeft className="h-4 w-4 transition-transform duration-300 ease-in-out" />
+                )}
               </Button>
             </div>
             <nav className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
               {sidebarItems.map((category, categoryIndex) => (
                 <div key={categoryIndex} className="px-3 py-2">
                   {!isSidebarCollapsed && (
-                    <h3 className="mb-2 px-2 text-sm font-semibold text-gray-600 dark:text-gray-400">
+                    <h3 className={cn(
+                      "mb-2 px-2 text-sm font-semibold text-gray-600 dark:text-gray-400",
+                      "transition-opacity duration-300",
+                      isSidebarCollapsed ? "opacity-0" : "opacity-100"
+                    )}>
                       {category.category}
                     </h3>
                   )}
@@ -117,15 +136,20 @@ export default function AdminLayout({ children }) {
                             className={cn(
                               "w-full justify-start",
                               isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700",
-                              "transition-colors"
+                              "transition-all duration-300"
                             )}
                           >
                             <item.icon className={cn(
-                              "h-4 w-4",
+                              "h-4 w-4 transition-colors duration-300",
                               isActive ? "text-primary" : "text-gray-500 dark:text-gray-400"
                             )} />
                             {!isSidebarCollapsed && (
-                              <span className="ml-2">{item.label}</span>
+                              <span className={cn(
+                                "ml-2 transition-opacity duration-300",
+                                isSidebarCollapsed ? "opacity-0" : "opacity-100"
+                              )}>
+                                {item.label}
+                              </span>
                             )}
                           </Button>
                         </Link>
