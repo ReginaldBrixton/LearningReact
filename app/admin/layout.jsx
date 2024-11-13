@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Bell, ChevronDown, HelpCircle, Layout, LogOut, Moon, Search, Settings, Sun, Users, BarChart, Briefcase, AlertTriangle } from 'lucide-react'
+import { Bell, ChevronDown, HelpCircle, Layout, LogOut, Moon, Search, Settings, Sun, Users, BarChart, Briefcase, AlertTriangle, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -15,24 +15,47 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const sidebarItems = [
-  { icon: Layout, label: 'Dashboard', href: '/admin/dashboard' },
-  { icon: Users, label: 'User Management', href: '/admin/user-management' },
-  { icon: Briefcase, label: 'Project Management', href: '/admin/project-management' },
-  { icon: Users, label: 'Supervisor Management', href: '/admin/supervisor-management' },
-  { icon: Layout, label: 'Department Management', href: '/admin/department-management' },
-  { icon: Bell, label: 'Announcements', href: '/admin/announcements' },
-  { icon: BarChart, label: 'Reports', href: '/admin/reports' },
-  { icon: Settings, label: 'Settings', href: '/admin/settings' },
-  { icon: AlertTriangle, label: 'Logs', href: '/admin/logs' },
-  { icon: HelpCircle, label: 'Help & Support', href: '/admin/support' },
+  {
+    category: "Main",
+    items: [
+      { icon: Layout, label: 'Dashboard', href: '/admin/dashboard' },
+      { icon: Users, label: 'User Management', href: '/admin/user-management' },
+    ]
+  },
+  {
+    category: "Management",
+    items: [
+      { icon: Briefcase, label: 'Project Management', href: '/admin/project-management' },
+      { icon: Users, label: 'Supervisor Management', href: '/admin/supervisor-management' },
+      { icon: Layout, label: 'Department Management', href: '/admin/department-management' },
+    ]
+  },
+  {
+    category: "Communication",
+    items: [
+      { icon: Bell, label: 'Announcements', href: '/admin/announcements' },
+      { icon: BarChart, label: 'Reports', href: '/admin/reports' },
+    ]
+  },
+  {
+    category: "System",
+    items: [
+      { icon: Settings, label: 'Settings', href: '/admin/settings' },
+      { icon: AlertTriangle, label: 'Logs', href: '/admin/logs' },
+      { icon: HelpCircle, label: 'Help & Support', href: '/admin/support' },
+    ]
+  }
 ]
 
 export default function AdminLayout({ children }) {
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [notifications, setNotifications] = useState([])
+  const [isSidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     // Simulated notifications fetch
@@ -49,30 +72,67 @@ export default function AdminLayout({ children }) {
     setSearchQuery(e.target.value)
     // Implement search functionality
   }
+
   return (
     <div className={cn("min-h-screen bg-background transition-colors duration-300", isDarkMode ? 'dark' : '')}>
       <div className="flex h-screen overflow-hidden">
         {/* Sidebar */}
-        <aside className="hidden w-64 overflow-y-auto border-r bg-gray-50 md:block dark:bg-gray-800 transition-colors duration-300">
+        <aside className={cn(
+          "relative hidden md:flex flex-col border-r bg-gray-50 dark:bg-gray-800 transition-all duration-300",
+          isSidebarCollapsed ? "w-20" : "w-64"
+        )}>
           <div className="flex h-full flex-col">
-            <div className="flex items-center justify-center h-16 border-b">
-              <span className="text-lg font-bold">Admin Dashboard</span>
+            <div className="flex items-center justify-between h-16 border-b px-4">
+              {!isSidebarCollapsed && (
+                <span className="text-lg font-bold">Admin Dashboard</span>
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="absolute -right-3 top-7 h-6 w-6 rounded-full bg-gray-200 dark:bg-gray-700 shadow-md"
+                onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
+              >
+                {isSidebarCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+              </Button>
             </div>
-            <nav className="flex-1 px-2 py-4 space-y-2">
-              {sidebarItems.map((item, index) => (
-                <Link 
-                  key={index} 
-                  href={item.href}
-                  className="w-full"
-                >
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    <item.icon className="mr-2 h-4 w-4" />
-                    {item.label}
-                  </Button>
-                </Link>
+            <nav className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
+              {sidebarItems.map((category, categoryIndex) => (
+                <div key={categoryIndex} className="px-3 py-2">
+                  {!isSidebarCollapsed && (
+                    <h3 className="mb-2 px-2 text-sm font-semibold text-gray-600 dark:text-gray-400">
+                      {category.category}
+                    </h3>
+                  )}
+                  <div className="space-y-1">
+                    {category.items.map((item, index) => {
+                      const isActive = pathname === item.href
+                      return (
+                        <Link
+                          key={index}
+                          href={item.href}
+                          className="block"
+                        >
+                          <Button
+                            variant={isActive ? "secondary" : "ghost"}
+                            className={cn(
+                              "w-full justify-start",
+                              isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700",
+                              "transition-colors"
+                            )}
+                          >
+                            <item.icon className={cn(
+                              "h-4 w-4",
+                              isActive ? "text-primary" : "text-gray-500 dark:text-gray-400"
+                            )} />
+                            {!isSidebarCollapsed && (
+                              <span className="ml-2">{item.label}</span>
+                            )}
+                          </Button>
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
               ))}
             </nav>
           </div>
