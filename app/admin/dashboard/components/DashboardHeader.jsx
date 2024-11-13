@@ -2,17 +2,59 @@
 
 import { Download, ChevronDown, Calendar } from 'lucide-react'
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { memo } from 'react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu"
+import { memo, useState } from 'react'
+import { Calendar as CalendarComponent } from "@/components/ui/calendar"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle
+} from "@/components/ui/dialog"
+import { addDays, format } from "date-fns"
 
 const TIME_RANGES = {
   '7d': 'Last 7 Days',
-  '30d': 'Last 30 Days', 
-  '90d': 'Last 90 Days',
+  '30d': 'Last 30 Days',
+  '90d': 'Last 90 Days', 
   'custom': 'Custom Range'
 }
 
 const DashboardHeader = memo(({ timeRange, setTimeRange, onExport }) => {
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false)
+  const [date, setDate] = useState({
+    from: new Date(),
+    to: addDays(new Date(), 7),
+  })
+
+  const handleRangeSelect = (value) => {
+    if (value === 'custom') {
+      setIsCalendarOpen(true)
+    } else {
+      setTimeRange(value)
+    }
+  }
+
+  const handleDateSelect = (newDate) => {
+    setDate(newDate)
+    if (newDate.from && newDate.to) {
+      setTimeRange(`custom-${format(newDate.from, 'yyyy-MM-dd')}-to-${format(newDate.to, 'yyyy-MM-dd')}`)
+      setIsCalendarOpen(false)
+    }
+  }
+
+  const getDisplayedTimeRange = () => {
+    if (timeRange.startsWith('custom-')) {
+      return `${format(date.from, 'MMM d')} - ${format(date.to, 'MMM d')}`
+    }
+    return TIME_RANGES[timeRange]
+  }
+
   return (
     <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-8 bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 transition-all duration-300">
       <div className="space-y-3">
@@ -37,7 +79,7 @@ const DashboardHeader = memo(({ timeRange, setTimeRange, onExport }) => {
             >
               <div className="flex items-center">
                 <Calendar className="h-4 w-4 mr-2 text-indigo-600 dark:text-indigo-400" />
-                <span className="font-medium dark:text-gray-400">{TIME_RANGES[timeRange]}</span>
+                <span className="font-medium dark:text-gray-400">{getDisplayedTimeRange()}</span>
               </div>
               <ChevronDown className="h-4 w-4 text-gray-500 dark:text-gray-400" />
             </Button>
@@ -46,7 +88,7 @@ const DashboardHeader = memo(({ timeRange, setTimeRange, onExport }) => {
             {Object.entries(TIME_RANGES).map(([value, label]) => (
               <DropdownMenuItem 
                 key={value}
-                onClick={() => setTimeRange(value)}
+                onClick={() => handleRangeSelect(value)}
                 className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 focus:bg-gray-50 dark:focus:bg-gray-800 transition-colors"
               >
                 {label}
@@ -54,6 +96,21 @@ const DashboardHeader = memo(({ timeRange, setTimeRange, onExport }) => {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <Dialog open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Select Date Range</DialogTitle>
+            </DialogHeader>
+            <CalendarComponent
+              mode="range"
+              selected={date}
+              onSelect={handleDateSelect}
+              numberOfMonths={2}
+              className="rounded-md border"
+            />
+          </DialogContent>
+        </Dialog>
 
         <Button 
           onClick={onExport}

@@ -79,7 +79,7 @@ export default function AdminDashboard() {
     <div className={cn("min-h-screen bg-background transition-colors duration-300", isDarkMode ? 'dark' : '')}>
       <div className="flex min-h-screen">
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-          <div className="max-w-[2000px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className=" mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <DashboardHeader 
               timeRange={timeRange}
               setTimeRange={setTimeRange}
