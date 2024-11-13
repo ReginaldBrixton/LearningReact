@@ -263,7 +263,7 @@ const NotificationsDisplay = memo(({ notifications }) => {
   )
 })
 
-// ============= MAIN SECTION: STATS CARD =============
+// ============= SECTION 5: MAIN SECTION: STATS CARD =============
 // Main StatsCard component that combines all sections
 const StatsCard = memo(function StatsCard({ card, index }) {
   const IconComponent = card.icon
@@ -298,4 +298,32 @@ const StatsCard = memo(function StatsCard({ card, index }) {
   )
 })
 
-export { StatsCard }
+// ============= SECTION 6: ANNOUNCEMENTS =============
+const AnnouncementsCard = memo(function AnnouncementsCard({ card, index }) {
+  return (
+    <StatsCard card={card} index={index} />
+  )
+})
+
+// ============= SECTION 7: TOTAL USERS =============
+const TotalUsersCard = memo(function TotalUsersCard({ card, index }) {
+  return (
+    <StatsCard card={card} index={index} />
+  )
+})
+
+// ============= SECTION 8: ACTIVE PROJECTS =============
+const ActiveProjectsCard = memo(function ActiveProjectsCard({ card, index }) {
+  return (
+    <StatsCard card={card} index={index} />
+  )
+})
+
+// ============= SECTION 9: SYSTEM HEALTH =============
+const SystemHealthCard = memo(function SystemHealthCard({ card, index }) {
+  return (
+    <StatsCard card={card} index={index} />
+  )
+})
+
+export { StatsCard, AnnouncementsCard, TotalUsersCard, ActiveProjectsCard, SystemHealthCard }
